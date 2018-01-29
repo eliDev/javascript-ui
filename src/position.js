@@ -16,7 +16,7 @@
    * @param {HTML Element} 'element' element in DOM
    * @return {link Rectangle} 
   */
- static getFrame = function (element) {
+ static getFrame (element) {
 
     if (!Boolean(element)) {
       return undefined;
@@ -115,30 +115,30 @@
     return origin;
   }
 
-    static originToCentreBesideElementPlus(element, referenceElement, referenceSide, extraDistance) {
+  static originToCentreBesideElementPlus(element, referenceElement, referenceSide, extraDistance) {
 
     var referenceRect = referenceElement.getBoundingClientRect();
     var rect = element.getBoundingClientRect();
     var origin = GeometryUtils.originToCentreBesideRectPlus(rect, referenceRect, referenceSide, extraDistance);
     return origin;
-  };
+  }
 
-  ElementUtils.centreElementBeside = function (element, referenceElement, direction) {
+  static centreElementBeside(element, referenceElement, direction) {
     this.centreElementBesidePlus(element, referenceElement, direction, 0);
-  };
+  }
 
-  ElementUtils.centreElementBesidePlus = function (element, referenceElement, direction, extraDistance) {
+  static centreElementBesidePlus (element, referenceElement, direction, extraDistance) {
 
     // Includes scrolling, otherwise gets viewport coordinates.
     var origin = this.originToCentreBesideElementPlus(element, referenceElement, direction, extraDistance);
     this.setOrigin(element, origin);
-  };
+  }
 
-  ElementUtils.setOrigin = function (element, origin) {
+  static setOrigin (element, origin) {
 
     element.style.left = origin.x + "px";
     element.style.top = origin.y + "px";
-  };
+  }
 
   /**
     Positions (top, right, bottom, left) are set in conjunction
@@ -151,7 +151,7 @@
     @param {HTML Element} 'element' Element in the DOM
     @param {Rectangle} 'frame' element's rectangle within the parent's bounds.
   */
-  ElementUtils.setPositionsToFrame = function (element, frame) {
+  static setPositionsToFrame(element, frame) {
 
     var parent = this.getParentElement(element);
 
@@ -161,22 +161,22 @@
     element.style.left = frame.x + "px";
   };
 
-  ElementUtils.setBottom = function (element, bottom) {
+  static setBottom(element, bottom) {
     element.style.bottom = bottom + "px";
   };
 
-  ElementUtils.setRight = function (element, right) {
+  static setRight(element, right) {
     element.style.right = right + "px";
   };
 
-  ElementUtils.setCentre = function (element, centre) {
+  static setCentre (element, centre) {
 
     var frame = this.getFrame(element);
     frame.setCentre(centre);
     this.setPositionsToFrame(element, frame);
   };
 
-  ElementUtils.logPositions = function (element) {
+  static logPositions(element) {
 
     console.log(
       "top: ", element.style.top,
