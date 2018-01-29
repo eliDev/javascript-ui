@@ -2058,7 +2058,7 @@ class ElementFactory {
         if (!tag) {
             tag = 'div';
         }
-        var wrapper = ElementUtils.createElement(tag, null, HTMLstring);
+        var wrapper = ElementFactory.createElement(tag, null, HTMLstring);
         return Array.from(wrapper.children);
     }
 
