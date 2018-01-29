@@ -1,4 +1,7 @@
-﻿class Position {
+﻿/**
+ * 
+ */
+class Position {
 
   constructor() { }
 
