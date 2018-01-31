@@ -305,6 +305,7 @@ class PropertyUtils {
         case 'opacity':
         case 'color+component':
         case 'background-color+component':
+        case 'visibility':
           suffix = "";
           break;
         case 'translateY':
