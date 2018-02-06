@@ -7,6 +7,7 @@ class ClickManager {
         this.registeredIds = {};
         this.registeredClasses = {};
         this.registeredSubclasses = {};
+        this.registeredTags = {};
         globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
         // window.addEventListener('load', this.onPageLoad.bind(this));
     }
@@ -18,10 +19,36 @@ class ClickManager {
     onBodyClick(event) {
         console.log('clicked: ', event);
         var element = event.srcElement;
+        this._handleIdClick(element);
+        this._handleClassClick(element);
+        this._handleTagClick(element);
+
+        // if (this.registeredIds[element.id]) {
+        //     this.registeredIds[element.id](element);
+        // }
+        // else if (this.registeredClasses[element.className]) {
+        //     this.registeredClasses[element.className](element);
+        // }
+        // else {
+        //     var parentNode = element.parentNode;
+        //     while (parentNode.nodeName != 'BODY') {
+        //         if (this.registeredClasses[parentNode.className]) {
+        //             this.registeredClasses[parentNode.className](element);
+        //             break;
+        //         }
+        //         parentNode = parentNode.parentNode;
+        //     }
+        // }
+    }
+
+    _handleIdClick(element){
         if (this.registeredIds[element.id]) {
             this.registeredIds[element.id](element);
         }
-        else if (this.registeredClasses[element.className]) {
+    }
+
+    _handleClassClick(element) {
+        if (this.registeredClasses[element.className]) {
             this.registeredClasses[element.className](element);
         }
         else {
@@ -36,6 +63,12 @@ class ClickManager {
         }
     }
 
+    _handleTagClick(element) {
+        if (this.registeredTags[element.tagName]) {
+            this.registeredTags[element.tagName](element);
+        }
+    }
+
     registerId(id, fn) {
         this.registeredIds[id] = fn;
     }
@@ -46,6 +79,17 @@ class ClickManager {
 
     registerSubclasses(parentClassname, fn) {
         this.registeredSubclasses[classname] = fn;
+    }
+
+    /**
+     * Overwrites previous registration.
+     * @param {*} tag 
+     * @param {*} fn 
+     */
+    registerTag(tag, fn) {
+        // Tags are read back from an element as uppercase. 
+        var upper = tag.toUpperCase();
+        this.registeredTags[upper] = fn;
     }
 
 }
