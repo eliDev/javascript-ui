@@ -453,6 +453,11 @@ Rectangle.prototype.getOrigin = function () {
   return { x: this.x, y: this.y };
 };
 
+Rectangle.prototype.setOriginPoint = function (point) {
+  this.x = point.x;
+  this.y = point.y;
+};
+
 Rectangle.prototype.getTop = function () {
   return this.y;
 };
