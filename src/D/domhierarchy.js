@@ -1,7 +1,7 @@
 /**
  * 
  */
-class Hierarchy {
+class DOMHierarchy {
 
     constructor() { }
 
