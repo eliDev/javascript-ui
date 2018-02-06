@@ -8,7 +8,6 @@ class ClickManager {
         this.registeredClasses = {};
         this.registeredSubclasses = {};
         this.registeredTags = {};
-        
         // window.addEventListener('load', this.onPageLoad.bind(this));
     }
 
