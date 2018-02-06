@@ -128,20 +128,48 @@ class ClickManager {
         this.registeredIds = {};
         this.registeredClasses = {};
         this.registeredSubclasses = {};
-        window.addEventListener('load', this.onPageLoad.bind(this));
+        this.registeredTags = {};
+        globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
+        // window.addEventListener('load', this.onPageLoad.bind(this));
     }
 
     onPageLoad() {
-        document.body.addEventListener('click', this.onBodyClick.bind(this), true)
+        document.body.addEventListener('click', this.onBodyClick.bind(this), true);
     }
 
     onBodyClick(event) {
-        console.log('clicked: ', event)
+        console.log('clicked: ', event);
         var element = event.srcElement;
+        this._handleIdClick(element);
+        this._handleClassClick(element);
+        this._handleTagClick(element);
+
+        // if (this.registeredIds[element.id]) {
+        //     this.registeredIds[element.id](element);
+        // }
+        // else if (this.registeredClasses[element.className]) {
+        //     this.registeredClasses[element.className](element);
+        // }
+        // else {
+        //     var parentNode = element.parentNode;
+        //     while (parentNode.nodeName != 'BODY') {
+        //         if (this.registeredClasses[parentNode.className]) {
+        //             this.registeredClasses[parentNode.className](element);
+        //             break;
+        //         }
+        //         parentNode = parentNode.parentNode;
+        //     }
+        // }
+    }
+
+    _handleIdClick(element){
         if (this.registeredIds[element.id]) {
             this.registeredIds[element.id](element);
         }
-        else if (this.registeredClasses[element.className]) {
+    }
+
+    _handleClassClick(element) {
+        if (this.registeredClasses[element.className]) {
             this.registeredClasses[element.className](element);
         }
         else {
@@ -156,18 +184,33 @@ class ClickManager {
         }
     }
 
+    _handleTagClick(element) {
+        if (this.registeredTags[element.tagName]) {
+            this.registeredTags[element.tagName](element);
+        }
+    }
+
     registerId(id, fn) {
-        this.registeredIds[id] = fn
+        this.registeredIds[id] = fn;
     }
 
     registerClass(classname, fn) {
-        this.registeredClasses[classname] = fn
+        this.registeredClasses[classname] = fn;
     }
 
     registerSubclasses(parentClassname, fn) {
+        this.registeredSubclasses[classname] = fn;
+    }
 
-
-        this.registeredSubclasses[classname] = fn
+    /**
+     * Overwrites previous registration.
+     * @param {*} tag 
+     * @param {*} fn 
+     */
+    registerTag(tag, fn) {
+        // Tags are read back from an element as uppercase. 
+        var upper = tag.toUpperCase();
+        this.registeredTags[upper] = fn;
     }
 
 }/**
@@ -877,7 +920,27 @@ class TableUtils {
         return data;
     }
 }
-﻿/**
+/**
+ * 
+ */
+class WindowEventManager {
+
+  constructor() {
+    this.onLoadCallbacks = [];
+    window.addEventListener('load', this.onPageLoad.bind(this));
+  }
+
+  registerForLoadEvent(callback) {
+    this.onLoadCallbacks.push(callback);
+  }
+
+  onPageLoad() {
+    this.onLoadCallbacks.forEach(function(callback) {
+      callback();
+    });
+  }
+
+}﻿/**
  * 
  */
 class Position {
@@ -2535,12 +2598,13 @@ class ElementCache {
     }
 }var globals = {
     singletons: {
-        main: new Main(),
+        main: new Main(), // Provided by application. Contains at least the function run()
+        windowEventManager: new WindowEventManager(),
         clickmanager: new ClickManager()
-
     }
-}
+};
 
+// Call into application code.
 globals.singletons.main.run();
 
 (function(window,document) {
