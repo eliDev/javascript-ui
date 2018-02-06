@@ -1,11 +1,11 @@
 var globals = {
     singletons: {
-        main: new Main(),
+        main: new Main(), // Provided by application. Contains at least the function run()
         clickmanager: new ClickManager()
-
     }
-}
+};
 
+// Call into application code.
 globals.singletons.main.run();
 
 (function(window,document) {
