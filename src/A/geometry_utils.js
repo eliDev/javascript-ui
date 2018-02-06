@@ -105,7 +105,7 @@ function Rectangle(x, y, width, height) {
   this.y = y;
   this.height = height;
   this.width = width;
-};
+}
 
 /** =================
       Initialisers
@@ -216,7 +216,6 @@ Rectangle.prototype.setWidthPlus = function (extraWidth, stickyCentre) {
                     after applying size.
 */
 Rectangle.prototype.setSize = function (width, height, stickyCentre) {
-
   var centre = this.getCentre();
   this.height = height;
   this.width = width;
