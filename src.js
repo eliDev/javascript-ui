@@ -192,6 +192,16 @@ class ClickManager {
         if (this.registeredTags[element.tagName]) {
             this.registeredTags[element.tagName](element);
         }
+        else {
+            var parentNode = element.parentNode;
+            while (parentNode.nodeName != 'BODY') {
+                if (this.registeredClasses[parentNode.tagName]) {
+                    this.registeredClasses[parentNode.tagName](element);
+                    break;
+                }
+                parentNode = parentNode.parentNode;
+            }
+        }
     }
 
     registerId(id, fn) {
