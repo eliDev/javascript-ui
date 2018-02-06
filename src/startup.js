@@ -1,6 +1,7 @@
 var globals = {
     singletons: {
         main: new Main(), // Provided by application. Contains at least the function run()
+        windowEventManager: new WindowEventManager(),
         clickmanager: new ClickManager()
     }
 };

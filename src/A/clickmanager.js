@@ -7,15 +7,16 @@ class ClickManager {
         this.registeredIds = {};
         this.registeredClasses = {};
         this.registeredSubclasses = {};
-        window.addEventListener('load', this.onPageLoad.bind(this));
+        globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
+        // window.addEventListener('load', this.onPageLoad.bind(this));
     }
 
     onPageLoad() {
-        document.body.addEventListener('click', this.onBodyClick.bind(this), true)
+        document.body.addEventListener('click', this.onBodyClick.bind(this), true);
     }
 
     onBodyClick(event) {
-        console.log('clicked: ', event)
+        console.log('clicked: ', event);
         var element = event.srcElement;
         if (this.registeredIds[element.id]) {
             this.registeredIds[element.id](element);
@@ -36,17 +37,15 @@ class ClickManager {
     }
 
     registerId(id, fn) {
-        this.registeredIds[id] = fn
+        this.registeredIds[id] = fn;
     }
 
     registerClass(classname, fn) {
-        this.registeredClasses[classname] = fn
+        this.registeredClasses[classname] = fn;
     }
 
     registerSubclasses(parentClassname, fn) {
-
-
-        this.registeredSubclasses[classname] = fn
+        this.registeredSubclasses[classname] = fn;
     }
 
 }
