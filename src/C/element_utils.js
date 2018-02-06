@@ -77,10 +77,9 @@ class ElementUtils {
      * @param {Number} 'value'
      */
     static setValue (element, propertyName, value, customSuffix) {
-
       var propertyKey = PropertyUtils.getPropertyKey(propertyName);
       var preparedValue;  
-      if (customSuffix){
+      if (customSuffix) {
         preparedValue = (value + customSuffix);
       }
       else {
@@ -88,8 +87,8 @@ class ElementUtils {
       }
 
       if (PropertyUtils.isCSSStyle(propertyName)) {
-        element.style[propertyKey] = preparedValue;
-          // angularElement.css(propertyKey, preparedValue);
+        CSSUtils.setStyle(element, propertyKey, preparedValue);
+        // element.style[propertyKey] = preparedValue;
       }
       else {
         element[propertyKey] = preparedValue;

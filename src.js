@@ -251,6 +251,19 @@ class CSSUtils
         return hasClass;
     }
 
+    static setStyle(element, styleName, value) {
+        element.style[styleName] = value;
+        switch(styleName) {
+            case 'position': {
+                if (value == 'sticky') {
+                    element.style[styleName] = '-webkit-sticky';
+                } else if (value == '-webkit-sticky') {
+                    element.style[styleName] = 'sticky';
+                }
+            }
+        }
+    }
+
     /** ==============
         Display
         ===============*/
@@ -1816,10 +1829,9 @@ class ElementUtils {
      * @param {Number} 'value'
      */
     static setValue (element, propertyName, value, customSuffix) {
-
       var propertyKey = PropertyUtils.getPropertyKey(propertyName);
       var preparedValue;  
-      if (customSuffix){
+      if (customSuffix) {
         preparedValue = (value + customSuffix);
       }
       else {
@@ -1827,8 +1839,8 @@ class ElementUtils {
       }
 
       if (PropertyUtils.isCSSStyle(propertyName)) {
-        element.style[propertyKey] = preparedValue;
-          // angularElement.css(propertyKey, preparedValue);
+        CSSUtils.setStyle(element, propertyKey, preparedValue);
+        // element.style[propertyKey] = preparedValue;
       }
       else {
         element[propertyKey] = preparedValue;

@@ -1,8 +1,7 @@
 /**
  * 
  */
-class CSSUtils
-{
+class CSSUtils {
 
     constructor() { }
     /**
@@ -20,6 +19,19 @@ class CSSUtils
 
         var hasClass = element.classList.contains(className);
         return hasClass;
+    }
+
+    static setStyle(element, styleName, value) {
+        element.style[styleName] = value;
+        switch(styleName) {
+            case 'position': {
+                if (value == 'sticky') {
+                    element.style[styleName] = '-webkit-sticky';
+                } else if (value == '-webkit-sticky') {
+                    element.style[styleName] = 'sticky';
+                }
+            }
+        }
     }
 
     /** ==============
