@@ -12,6 +12,7 @@ class ClickManager {
     }
 
     init() {
+        // inside init.
         globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
     }
 
