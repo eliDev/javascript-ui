@@ -188,9 +188,7 @@ class ClickManager {
         }
     }
 
-
     _handleTagClick(element) {
-        //
         if (this.registeredTags[element.tagName]) {
             this.registeredTags[element.tagName](element);
         }
