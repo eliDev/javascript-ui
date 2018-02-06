@@ -25,9 +25,9 @@ class CSSUtils {
         element.style[styleName] = value;
         switch(styleName) {
             case 'position': {
-                if (value == 'sticky') {
+                if (value === 'sticky') {
                     element.style[styleName] = '-webkit-sticky';
-                } else if (value == '-webkit-sticky') {
+                } else if (value === '-webkit-sticky') {
                     element.style[styleName] = 'sticky';
                 }
             }
