@@ -85,8 +85,15 @@ class CSSUtils
 
      This requires a somewhat complex clipping rule
      since clipping preserves the inside.
+     https://developer.mozilla.org/en-US/docs/Web/API/DOMRect
      */
-    static clipInsideRect(element, domRect) {
+    static clipInsideDOMRect(element, domRect) {
+        var r = Rectangle();
+        r.initFromClientRect(domRect);
+        CSSUtils.clipInsideRectangle(element, r);
+    }
+
+    static clipInsideRectangle(element, rectangle) {
 
         // Requires 11 points (10 without closing):
         // Procedure:
@@ -102,17 +109,17 @@ class CSSUtils
 
             { x: elementRect.width + extraWidth, y: 0 },
 
-            { x: elementRect.width + extraWidth, y: (domRect.top - extra) },
+            { x: elementRect.width + extraWidth, y: (rectangle.y - extra) },
 
-            { x: domRect.left + extraWidth, y: (domRect.top - extra) },
+            { x: rectangle.x + extraWidth, y: (rectangle.y - extra) },
 
-            { x: domRect.left + extraWidth, y: (domRect.bottom - extra) },
+            { x: rectangle.x + extraWidth, y: (rectangle.getBottom() - extra) },
 
-            { x: domRect.right, y: (domRect.bottom - extra) },
+            { x: rectangle.getRight(), y: (rectangle.getBottom() - extra) },
 
-            { x: domRect.right, y: (domRect.top - extra) },
+            { x: rectangle.getRight(), y: (rectangle.y - extra) },
 
-            { x: elementRect.width + extraWidth, y: (domRect.top - extra) },
+            { x: elementRect.width + extraWidth, y: (rectangle.y - extra) },
 
             { x: elementRect.width + extraWidth, y: elementRect.height },
 
@@ -124,9 +131,7 @@ class CSSUtils
         var cssValue = 'polygon(';
 
         for (index = 0; index < points.length; index++) {
-
             cssValue += points[index].x + 'px ' + points[index].y + 'px';
-
             if (index < points.length - 1) {
                 cssValue += ', ';
             }
