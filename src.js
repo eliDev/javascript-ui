@@ -129,8 +129,12 @@ class ClickManager {
         this.registeredClasses = {};
         this.registeredSubclasses = {};
         this.registeredTags = {};
-        globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
+        
         // window.addEventListener('load', this.onPageLoad.bind(this));
+    }
+
+    init() {
+        globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
     }
 
     onPageLoad() {
@@ -928,6 +932,9 @@ class WindowEventManager {
   constructor() {
     this.onLoadCallbacks = [];
     window.addEventListener('load', this.onPageLoad.bind(this));
+  }
+
+  init() {
   }
 
   registerForLoadEvent(callback) {
@@ -2604,6 +2611,8 @@ class ElementCache {
     }
 };
 
+globals.singletons.windowEventManager.init();
+globals.singletons.clickmanager.init();
 // Call into application code.
 globals.singletons.main.run();
 

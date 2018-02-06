@@ -6,6 +6,8 @@ var globals = {
     }
 };
 
+globals.singletons.windowEventManager.init();
+globals.singletons.clickmanager.init();
 // Call into application code.
 globals.singletons.main.run();
 

@@ -8,8 +8,12 @@ class ClickManager {
         this.registeredClasses = {};
         this.registeredSubclasses = {};
         this.registeredTags = {};
-        globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
+        
         // window.addEventListener('load', this.onPageLoad.bind(this));
+    }
+
+    init() {
+        globals.singletons.windowEventManager.registerForLoadEvent(onPageLoad);
     }
 
     onPageLoad() {

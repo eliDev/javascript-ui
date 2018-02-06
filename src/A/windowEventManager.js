@@ -8,6 +8,9 @@ class WindowEventManager {
     window.addEventListener('load', this.onPageLoad.bind(this));
   }
 
+  init() {
+  }
+
   registerForLoadEvent(callback) {
     this.onLoadCallbacks.push(callback);
   }
