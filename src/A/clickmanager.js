@@ -74,8 +74,8 @@ class ClickManager {
         else {
             var parentNode = element.parentNode;
             while (parentNode.nodeName != 'BODY') {
-                if (this.registeredClasses[parentNode.tagName]) {
-                    this.registeredClasses[parentNode.tagName](element);
+                if (this.registeredTags[parentNode.tagName]) {
+                    this.registeredTags[parentNode.tagName](element);
                     break;
                 }
                 parentNode = parentNode.parentNode;
