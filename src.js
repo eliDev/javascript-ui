@@ -241,13 +241,29 @@ class CSSUtils {
      @param {String} 'className'
      */
     static elementHasClass(element, className) {
-
         if (undefined === element || undefined === className || null === className) {
             return false;
         }
-
         var hasClass = element.classList.contains(className);
         return hasClass;
+    }
+
+    static overwriteClass(element, className) {
+        if (undefined === element || undefined === className || null === className) {
+            return false;
+        }
+        CSSUtils.removeClasses(element);
+        element.classList.add(className);
+    }
+
+    static removeClasses(element, classesToRemove) {
+        if (undefined === element) {
+            return;
+        }
+        if (undefined === classesToRemove || null === classesToRemove) {
+            classesToRemove = element.classList;
+        }
+        element.classList.remove(...classesToRemove);
     }
 
     static setStyle(element, styleName, value) {
