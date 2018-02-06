@@ -301,10 +301,11 @@ class CSSUtils
 
         var index;
         var cssValue = 'polygon(';
+        var pointsLength = points.length;
 
-        for (index = 0; index < points.length; index++) {
+        for (index = 0; index < pointsLength; index++) {
             cssValue += points[index].x + 'px ' + points[index].y + 'px';
-            if (index < points.length - 1) {
+            if (index < pointsLength - 1) {
                 cssValue += ', ';
             }
         }
