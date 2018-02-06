@@ -196,7 +196,7 @@ class ClickManager {
             var parentNode = element.parentNode;
             while (parentNode.nodeName != 'BODY') {
                 if (this.registeredTags[parentNode.tagName]) {
-                    this.registeredTags[parentNode.tagName](element);
+                    this.registeredTags[parentNode.tagName](parentNode);
                     break;
                 }
                 parentNode = parentNode.parentNode;
