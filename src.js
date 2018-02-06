@@ -1865,7 +1865,7 @@ class ElementUtils {
      * @param {HTMLElement} 'element'
      * @param {Object} 'values' properties to numeric values. 
      * 
-     * @example: { "bottom": -12 }
+     * @example: { "bottom": -12, "top": 2 }
      */
     static setValues (element, values) {
 
@@ -1891,7 +1891,6 @@ class ElementUtils {
       }
 
       if (hasTransforms) {
-
           value = PropertyUtils.composeTransform(transforms);
           this.setValue(element, TransformUtils.getVendorPrefix(), value);
       }
