@@ -5,7 +5,6 @@ class DOMHierarchy {
 
     constructor() { }
 
-
     static childrenWithClassName(parent, clazz) {
         var HTMLElements = parent.getElementsByClassName(clazz);
         HTMLElements = Array.from(HTMLElements);
@@ -20,23 +19,18 @@ class DOMHierarchy {
      @return {Array} List of child HTMLElements
      */
     static getChildren(element) {
-
         var children = [];
         var child = element.firstElementChild;
 
         while (null !== child) {
-
             children.push(child);
             child = child.nextElementSibling;
         }
-
         return children;
     }
 
     static removeChildren(element) {
-
         var children = [];
-
         while (element.firstChild) {
             children.push(element.firstChild);
             element.removeChild(element.firstChild);
@@ -45,9 +39,7 @@ class DOMHierarchy {
     }
 
     static removeChild(parentElement, childElement) {
-
         var parent = ElementUtils.parentElement(childElement);
-
         if (!parent || parent !== parentElement) {
             return;
         }
@@ -55,13 +47,11 @@ class DOMHierarchy {
     }
 
     static insertChildAtIndex(parentElement, child, index) {
-
         // No children or child is last.
         if (index === parentElement.children.length) {
             parentElement.appendChild(child);
         }
         else {
-
             var nextchild = this.getChildAtIndex(parentElement, index);
             parentElement.insertBefore(child, nextchild);
         }
@@ -93,7 +83,6 @@ class DOMHierarchy {
             subView = subView.nextElementSibling;
             index++;
         }
-
         if (child !== subView) {
             index = -1;
         }
@@ -123,7 +112,6 @@ class DOMHierarchy {
 
         var index = 0;
         while (child !== subView && null !== subView) {
-
             if (CSSUtils.elementHasClass(subView, includeClass)) {
                 index++;
             }
@@ -133,28 +121,22 @@ class DOMHierarchy {
             else if (!CSSUtils.elementHasClass(subView, excludeClass)) {
                 index++;
             }
-
             subView = subView.nextElementSibling;
         }
-
         return index;
     }
 
     static getChildAtIndex(element, index) {
-
         var child = element.firstElementChild;
         var childIndex = 0;
-
         while (child && null !== child && childIndex < index) {
             child = child.nextElementSibling;
             childIndex++;
         }
-
         return child;
     }
 
     static removeChildAtIndex(parent, childIndex) {
-
         var child = this.getChildAtIndex(childIndex);
         element.removeChild(child);
         return child;
