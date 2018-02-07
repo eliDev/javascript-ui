@@ -246,196 +246,6 @@ class ClickManager {
     //     });
     // }
 
-}/**
- * 
- */
-class CSSUtils {
-
-    constructor() { }
-    /**
-     false when class is undefined or not in the
-     element's class list.
-
-     @param {HTML Element} 'element'
-     @param {String} 'className'
-     */
-    static elementHasClass(element, className) {
-        if (undefined === element || undefined === className || null === className) {
-            return false;
-        }
-        var hasClass = element.classList.contains(className);
-        return hasClass;
-    }
-
-    static overwriteClass(element, className) {
-        if (undefined === element || undefined === className || null === className) {
-            return false;
-        }
-        CSSUtils.removeClasses(element);
-        element.classList.add(className);
-    }
-
-    static removeClasses(element, classesToRemove) {
-        if (undefined === element) {
-            return;
-        }
-        if (undefined === classesToRemove || null === classesToRemove) {
-            classesToRemove = element.classList;
-        }
-        element.classList.remove(...classesToRemove);
-    }
-
-    static setStyle(element, styleName, value) {
-        element.style[styleName] = value;
-        switch(styleName) {
-            case 'position': {
-                if (value === 'sticky') {
-                    element.style[styleName] = '-webkit-sticky';
-                } else if (value === '-webkit-sticky') {
-                    element.style[styleName] = 'sticky';
-                }
-            }
-        }
-    }
-
-    /** ==============
-        Display
-        ===============*/
-
-    static setGone(element, shouldGo, displayName) {
-
-        if (!element) {
-            return;
-        }
-
-        if (Array.isArray(element)){
-            for (var i=0; i<element.length;i++){
-                this.setGone(element[i], shouldGo);
-            }
-            return;
-        }
-
-        var wasGone = this.isGone(element);
-
-        if (shouldGo) {
-            if (!wasGone) {
-                var display = CSSUtils.getDisplay(element);
-                element.removedDisplay = display;
-                element.style.display = 'none';
-            }
-        }
-        else if (wasGone) {
-            if (displayName) {
-                element.style.display = displayName;
-            }
-            else if (element.removedDisplay && element.removedDisplay !== 'none') {
-                element.style.display = element.removedDisplay;
-            }
-            else {
-                element.style.display = 'block';
-            }
-        }
-    }
-
-    static isGone(element) {
-        var display = CSSUtils.getDisplay(element);
-        var isGone = (display === 'none');
-        return isGone;
-    }
-
-    static getDisplay(element) {
-        var display = "";
-        if (element.style && element.style.display) {
-            display = element.style.display;
-        }
-        else {
-            display = getComputedStyle(element, null).display;
-        }
-        return display;
-    }
-
-
-    /**
-     The given rect will be empty and the content will
-     be visible outside.
-
-     This requires a somewhat complex clipping rule
-     since clipping preserves the inside.
-     https://developer.mozilla.org/en-US/docs/Web/API/DOMRect
-     */
-    static clipInsideDOMRect(element, domRect) {
-        var r = Rectangle();
-        r.initFromClientRect(domRect);
-        CSSUtils.clipInsideRectangle(element, r);
-    }
-
-    static clipPoints(elementRect, clipRect){
-        // Requires 11 points (10 without closing):
-        // Procedure:
-        // start top left, loop over top,
-        // loop down left, top of bottom, loop right, return to left bottom.
-        var extra = elementRect.top;
-        var extraWidth = 0; //20;
-
-        var points = [
-
-            { x: 0, y: 0 },
-
-            { x: elementRect.width + extraWidth, y: 0 },
-
-            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
-
-            { x: clipRect.x + extraWidth, y: (clipRect.y - extra) },
-
-            { x: clipRect.x + extraWidth, y: (clipRect.getBottom() - extra) },
-
-            { x: clipRect.getRight(), y: (clipRect.getBottom() - extra) },
-
-            { x: clipRect.getRight(), y: (clipRect.y - extra) },
-
-            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
-
-            { x: elementRect.width + extraWidth, y: elementRect.height },
-
-            { x: 0, y: elementRect.height }
-
-        ];
-        return points;
-    }
-
-    static clipLeftInset(element, leftInset) {
-
-    }
-
-    static clipBetweenHorizontal(element, minX, maxX) {
-
-    }
-
-    static clipInsideRectangle(element, clipRect) {
-        var elementRect = element.getBoundingClientRect();
-        var points = CSSUtils.clipPoints(elementRect, clipRect);
-
-        var index;
-        var cssValue = 'polygon(';
-        var pointsLength = points.length;
-
-        for (index = 0; index < pointsLength; index++) {
-            cssValue += points[index].x + 'px ' + points[index].y + 'px';
-            if (index < pointsLength - 1) {
-                cssValue += ', ';
-            }
-        }
-
-        cssValue += ')';
-        console.log("clip path: ", cssValue);
-        element.style['-webkit-clip-path'] = cssValue;
-    }
-
-    static removeClipPath(element) {
-        element.style['-webkit-clip-path'] = '';
-    }
-
-
 }// class GeomtryUtils {
   
 GeometryUtils = {};
@@ -524,6 +334,8 @@ GeometryUtils.isDirectionUp = function (direction) {
      Rectangle
   ==================*/
 
+RectangleUtils = {};
+
 function Rectangle(x, y, width, height) {
 
   if (undefined === x) {
@@ -552,11 +364,22 @@ function Rectangle(x, y, width, height) {
 /**
   @param {ClientRect} 'clientRect'
 */
-Rectangle.prototype.initFromClientRect = function(clientRect){
-  this.x = clientRect.left;
-  this.y = clientRect.top;
-  this.width = clientRect.right - clientRect.left;
-  this.height = clientRect.bottom - clientRect.top;
+RectangleUtils.initFromDOMRect = function(clientRect) {
+  var rectangle = new Rectangle();
+  rectangle.x = clientRect.left;
+  rectangle.y = clientRect.top;
+  rectangle.width = clientRect.right - clientRect.left;
+  rectangle.height = clientRect.bottom - clientRect.top;
+  return rectangle;
+};
+
+RectangleUtils.initFromRect = function (rectangle) {
+  var rect = new Rectangle();
+  rect.x = rectangle.x;
+  rect.y = rectangle.y;
+  rect.width = rectangle.width;
+  rect.height = rectangle.height;
+  return rect;
 };
 
 Rectangle.prototype.DOMRect = function() {
@@ -570,13 +393,6 @@ Rectangle.prototype.DOMRect = function() {
     x: this.x,
     y: this.y
   };
-};
-
-Rectangle.prototype.initFromRect = function (rectangle) {
-  this.x = rectangle.x;
-  this.y = rectangle.y;
-  this.width = rectangle.width;
-  this.height = rectangle.height;
 };
 
 Rectangle.prototype.getOrigin = function () {
@@ -1033,6 +849,203 @@ class WindowEventManager {
       callback();
     });
   }
+
+}/**
+ * 
+ */
+class CSSUtils {
+
+    constructor() { }
+    /**
+     false when class is undefined or not in the
+     element's class list.
+
+     @param {HTML Element} 'element'
+     @param {String} 'className'
+     */
+    static elementHasClass(element, className) {
+        if (undefined === element || undefined === className || null === className) {
+            return false;
+        }
+        var hasClass = element.classList.contains(className);
+        return hasClass;
+    }
+
+    static overwriteClass(element, className) {
+        if (undefined === element || undefined === className || null === className) {
+            return false;
+        }
+        CSSUtils.removeClasses(element);
+        element.classList.add(className);
+    }
+
+    static removeClasses(element, classesToRemove) {
+        if (undefined === element) {
+            return;
+        }
+        if (undefined === classesToRemove || null === classesToRemove) {
+            classesToRemove = element.classList;
+        }
+        element.classList.remove(...classesToRemove);
+    }
+
+    static setStyle(element, styleName, value) {
+        element.style[styleName] = value;
+        switch(styleName) {
+            case 'position': {
+                if (value === 'sticky') {
+                    element.style[styleName] = '-webkit-sticky';
+                } else if (value === '-webkit-sticky') {
+                    element.style[styleName] = 'sticky';
+                }
+            }
+        }
+    }
+
+    /** ==============
+        Display
+        ===============*/
+
+    static setGone(element, shouldGo, displayName) {
+
+        if (!element) {
+            return;
+        }
+
+        if (Array.isArray(element)){
+            for (var i=0; i<element.length;i++){
+                this.setGone(element[i], shouldGo);
+            }
+            return;
+        }
+
+        var wasGone = this.isGone(element);
+
+        if (shouldGo) {
+            if (!wasGone) {
+                var display = CSSUtils.getDisplay(element);
+                element.removedDisplay = display;
+                element.style.display = 'none';
+            }
+        }
+        else if (wasGone) {
+            if (displayName) {
+                element.style.display = displayName;
+            }
+            else if (element.removedDisplay && element.removedDisplay !== 'none') {
+                element.style.display = element.removedDisplay;
+            }
+            else {
+                element.style.display = 'block';
+            }
+        }
+    }
+
+    static isGone(element) {
+        var display = CSSUtils.getDisplay(element);
+        var isGone = (display === 'none');
+        return isGone;
+    }
+
+    static getDisplay(element) {
+        var display = "";
+        if (element.style && element.style.display) {
+            display = element.style.display;
+        }
+        else {
+            display = getComputedStyle(element, null).display;
+        }
+        return display;
+    }
+
+     /** ==============
+            Clipping
+        ===============*/
+
+    /*
+        Rect to be clipped should be given as bounds to the 
+        element's clientRect
+
+
+    */
+
+    /**
+     The given rect will be empty and the content will
+     be visible outside.
+
+     This requires a somewhat complex clipping rule
+     since clipping preserves the inside.
+     https://developer.mozilla.org/en-US/docs/Web/API/DOMRect
+     */
+    static clipInsideDOMRect(element, domRect) {
+        var r = Rectangle();
+        r.initFromDOMRect(domRect);
+        CSSUtils.clipInsideRectangle(element, r);
+    }
+
+    static clipPoints(elementBounds, clipRectBounds) {
+        // Carve out the region to keep visible.
+        // Points are within the bounds of the element frame.
+        var points = [
+
+            // Top left.
+            { x: 0, y: 0 },
+            // Right movement. Will loop back if top if clipped out.
+            { x: elementBounds.width, y: 0 },
+
+            { x: elementBounds.width, y: clipRectBounds.y },
+
+            { x: clipRectBounds.x, y: clipRectBounds.y },
+
+            { x: clipRectBounds.x, y: clipRectBounds.getBottom() },
+
+            { x: clipRectBounds.getRight(), y: clipRectBounds.getBottom() },
+
+            { x: clipRectBounds.getRight(), y: clipRectBounds.y },
+
+            { x: elementBounds.width, y: clipRectBounds.y},
+
+            { x: elementBounds.width, y: elementBounds.height },
+
+            { x: 0, y: elementBounds.height }
+        ];
+        return points;
+    }
+
+    static clipLeftInset(element, leftInset) {
+
+    }
+
+    static clipBetweenHorizontal(element, minX, maxX) {
+
+    }
+
+    static clipInsideRectangle(element, clipBounds) {
+        var elementRect = element.getBoundingClientRect();
+        elementBounds = RectangleUtils.initFromDOMRect(elementRect);
+        elementBounds.setOriginPoint(PointZero());
+        var points = CSSUtils.clipPoints(elementBounds, clipBounds);
+
+        var index;
+        var cssValue = 'polygon(';
+        var pointsLength = points.length;
+
+        for (index = 0; index < pointsLength; index++) {
+            cssValue += points[index].x + 'px ' + points[index].y + 'px';
+            if (index < pointsLength - 1) {
+                cssValue += ', ';
+            }
+        }
+
+        cssValue += ')';
+        console.log("clip path: ", cssValue);
+        element.style['-webkit-clip-path'] = cssValue;
+    }
+
+    static removeClipPath(element) {
+        element.style['-webkit-clip-path'] = '';
+    }
+
 
 }﻿/**
  * 

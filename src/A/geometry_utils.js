@@ -86,6 +86,8 @@ GeometryUtils.isDirectionUp = function (direction) {
      Rectangle
   ==================*/
 
+RectangleUtils = {};
+
 function Rectangle(x, y, width, height) {
 
   if (undefined === x) {
@@ -114,11 +116,22 @@ function Rectangle(x, y, width, height) {
 /**
   @param {ClientRect} 'clientRect'
 */
-Rectangle.prototype.initFromClientRect = function(clientRect){
-  this.x = clientRect.left;
-  this.y = clientRect.top;
-  this.width = clientRect.right - clientRect.left;
-  this.height = clientRect.bottom - clientRect.top;
+RectangleUtils.initFromDOMRect = function(clientRect) {
+  var rectangle = new Rectangle();
+  rectangle.x = clientRect.left;
+  rectangle.y = clientRect.top;
+  rectangle.width = clientRect.right - clientRect.left;
+  rectangle.height = clientRect.bottom - clientRect.top;
+  return rectangle;
+};
+
+RectangleUtils.initFromRect = function (rectangle) {
+  var rect = new Rectangle();
+  rect.x = rectangle.x;
+  rect.y = rectangle.y;
+  rect.width = rectangle.width;
+  rect.height = rectangle.height;
+  return rect;
 };
 
 Rectangle.prototype.DOMRect = function() {
@@ -132,13 +145,6 @@ Rectangle.prototype.DOMRect = function() {
     x: this.x,
     y: this.y
   };
-};
-
-Rectangle.prototype.initFromRect = function (rectangle) {
-  this.x = rectangle.x;
-  this.y = rectangle.y;
-  this.width = rectangle.width;
-  this.height = rectangle.height;
 };
 
 Rectangle.prototype.getOrigin = function () {

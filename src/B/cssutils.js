@@ -106,6 +106,16 @@ class CSSUtils {
         return display;
     }
 
+     /** ==============
+            Clipping
+        ===============*/
+
+    /*
+        Rect to be clipped should be given as bounds to the 
+        element's clientRect
+
+
+    */
 
     /**
      The given rect will be empty and the content will
@@ -117,40 +127,35 @@ class CSSUtils {
      */
     static clipInsideDOMRect(element, domRect) {
         var r = Rectangle();
-        r.initFromClientRect(domRect);
+        r.initFromDOMRect(domRect);
         CSSUtils.clipInsideRectangle(element, r);
     }
 
-    static clipPoints(elementRect, clipRect){
-        // Requires 11 points (10 without closing):
-        // Procedure:
-        // start top left, loop over top,
-        // loop down left, top of bottom, loop right, return to left bottom.
-        var extra = elementRect.top;
-        var extraWidth = 0; //20;
-
+    static clipPoints(elementBounds, clipRectBounds) {
+        // Carve out the region to keep visible.
+        // Points are within the bounds of the element frame.
         var points = [
 
+            // Top left.
             { x: 0, y: 0 },
+            // Right movement. Will loop back if top if clipped out.
+            { x: elementBounds.width, y: 0 },
 
-            { x: elementRect.width + extraWidth, y: 0 },
+            { x: elementBounds.width, y: clipRectBounds.y },
 
-            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
+            { x: clipRectBounds.x, y: clipRectBounds.y },
 
-            { x: clipRect.x + extraWidth, y: (clipRect.y - extra) },
+            { x: clipRectBounds.x, y: clipRectBounds.getBottom() },
 
-            { x: clipRect.x + extraWidth, y: (clipRect.getBottom() - extra) },
+            { x: clipRectBounds.getRight(), y: clipRectBounds.getBottom() },
 
-            { x: clipRect.getRight(), y: (clipRect.getBottom() - extra) },
+            { x: clipRectBounds.getRight(), y: clipRectBounds.y },
 
-            { x: clipRect.getRight(), y: (clipRect.y - extra) },
+            { x: elementBounds.width, y: clipRectBounds.y},
 
-            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
+            { x: elementBounds.width, y: elementBounds.height },
 
-            { x: elementRect.width + extraWidth, y: elementRect.height },
-
-            { x: 0, y: elementRect.height }
-
+            { x: 0, y: elementBounds.height }
         ];
         return points;
     }
@@ -163,9 +168,11 @@ class CSSUtils {
 
     }
 
-    static clipInsideRectangle(element, clipRect) {
+    static clipInsideRectangle(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
-        var points = CSSUtils.clipPoints(elementRect, clipRect);
+        elementBounds = RectangleUtils.initFromDOMRect(elementRect);
+        elementBounds.setOriginPoint(PointZero());
+        var points = CSSUtils.clipPoints(elementBounds, clipBounds);
 
         var index;
         var cssValue = 'polygon(';
