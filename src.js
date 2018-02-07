@@ -413,6 +413,18 @@ Rectangle.prototype.setOriginPoint = function (point) {
   this.y = point.y;
 };
 
+Rectangle.prototype.getMaxXPoint = function () {
+  return new Point(this.getRight(), this.y);
+};
+
+Rectangle.prototype.getMaxYPoint = function () {
+  return new Point(this.x, this.getBottom());
+};
+
+Rectangle.prototype.getMaxPoint = function () {
+  return new Point(this.getRight(), this.getBottom());
+};
+
 Rectangle.prototype.getTop = function () {
   return this.y;
 };
@@ -579,7 +591,6 @@ Rectangle.prototype.stretchToXPos = function (xPos, plusDistance) {
   ===============*/
 
 Rectangle.prototype.containsPoint = function (point) {
-
     var contains = ((point.x >= this.x && point.x <= this.getRight()) &&
         (point.y >= this.y && point.y <= this.getBottom()));
     return contains;
@@ -593,6 +604,23 @@ Rectangle.prototype.containsXY = function (x, y) {
 Rectangle.prototype.containsX = function (x) {
     var point = new Point(x, this.y);
     return this.containsPoint(point);
+};
+
+Rectangle.prototype.overlaps = function (otherRect) {
+    var overlaps = false;
+    if (this.containsPoint(otherRect.getOrigin()) || otherRect.containsPoint(this.getOrigin())) {
+      overlaps = true;
+    }
+    else if (this.containsPoint(otherRect.getMaxXPoint()) || otherRect.containsPoint(this.getMaxXPoint())) {
+      overlaps = true;
+    }
+    else if (this.containsPoint(otherRect.getMaxYPoint()) || otherRect.containsPoint(this.getMaxYPoint())) {
+      overlaps = true;
+    }
+    else if (this.containsPoint(otherRect.getMaxPoint()) || otherRect.containsPoint(this.getMaxPoint())) {
+      overlaps = true;
+    }
+    return overlaps;
 };
 
 /**
@@ -664,11 +692,9 @@ GeometryUtils.addPoints = function (point1, point2) {
 };
 
 GeometryUtils.sideOpposite = function(side) {
-
   var oppositeSide = this.DIRECTION_UNDEFINED;
 
   switch (side) {
-
     case GeometryUtils.DIRECTION_TOP:
       oppositeSide = this.DIRECTION_BOTTOM;
       break;
@@ -739,7 +765,6 @@ GeometryUtils.originToCentreSide = function (domRect, side, centreOfSide) {
 
 */
 GeometryUtils.originToCentreSidePlus = function (domRect, side, centreOfSide, extraDistance) {
-
   var origin = {};
   switch (side) {
 
@@ -773,14 +798,11 @@ GeometryUtils.originToCentreSidePlus = function (domRect, side, centreOfSide, ex
     given reference rectangle so that their centres align.
 */
 GeometryUtils.originToCentreBesideRect = function (domRect, referenceDomRect, referenceSide) {
-
   var origin = this.originToCentreBesideRectPlus(domRect, referenceDomRect, referenceSide, 0);
   return origin;
 };
 
 GeometryUtils.originToCentreBesideRectPlus = function (domRect, referenceDomRect, referenceSide, extraDistance) {
-
-
   if (undefined === extraDistance) {
     extraDistance = 0;
   }
@@ -1132,7 +1154,6 @@ class Position {
   }
 
   static containsPoint(element, localPoint) {
-
     var frame = this.getFrame(element);
     var contains = frame.containsPoint(localPoint);
     return contains;
@@ -1158,13 +1179,11 @@ class Position {
     var foundChild;
 
     for (childIndex = 0; childIndex < children.length; childIndex++) {
-
       child = children[childIndex];
-
       if (CSSUtils.elementHasClass(child, excludeClass)) {
         continue;
       }
-      else if (undefined != includeClass && !CSSUtils.elementHasClass(child, includeClass)) {
+      else if (undefined !== includeClass && !CSSUtils.elementHasClass(child, includeClass)) {
         continue;
       }
 

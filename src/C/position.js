@@ -63,7 +63,6 @@ class Position {
   }
 
   static containsPoint(element, localPoint) {
-
     var frame = this.getFrame(element);
     var contains = frame.containsPoint(localPoint);
     return contains;
@@ -89,13 +88,11 @@ class Position {
     var foundChild;
 
     for (childIndex = 0; childIndex < children.length; childIndex++) {
-
       child = children[childIndex];
-
       if (CSSUtils.elementHasClass(child, excludeClass)) {
         continue;
       }
-      else if (undefined != includeClass && !CSSUtils.elementHasClass(child, includeClass)) {
+      else if (undefined !== includeClass && !CSSUtils.elementHasClass(child, includeClass)) {
         continue;
       }
 
