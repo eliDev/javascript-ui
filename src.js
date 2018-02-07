@@ -971,24 +971,16 @@ class CSSUtils {
     /*
         Rect to be clipped should be given as bounds to the 
         element's clientRect
-
-
+       https://developer.mozilla.org/en-US/docs/Web/API/DOMRect
     */
 
     /**
-     The given rect will be empty and the content will
-     be visible outside.
-
-     This requires a somewhat complex clipping rule
-     since clipping preserves the inside.
-     https://developer.mozilla.org/en-US/docs/Web/API/DOMRect
+     * The given rect will be empty and the content will
+     * be visible outside.
+     * 
+     * This requires a somewhat complex clipping rule
+     * since clipping preserves the inside.
      */
-    static clipInsideDOMRect(element, domRect) {
-        var r = Rectangle();
-        r.initFromDOMRect(domRect);
-        CSSUtils.clipInsideRectangle(element, r);
-    }
-
     static clipPoints(elementBounds, clipRectBounds) {
         // Carve out the region to keep visible.
         // Points are within the bounds of the element frame.
@@ -1059,8 +1051,7 @@ class CSSUtils {
     static removeClipPath(element) {
         element.style['-webkit-clip-path'] = '';
     }
-
-
+    
 }﻿/**
  * 
  */
