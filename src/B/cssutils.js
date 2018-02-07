@@ -169,7 +169,10 @@ class CSSUtils {
     }
 
     static clipBetweenHorizontal(element, minX, maxX) {
-        
+        var elementRect = element.getBoundingClientRect();
+        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var clipBounds = new Rectangle(minX, 0, maxX - minX, elementBounds.height);
+        CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipInsideRectangle(element, clipBounds) {
