@@ -397,6 +397,9 @@ Rectangle.prototype.overlaps = function (otherRect, outRect) {
     else if (this.containsPoint(otherRect.getMaxPoint()) || otherRect.containsPoint(this.getMaxPoint())) {
       overlaps = true;
     }
+    if (outRect){
+      outRect.copy(this.overlappingRect(otherRect));
+    }
     return overlaps;
 };
 
