@@ -121,13 +121,11 @@ class CSSUtils {
         CSSUtils.clipInsideRectangle(element, r);
     }
 
-    static clipInsideRectangle(element, rectangle) {
-
+    static clipPoints(elementRect, clipRect){
         // Requires 11 points (10 without closing):
         // Procedure:
         // start top left, loop over top,
         // loop down left, top of bottom, loop right, return to left bottom.
-        var elementRect = element.getBoundingClientRect();
         var extra = elementRect.top;
         var extraWidth = 0; //20;
 
@@ -137,23 +135,37 @@ class CSSUtils {
 
             { x: elementRect.width + extraWidth, y: 0 },
 
-            { x: elementRect.width + extraWidth, y: (rectangle.y - extra) },
+            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
 
-            { x: rectangle.x + extraWidth, y: (rectangle.y - extra) },
+            { x: clipRect.x + extraWidth, y: (clipRect.y - extra) },
 
-            { x: rectangle.x + extraWidth, y: (rectangle.getBottom() - extra) },
+            { x: clipRect.x + extraWidth, y: (clipRect.getBottom() - extra) },
 
-            { x: rectangle.getRight(), y: (rectangle.getBottom() - extra) },
+            { x: clipRect.getRight(), y: (clipRect.getBottom() - extra) },
 
-            { x: rectangle.getRight(), y: (rectangle.y - extra) },
+            { x: clipRect.getRight(), y: (clipRect.y - extra) },
 
-            { x: elementRect.width + extraWidth, y: (rectangle.y - extra) },
+            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
 
             { x: elementRect.width + extraWidth, y: elementRect.height },
 
             { x: 0, y: elementRect.height }
 
         ];
+        return points;
+    }
+
+    static clipLeftInset(element, leftInset) {
+
+    }
+
+    static clipBetweenHorizontal(element, minX, maxX) {
+
+    }
+
+    static clipInsideRectangle(element, clipRect) {
+        var elementRect = element.getBoundingClientRect();
+        var points = CSSUtils.clipPoints(elementRect, clipRect);
 
         var index;
         var cssValue = 'polygon(';

@@ -33,14 +33,11 @@ class ElementUtils {
       }
       
       properties.forEach(function(propertyName) {
-  
         var value = 0;
         if (PropertyUtils.isCSSStyle(propertyName)) {
-        
           if (!elementStyles){
             elementStyles = window.getComputedStyle(element, null);
           }
-
           var propertyKey = PropertyUtils.getPropertyKey(propertyName);
           if (propertyKey === 'transform') {
             value = TransformUtils.getValue(elementStyles, propertyName);

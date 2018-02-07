@@ -129,7 +129,7 @@ class ClickManager {
         this.registeredClasses = {};
         this.registeredSubclasses = {};
         this.registeredTags = {};
-        // window.addEventListener('load', this.onPageLoad.bind(this));
+        this.registeredElementTags = [];
     }
 
     init() {
@@ -147,23 +147,6 @@ class ClickManager {
         this._handleIdClick(element);
         this._handleClassClick(element);
         this._handleTagClick(element);
-
-        // if (this.registeredIds[element.id]) {
-        //     this.registeredIds[element.id](element);
-        // }
-        // else if (this.registeredClasses[element.className]) {
-        //     this.registeredClasses[element.className](element);
-        // }
-        // else {
-        //     var parentNode = element.parentNode;
-        //     while (parentNode.nodeName != 'BODY') {
-        //         if (this.registeredClasses[parentNode.className]) {
-        //             this.registeredClasses[parentNode.className](element);
-        //             break;
-        //         }
-        //         parentNode = parentNode.parentNode;
-        //     }
-        // }
     }
 
     _handleIdClick(element){
@@ -204,6 +187,30 @@ class ClickManager {
         }
     }
 
+    // _handleElementClick(element) {
+    //     var self = this;
+    //     this.registeredElementTags.forEach(function(source){
+    //         if (element === source.element){
+    //             source.callback(element, )
+    //         }
+    //     });
+
+
+    //     if (this.registeredTags[element.tagName]) {
+    //         this.registeredTags[element.tagName](element);
+    //     }
+    //     else {
+    //         var parentNode = element.parentNode;
+    //         while (parentNode.nodeName != 'BODY') {
+    //             if (this.registeredTags[parentNode.tagName]) {
+    //                 this.registeredTags[parentNode.tagName](parentNode);
+    //                 break;
+    //             }
+    //             parentNode = parentNode.parentNode;
+    //         }
+    //     }
+    // }
+
     registerId(id, fn) {
         this.registeredIds[id] = fn;
     }
@@ -226,6 +233,18 @@ class ClickManager {
         var upper = tag.toUpperCase();
         this.registeredTags[upper] = fn;
     }
+
+    // registerTagsUnderElement(element, tags, fn) {
+    //     if (!Array.isArray(tags)){
+    //         tags = [tags];
+    //     }
+
+    //     this.registeredElementTags.push({
+    //         element: element,
+    //         tags: tags,
+    //         calback: fn
+    //     });
+    // }
 
 }/**
  * 
@@ -350,13 +369,11 @@ class CSSUtils {
         CSSUtils.clipInsideRectangle(element, r);
     }
 
-    static clipInsideRectangle(element, rectangle) {
-
+    static clipPoints(elementRect, clipRect){
         // Requires 11 points (10 without closing):
         // Procedure:
         // start top left, loop over top,
         // loop down left, top of bottom, loop right, return to left bottom.
-        var elementRect = element.getBoundingClientRect();
         var extra = elementRect.top;
         var extraWidth = 0; //20;
 
@@ -366,23 +383,37 @@ class CSSUtils {
 
             { x: elementRect.width + extraWidth, y: 0 },
 
-            { x: elementRect.width + extraWidth, y: (rectangle.y - extra) },
+            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
 
-            { x: rectangle.x + extraWidth, y: (rectangle.y - extra) },
+            { x: clipRect.x + extraWidth, y: (clipRect.y - extra) },
 
-            { x: rectangle.x + extraWidth, y: (rectangle.getBottom() - extra) },
+            { x: clipRect.x + extraWidth, y: (clipRect.getBottom() - extra) },
 
-            { x: rectangle.getRight(), y: (rectangle.getBottom() - extra) },
+            { x: clipRect.getRight(), y: (clipRect.getBottom() - extra) },
 
-            { x: rectangle.getRight(), y: (rectangle.y - extra) },
+            { x: clipRect.getRight(), y: (clipRect.y - extra) },
 
-            { x: elementRect.width + extraWidth, y: (rectangle.y - extra) },
+            { x: elementRect.width + extraWidth, y: (clipRect.y - extra) },
 
             { x: elementRect.width + extraWidth, y: elementRect.height },
 
             { x: 0, y: elementRect.height }
 
         ];
+        return points;
+    }
+
+    static clipLeftInset(element, leftInset) {
+
+    }
+
+    static clipBetweenHorizontal(element, minX, maxX) {
+
+    }
+
+    static clipInsideRectangle(element, clipRect) {
+        var elementRect = element.getBoundingClientRect();
+        var points = CSSUtils.clipPoints(elementRect, clipRect);
 
         var index;
         var cssValue = 'polygon(';
@@ -1805,14 +1836,11 @@ class ElementUtils {
       }
       
       properties.forEach(function(propertyName) {
-  
         var value = 0;
         if (PropertyUtils.isCSSStyle(propertyName)) {
-        
           if (!elementStyles){
             elementStyles = window.getComputedStyle(element, null);
           }
-
           var propertyKey = PropertyUtils.getPropertyKey(propertyName);
           if (propertyKey === 'transform') {
             value = TransformUtils.getValue(elementStyles, propertyName);

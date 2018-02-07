@@ -8,7 +8,7 @@ class ClickManager {
         this.registeredClasses = {};
         this.registeredSubclasses = {};
         this.registeredTags = {};
-        // window.addEventListener('load', this.onPageLoad.bind(this));
+        this.registeredElementTags = [];
     }
 
     init() {
@@ -26,23 +26,6 @@ class ClickManager {
         this._handleIdClick(element);
         this._handleClassClick(element);
         this._handleTagClick(element);
-
-        // if (this.registeredIds[element.id]) {
-        //     this.registeredIds[element.id](element);
-        // }
-        // else if (this.registeredClasses[element.className]) {
-        //     this.registeredClasses[element.className](element);
-        // }
-        // else {
-        //     var parentNode = element.parentNode;
-        //     while (parentNode.nodeName != 'BODY') {
-        //         if (this.registeredClasses[parentNode.className]) {
-        //             this.registeredClasses[parentNode.className](element);
-        //             break;
-        //         }
-        //         parentNode = parentNode.parentNode;
-        //     }
-        // }
     }
 
     _handleIdClick(element){
@@ -83,6 +66,30 @@ class ClickManager {
         }
     }
 
+    // _handleElementClick(element) {
+    //     var self = this;
+    //     this.registeredElementTags.forEach(function(source){
+    //         if (element === source.element){
+    //             source.callback(element, )
+    //         }
+    //     });
+
+
+    //     if (this.registeredTags[element.tagName]) {
+    //         this.registeredTags[element.tagName](element);
+    //     }
+    //     else {
+    //         var parentNode = element.parentNode;
+    //         while (parentNode.nodeName != 'BODY') {
+    //             if (this.registeredTags[parentNode.tagName]) {
+    //                 this.registeredTags[parentNode.tagName](parentNode);
+    //                 break;
+    //             }
+    //             parentNode = parentNode.parentNode;
+    //         }
+    //     }
+    // }
+
     registerId(id, fn) {
         this.registeredIds[id] = fn;
     }
@@ -105,5 +112,17 @@ class ClickManager {
         var upper = tag.toUpperCase();
         this.registeredTags[upper] = fn;
     }
+
+    // registerTagsUnderElement(element, tags, fn) {
+    //     if (!Array.isArray(tags)){
+    //         tags = [tags];
+    //     }
+
+    //     this.registeredElementTags.push({
+    //         element: element,
+    //         tags: tags,
+    //         calback: fn
+    //     });
+    // }
 
 }
