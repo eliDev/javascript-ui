@@ -268,6 +268,9 @@ GeometryUtils.isDirectionDown = function (direction) {
 GeometryUtils.isDirectionUp = function (direction) {
   return direction === GeometryUtils.DIRECTION_UP;
 };
+GeometryUtils.isHorizontal = function (direction) {
+  return (direction === GeometryUtils.DIRECTION_LEFT || direction === GeometryUtils.DIRECTION_RIGHT);
+};
 
   
 /** ============
@@ -507,6 +510,11 @@ Rectangle.prototype.setSizePlus = function (extraWidth, extraHeight, stickyCentr
   this.setSize(this.width + extraWidth, this.height + extraHeight, stickyCentre);
 };
 
+Rectangle.prototype.moveBy = function(point) {
+  this.x = this.x + point.x;
+  this.y = this.y + point.y;
+};
+
 /** =============
       Resize
   ===============*/
@@ -645,6 +653,13 @@ GeometryUtils.subtractPoints = function (point1, point2) {
   var point;
   point.x = point1.x - point2.x;
   point.y = point1.y - point2.y;
+  return point;
+};
+
+GeometryUtils.addPoints = function (point1, point2) {
+  var point;
+  point.x = point1.x + point2.x;
+  point.y = point1.y + point2.y;
   return point;
 };
 
