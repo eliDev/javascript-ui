@@ -6,7 +6,7 @@ class DOMHierarchy {
     constructor() { }
 
 
-    static elementWithClass(parent, clazz) {
+    static childrenWithClassName(parent, clazz) {
         var HTMLElements = parent.getElementsByClassName(clazz);
         HTMLElements = Array.from(HTMLElements);
         return HTMLElements;
