@@ -559,6 +559,19 @@ Rectangle.prototype.initFromClientRect = function(clientRect){
   this.height = clientRect.bottom - clientRect.top;
 };
 
+Rectangle.prototype.DOMRect = function() {
+  return {
+    bottom: this.getBottom(),
+    height: this.height,
+    left: this.getLeft(),
+    right: this.getRight(),
+    top: this.getTop(),
+    width: this.width,
+    x: this.x,
+    y: this.y
+  };
+};
+
 Rectangle.prototype.initFromRect = function (rectangle) {
   this.x = rectangle.x;
   this.y = rectangle.y;
