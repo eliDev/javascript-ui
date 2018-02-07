@@ -625,16 +625,15 @@ Rectangle.prototype.overlaps = function (otherRect) {
 };
 
 Rectangle.prototype.overlappingRect = function (otherRect) {
-  var maxOriginY = Math.max(otherRect.y, this.y);
-  var minOriginY = Math.min(otherRect.y, this.y);
+  // var maxOriginY = Math.max(otherRect.y, this.y);
+  // var minOriginY = Math.min(otherRect.y, this.y);
 
   var overlapRect = new Rectangle();
-  overlapRect.y = maxOriginY - minOriginY;
+  overlapRect.y = Math.max(otherRect.y, this.y);
   overlapRect.x = Math.max(otherRect.x, this.x);
   overlapRect.setBottom(Math.min(otherRect.getBottom(), this.getBottom()));
   overlapRect.setRight(Math.min(otherRect.getRight(), this.getRight()));
   return overlapRect;
-
 };
 
 /**
