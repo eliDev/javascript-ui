@@ -197,6 +197,10 @@ Rectangle.prototype.getBottom = function () {
   return this.y + this.height;
 };
 
+Rectangle.prototype.setBottom = function (y) {
+  this.height = (y - this.y);
+};
+
 Rectangle.prototype.getBoundsCentre = function () {
   var centre = {};
   centre.x = this.halfWidth();
@@ -288,7 +292,6 @@ Rectangle.prototype.moveBy = function(point) {
     @param {Number} 'amount' size to increase by.
 */
 Rectangle.prototype.stretchBy = function (amount) {
-
   this.stretchHoriztonally(amount);
   this.stretchVertically(amount);
 };
@@ -298,13 +301,11 @@ Rectangle.prototype.stretchBy = function (amount) {
     Centre remains the same.
 */
 Rectangle.prototype.stretchHoriztonally = function (amount) {
-
   this.x -= amount;
   this.width += (2 * amount);
 };
 
 Rectangle.prototype.stretchVertically = function (amount) {
-
   this.y -= amount;
   this.height += (2 * amount);
 };
@@ -375,6 +376,19 @@ Rectangle.prototype.overlaps = function (otherRect) {
     return overlaps;
 };
 
+Rectangle.prototype.overlappingRect = function (otherRect) {
+  var maxOriginY = Math.max(otherRect.y, this.y);
+  var minOriginY = Math.min(otherRect.y, this.y);
+
+  var overlapRect = new Rectangle();
+  overlapRect.y = maxOriginY - minOriginY;
+  overlapRect.x = Math.max(otherRect.x, this.x);
+  overlapRect.setBottom(Math.min(otherRect.getBottom(), this.getBottom()));
+  overlapRect.setRight(Math.min(otherRect.getRight(), this.getRight()));
+  return overlapRect;
+
+};
+
 /**
     Zero if point is within the rectangle or outside vertically.
     Else provides an x value.
@@ -383,12 +397,10 @@ Rectangle.prototype.overlaps = function (otherRect) {
     @param {point} 'point' has x: y: properties.
 */
 Rectangle.prototype.xDistanceOutside = function (point) {
-
   var distance = 0;
   if (this.containsPoint(point)) {
     return distance;
   }
-
   if (point.x > this.getRight()) {
     distance = point.x - this.getRight();
   }
@@ -397,7 +409,6 @@ Rectangle.prototype.xDistanceOutside = function (point) {
   }
   return distance;
 };
-
 
 /**
   The given is either closer to the left or right side 
@@ -411,9 +422,7 @@ Rectangle.prototype.xDistanceOutside = function (point) {
   @return {Number} A GeometryUtils 'direction'
 */
 Rectangle.prototype.horizontalSideClosestToXPos = function (xPos) {
-
   var side = GeometryUtils.DIRECTION_CENTRE;
-
   if (xPos > this.getCentre().x) {
     side = GeometryUtils.DIRECTION_RIGHT;
   }
