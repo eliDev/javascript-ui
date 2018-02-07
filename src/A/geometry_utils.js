@@ -112,6 +112,10 @@ function Rectangle(x, y, width, height) {
   this.width = width;
 }
 
+function RectZero(){
+  return new Rectangle();
+}
+
 /** =================
       Initialisers
   ===================*/
@@ -155,6 +159,19 @@ Rectangle.prototype.DOMRect = function() {
     y: this.y
   };
 };
+
+/** ==============
+    EQUALITY
+  ===============*/
+
+  Rectangle.prototype.equals = function (otherRect) {
+    return ((otherRect.x === this.x && otherRect.y === this.y) &&
+            (otherRect.width === this.width && otherRect.height === this.height));
+  };
+
+/** ==============
+      PROPERTIES
+  ===============*/
 
 Rectangle.prototype.getOrigin = function () {
   return { x: this.x, y: this.y };
@@ -377,9 +394,6 @@ Rectangle.prototype.overlaps = function (otherRect) {
 };
 
 Rectangle.prototype.overlappingRect = function (otherRect) {
-  // var maxOriginY = Math.max(otherRect.y, this.y);
-  // var minOriginY = Math.min(otherRect.y, this.y);
-
   var overlapRect = new Rectangle();
   overlapRect.y = Math.max(otherRect.y, this.y);
   overlapRect.x = Math.max(otherRect.x, this.x);
