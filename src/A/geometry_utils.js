@@ -116,12 +116,18 @@ function Rectangle(x, y, width, height) {
 /**
   @param {ClientRect} 'clientRect'
 */
-RectangleUtils.initFromDOMRect = function(clientRect) {
+RectangleUtils.initFromDOMRect = function(domRect) {
   var rectangle = new Rectangle();
-  rectangle.x = clientRect.left;
-  rectangle.y = clientRect.top;
-  rectangle.width = clientRect.right - clientRect.left;
-  rectangle.height = clientRect.bottom - clientRect.top;
+  rectangle.x = domRect.left;
+  rectangle.y = domRect.top;
+  rectangle.width = domRect.right - domRect.left;
+  rectangle.height = domRect.bottom - domRect.top;
+  return rectangle;
+};
+
+RectangleUtils.boundsFromDOMRect = function(domRect) {
+  var rectangle = RectangleUtils.initFromDOMRect(domRect);
+  rectangle.setOriginPoint(PointZero());
   return rectangle;
 };
 

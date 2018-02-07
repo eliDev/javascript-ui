@@ -161,19 +161,25 @@ class CSSUtils {
     }
 
     static clipLeftInset(element, leftInset) {
-
+        var elementRect = element.getBoundingClientRect();
+        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var clipBounds = RectangleUtils.initFromRect(elementBounds);
+        clipBounds.setWidth(leftInset);
+        CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipBetweenHorizontal(element, minX, maxX) {
-
+        
     }
 
     static clipInsideRectangle(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.initFromDOMRect(elementRect);
-        elementBounds.setOriginPoint(PointZero());
-        var points = CSSUtils.clipPoints(elementBounds, clipBounds);
+        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
+    }
 
+    static clipOutRectangle(element, elementBounds, clipBounds) {
+        var points = CSSUtils.clipPoints(elementBounds, clipBounds);
         var index;
         var cssValue = 'polygon(';
         var pointsLength = points.length;
@@ -184,7 +190,6 @@ class CSSUtils {
                 cssValue += ', ';
             }
         }
-
         cssValue += ')';
         console.log("clip path: ", cssValue);
         element.style['-webkit-clip-path'] = cssValue;
