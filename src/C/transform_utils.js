@@ -137,6 +137,7 @@ class TransformUtils {
         case 'translateY':
         case 'translateX':
         case 'rotateX':
+        case 'rotateY':
           isTransform = true;
           break;
 

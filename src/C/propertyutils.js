@@ -104,6 +104,7 @@ class PropertyUtils {
         case 'translateY':
         case 'translateX':
         case 'rotateX':
+        case 'rotateY':
           name = 'transform';
         break;
       }
@@ -281,6 +282,9 @@ class PropertyUtils {
         case 'rotateX':
           prefix = 'rotateX(';
           break;
+        case 'rotateY':
+          prefix = 'rotateY(';
+          break;
       }
       return prefix;
     }
@@ -320,6 +324,7 @@ class PropertyUtils {
           suffix = ")";
           break;
         case 'rotateX':
+        case 'rotateY':
           suffix = 'deg)';
           break;
       }
