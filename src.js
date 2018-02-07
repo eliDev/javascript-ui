@@ -1022,7 +1022,7 @@ class CSSUtils {
 
     static clipInsideRectangle(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
-        elementBounds = RectangleUtils.initFromDOMRect(elementRect);
+        var elementBounds = RectangleUtils.initFromDOMRect(elementRect);
         elementBounds.setOriginPoint(PointZero());
         var points = CSSUtils.clipPoints(elementBounds, clipBounds);
 
