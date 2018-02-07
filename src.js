@@ -395,6 +395,13 @@ RectangleUtils.initFromRect = function (rectangle) {
   return rect;
 };
 
+RectangleUtils.copy = function (rectangle) {
+  this.x = rectangle.x;
+  this.y = rectangle.y;
+  this.width = rectangle.width;
+  this.height = rectangle.height;
+};
+
 Rectangle.prototype.DOMRect = function() {
   return {
     bottom: this.getBottom(),
@@ -624,7 +631,7 @@ Rectangle.prototype.containsX = function (x) {
     return this.containsPoint(point);
 };
 
-Rectangle.prototype.overlaps = function (otherRect) {
+Rectangle.prototype.overlaps = function (otherRect, outRect) {
     var overlaps = false;
     if (this.containsPoint(otherRect.getOrigin()) || otherRect.containsPoint(this.getOrigin())) {
       overlaps = true;
