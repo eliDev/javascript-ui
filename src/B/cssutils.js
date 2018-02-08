@@ -193,7 +193,7 @@ class CSSUtils {
             }
         }
         cssValue += ')';
-        console.log("clip path: ", cssValue);
+        // console.log("clip path: ", cssValue);
         element.style['-webkit-clip-path'] = cssValue;
     }
 
