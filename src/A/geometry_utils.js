@@ -24,6 +24,29 @@ GeometryUtils.isHorizontal = function (direction) {
   return (direction === GeometryUtils.DIRECTION_LEFT || direction === GeometryUtils.DIRECTION_RIGHT);
 };
 
+GeometryUtils.sideOpposite = function(side) {
+  var oppositeSide = this.DIRECTION_UNDEFINED;
+
+  switch (side) {
+    case GeometryUtils.DIRECTION_TOP:
+      oppositeSide = this.DIRECTION_BOTTOM;
+      break;
+
+    case GeometryUtils.DIRECTION_RIGHT:
+      oppositeSide = this.DIRECTION_LEFT;
+      break;
+
+    case GeometryUtils.DIRECTION_BOTTOM:
+      oppositeSide = this.DIRECTION_TOP;
+      break;
+
+    case GeometryUtils.DIRECTION_LEFT:
+      oppositeSide = this.DIRECTION_RIGHT;
+      break;
+  }
+  return oppositeSide;
+};
+
   
 /** ============
     Points
@@ -71,6 +94,21 @@ GeometryUtils.isHorizontal = function (direction) {
    .concat(point.y.toString())
    .concat("}"); 
  }
+
+ GeometryUtils.subtractPoints = function (point1, point2) {
+  var point;
+  point.x = point1.x - point2.x;
+  point.y = point1.y - point2.y;
+  return point;
+};
+
+GeometryUtils.addPoints = function (point1, point2) {
+  var point;
+  point.x = point1.x + point2.x;
+  point.y = point1.y + point2.y;
+  return point;
+};
+
  
  /** ============
       Lines
@@ -448,6 +486,29 @@ Rectangle.prototype.distanceOutside = function (point) {
   return new Point(x, y);
 };
 
+Rectangle.prototype.isBeyondSide = function(point, thisRectSide) {
+  var isBeyond = false;
+  var outsidePoint = this.distanceOutside(point);
+  switch (thisRectSide) {
+    case GeometryUtils.DIRECTION_TOP:
+      isBeyond = outsidePoint.y < 0;
+      break;
+    case GeometryUtils.DIRECTION_RIGHT:
+      isBeyond = outsidePoint.x > 0;
+      break;
+    case GeometryUtils.DIRECTION_BOTTOM:
+      isBeyond = outsidePoint.y > 0;
+      break;
+    case GeometryUtils.DIRECTION_LEFT:
+      isBeyond = outsidePoint.x < 0;
+      break;
+      default:
+      console.log("Rectangle.prototype.isBeyondSide unhandled case: ", thisRectSide);
+  }
+  return isBeyond;
+};
+
+
 /**
   The given is either closer to the left or right side 
   of the rectangle (unless centred, in which case DIRECTION_CENTRE
@@ -475,71 +536,29 @@ Rectangle.prototype.horizontalSideClosestToXPos = function (xPos) {
       GEOMETRY
   ===============*/
 
-
-GeometryUtils.subtractPoints = function (point1, point2) {
-  var point;
-  point.x = point1.x - point2.x;
-  point.y = point1.y - point2.y;
-  return point;
+GeometryUtils.centreOfSide = function(DOMRect, side) {
+  var rect = GeometryUtils.initFromDOMRect(DOMRect);
+  return rect.centreOfSide(side);
 };
-
-GeometryUtils.addPoints = function (point1, point2) {
-  var point;
-  point.x = point1.x + point2.x;
-  point.y = point1.y + point2.y;
-  return point;
-};
-
-GeometryUtils.sideOpposite = function(side) {
-  var oppositeSide = this.DIRECTION_UNDEFINED;
-
-  switch (side) {
-    case GeometryUtils.DIRECTION_TOP:
-      oppositeSide = this.DIRECTION_BOTTOM;
-      break;
-
-    case GeometryUtils.DIRECTION_RIGHT:
-      oppositeSide = this.DIRECTION_LEFT;
-      break;
-
-    case GeometryUtils.DIRECTION_BOTTOM:
-      oppositeSide = this.DIRECTION_TOP;
-      break;
-
-    case GeometryUtils.DIRECTION_LEFT:
-      oppositeSide = this.DIRECTION_RIGHT;
-      break;
-  }
-
-  return oppositeSide;
-}
 
 /**
     Returns the point representings the 
     centre along the top of the rectangle.
 */
-GeometryUtils.centreOfSide = function(domRect, side) {
-  var point = {};
+Rectangle.prototype.centreOfSide = function(side) {
+  var point;
   switch (side) {
-
     case GeometryUtils.DIRECTION_TOP:
-      point.x = domRect.left + this.halfWidth(domRect);
-      point.y = domRect.top;
+      point = new Point(this.x + this.halfWidth(), this.y);
       break;
-
     case GeometryUtils.DIRECTION_RIGHT:
-      point.x = domRect.left + domRect.width;
-      point.y = domRect.top + this.halfHeight(domRect);
+      point = new Point(this.x + this.width, this.y + this.halfHeight());
       break;
-
     case GeometryUtils.DIRECTION_BOTTOM:
-      point.x = domRect.left + this.halfWidth(domRect);
-      point.y = domRect.top + domRect.height;
+      point = new Point(this.x + this.halfWidth(), this.y + this.height);
       break;
-
     case GeometryUtils.DIRECTION_LEFT:
-      point.x = domRect.left;
-      point.y = domRect.top + this.halfHeight(domRect);
+      point = new Point(this.x, this.y + this.halfHeight());
       break;
   } 
   return point;
@@ -605,8 +624,8 @@ GeometryUtils.originToCentreBesideRectPlus = function (domRect, referenceDomRect
   if (undefined === extraDistance) {
     extraDistance = 0;
   }
-  var centreReferenceSide = this.centreOfSide(referenceDomRect, referenceSide);
-  var oppositeSide = this.sideOpposite(referenceSide);
+  var centreReferenceSide = GeometryUtils.centreOfSide(referenceDomRect, referenceSide);
+  var oppositeSide = GeometryUtils.sideOpposite(referenceSide);
   var origin = this.originToCentreSidePlus(domRect, oppositeSide, centreReferenceSide, -extraDistance);
   return origin;
 };
