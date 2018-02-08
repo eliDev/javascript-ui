@@ -415,25 +415,37 @@ Rectangle.prototype.overlappingRect = function (otherRect) {
   return overlapRect;
 };
 
+
 /**
     Zero if point is within the rectangle or outside vertically.
-    Else provides an x value.
-    Negative value means the point is outside to the left.
+    Negative x: the point is outside to the left.
 
     @param {point} 'point' has x: y: properties.
+    @return {Point} (x === 0): Given x is within the rectangle
+                    (x < 0): Given x is left of the rectangle
+                    (x > 0): Given x is right of the rectangle
+                    (y === 0): Given y is within the rectangle
+                    (y < 0): Given y is above the rectangle
+                    (y > 0): Given y is below the rectangle
 */
-Rectangle.prototype.xDistanceOutside = function (point) {
-  var distance = 0;
+Rectangle.prototype.distanceOutside = function (point) {
   if (this.containsPoint(point)) {
-    return distance;
+    return PointZero();
   }
+  var x, y;
   if (point.x > this.getRight()) {
-    distance = point.x - this.getRight();
+    x = point.x - this.getRight();
   }
   else if (point.x < this.x) {
-    distance = this.x - point.x;
+    x = point.x - this.x;
   }
-  return distance;
+  if (point.y > this.getBottom()) {
+    y = point.y - this.getBottom();
+  }
+  else if (point.y < this.y) {
+    y = point.y - this.y;
+  }
+  return new Point(x, y);
 };
 
 /**
@@ -593,7 +605,6 @@ GeometryUtils.originToCentreBesideRectPlus = function (domRect, referenceDomRect
   if (undefined === extraDistance) {
     extraDistance = 0;
   }
-
   var centreReferenceSide = this.centreOfSide(referenceDomRect, referenceSide);
   var oppositeSide = this.sideOpposite(referenceSide);
   var origin = this.originToCentreSidePlus(domRect, oppositeSide, centreReferenceSide, -extraDistance);
