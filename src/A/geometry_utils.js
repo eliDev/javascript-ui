@@ -565,25 +565,25 @@ Rectangle.prototype.isOutsideEdge = function(point, thisRectSide) {
 };
 
 Rectangle.prototype.isInsideEdge = function(point, thisRectSide) {
-  var isBeyond = false;
+  var isInside = false;
   var directionRect = GeometryUtils.distanceFromSourcePoint(this.centreOfSide(thisRectSide), point);
   switch (thisRectSide) {
     case GeometryUtils.DIRECTION_TOP:
-      isBeyond = directionRect.bottom >= 0;
+    isInside = directionRect.bottom >= 0;
       break;
     case GeometryUtils.DIRECTION_RIGHT:
-      isBeyond = directionRect.left >= 0;
+    isInside = directionRect.left >= 0;
       break;
     case GeometryUtils.DIRECTION_BOTTOM:
-      isBeyond = directionRect.top >= 0;
+    isInside = directionRect.top >= 0;
       break;
     case GeometryUtils.DIRECTION_LEFT:
-      isBeyond = directionRect.right >= 0;
+    isInside = directionRect.right >= 0;
       break;
       default:
       console.log("Rectangle.prototype.isInsideEdge unhandled case: ", thisRectSide);
   }
-  return isBeyond;
+  return isInside;
 };
 
 
