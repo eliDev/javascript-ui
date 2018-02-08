@@ -756,9 +756,9 @@ Rectangle.prototype.overlappingRect = function (otherRect) {
 */
 Rectangle.prototype.distanceOutside = function (point) {
   if (this.containsPoint(point)) {
-    return DirectionRect();
+    return new DirectionRect();
   }
-  var directionRect = DirectionRect();
+  var directionRect = new DirectionRect();
   if (point.x >= this.getRight()) {
     directionRect.right = point.x - this.getRight();
   }
