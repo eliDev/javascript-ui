@@ -502,13 +502,13 @@ Rectangle.prototype.distanceOutside = function (point) {
   }
   var x, y;
   if (point.x >= this.getRight()) {
-    x = point.x - this.getRight();
+    x = point.x - this.getRight() + 1;
   }
   else if (point.x < this.x) {
     x = point.x - this.x;
   }
   if (point.y >= this.getBottom()) {
-    y = point.y - this.getBottom();
+    y = point.y - this.getBottom() + 1;
   }
   else if (point.y < this.y) {
     y = point.y - this.y;
