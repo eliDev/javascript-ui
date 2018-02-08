@@ -200,7 +200,7 @@ RectangleUtils.initFromRect = function (rectangle) {
   return rect;
 };
 
-RectangleUtils.copy = function (rectangle) {
+Rectangle.prototype.copy = function (rectangle) {
   this.x = rectangle.x;
   this.y = rectangle.y;
   this.width = rectangle.width;
@@ -302,8 +302,7 @@ Rectangle.prototype.setCentre = function (centre) {
   ===============*/
 
 Rectangle.prototype.boundsForRect = function (otherRect) {
-    var bounds = new Rectangle();
-    bounds.copy(otherRect);
+    var bounds = RectangleUtils.initFromRect(otherRect);
     bounds.x -= this.x;
     bounds.y -= this.y;
     return bounds;
