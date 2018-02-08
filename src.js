@@ -310,6 +310,8 @@ GeometryUtils.elementPostitionForDirection = function (direction) {
     case GeometryUtils.DIRECTION_LEFT:
       property = 'left';
       break;
+    default:
+      console.log("GeometryUtils.elementPostitionForDirection unhandled case: ", direction);
   }
   return property;
 };
