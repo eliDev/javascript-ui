@@ -432,23 +432,31 @@ Rectangle.prototype.containsX = function (x) {
 };
 
 Rectangle.prototype.overlaps = function (otherRect, outRect) {
-    var overlaps = false;
-    if (this.containsPoint(otherRect.getOrigin()) || otherRect.containsPoint(this.getOrigin())) {
-      overlaps = true;
-    }
-    else if (this.containsPoint(otherRect.getMaxXPoint()) || otherRect.containsPoint(this.getMaxXPoint())) {
-      overlaps = true;
-    }
-    else if (this.containsPoint(otherRect.getMaxYPoint()) || otherRect.containsPoint(this.getMaxYPoint())) {
-      overlaps = true;
-    }
-    else if (this.containsPoint(otherRect.getMaxPoint()) || otherRect.containsPoint(this.getMaxPoint())) {
-      overlaps = true;
+    var overlappingRect = this.overlappingRect(otherRect);
+    if (overlappingRect.equals(RectZero())) {
+      return false;
     }
     if (outRect){
-      outRect.copy(this.overlappingRect(otherRect));
+      outRect.copy(overlappingRect);
     }
-    return overlaps;
+    return true;
+    // var overlaps = false;
+    // if (this.containsPoint(otherRect.getOrigin()) || otherRect.containsPoint(this.getOrigin())) {
+    //   overlaps = true;
+    // }
+    // else if (this.containsPoint(otherRect.getMaxXPoint()) || otherRect.containsPoint(this.getMaxXPoint())) {
+    //   overlaps = true;
+    // }
+    // else if (this.containsPoint(otherRect.getMaxYPoint()) || otherRect.containsPoint(this.getMaxYPoint())) {
+    //   overlaps = true;
+    // }
+    // else if (this.containsPoint(otherRect.getMaxPoint()) || otherRect.containsPoint(this.getMaxPoint())) {
+    //   overlaps = true;
+    // }
+    // if (outRect){
+    //   outRect.copy(this.overlappingRect(otherRect));
+    // }
+    // return overlaps;
 };
 
 Rectangle.prototype.overlappingRect = function (otherRect) {
