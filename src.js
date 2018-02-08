@@ -295,7 +295,25 @@ GeometryUtils.sideOpposite = function(side) {
   return oppositeSide;
 };
 
-  
+GeometryUtils.elementPostitionForDirection = function (direction) {
+  var property = '';
+  switch (direction) {
+    case GeometryUtils.DIRECTION_TOP:
+      property = 'top';
+      break;
+    case GeometryUtils.DIRECTION_RIGHT:
+      property = 'right';
+      break;
+    case GeometryUtils.DIRECTION_BOTTOM:
+      property = 'bottom';
+      break;
+    case GeometryUtils.DIRECTION_LEFT:
+      property = 'left';
+      break;
+  }
+  return property;
+};
+
 /** ============
     Points
  ============== */
