@@ -664,8 +664,8 @@ Rectangle.prototype.stretchToXPos = function (xPos, plusDistance) {
   ===============*/
 
 Rectangle.prototype.containsPoint = function (point) {
-    var contains = ((point.x >= this.x && point.x <= this.getRight()) &&
-        (point.y >= this.y && point.y <= this.getBottom()));
+    var contains = ((point.x >= this.x && point.x < this.getRight()) &&
+        (point.y >= this.y && point.y < this.getBottom()));
     return contains;
 };
 
