@@ -357,7 +357,6 @@ function DirectionRect() {
  }
  
  function distanceFromPointToPoint(startPoint, endPoint) {
-   
    var xDiff = endPoint.x - startPoint.x;
    var yDiff = endPoint.y - startPoint.y;
    return Point(xDiff, yDiff);
@@ -382,6 +381,23 @@ GeometryUtils.addPoints = function (point1, point2) {
   point.x = point1.x + point2.x;
   point.y = point1.y + point2.y;
   return point;
+};
+
+GeometryUtils.distanceFromSourcePoint = function (source, other) {
+  var directionRect = new DirectionRect();
+  if (other.x >= source.x) {
+    directionRect.right = other.x - source.x;
+  }
+  else if (other.x <= source.x) {
+    directionRect.left = source.x - other.x;
+  }
+  if (other.y >= source.y) {
+    directionRect.bottom = other.y - source.y;
+  }
+  else if (other.y < source.y) {
+    directionRect.top = source.y - other.y;
+  }
+  return directionRect;
 };
 
  
@@ -774,7 +790,7 @@ Rectangle.prototype.distanceOutside = function (point) {
   return directionRect;
 };
 
-Rectangle.prototype.isBeyondSide = function(point, thisRectSide) {
+Rectangle.prototype.isOutsideEdge = function(point, thisRectSide) {
   var isBeyond = false;
   var directionRect = this.distanceOutside(point);
   switch (thisRectSide) {
@@ -791,7 +807,29 @@ Rectangle.prototype.isBeyondSide = function(point, thisRectSide) {
       isBeyond = directionRect.left >= 0;
       break;
       default:
-      console.log("Rectangle.prototype.isBeyondSide unhandled case: ", thisRectSide);
+      console.log("Rectangle.prototype.isOutsideEdge unhandled case: ", thisRectSide);
+  }
+  return isBeyond;
+};
+
+Rectangle.prototype.isInsideEdge = function(point, thisRectSide) {
+  var isBeyond = false;
+  var directionRect = GeometryUtils.distanceFromSourcePoint(this.centreOfSide(thisRectSide), point);
+  switch (thisRectSide) {
+    case GeometryUtils.DIRECTION_TOP:
+      isBeyond = directionRect.bottom >= 0;
+      break;
+    case GeometryUtils.DIRECTION_RIGHT:
+      isBeyond = directionRect.left >= 0;
+      break;
+    case GeometryUtils.DIRECTION_BOTTOM:
+      isBeyond = directionRect.top >= 0;
+      break;
+    case GeometryUtils.DIRECTION_LEFT:
+      isBeyond = directionRect.right >= 0;
+      break;
+      default:
+      console.log("Rectangle.prototype.isInsideEdge unhandled case: ", thisRectSide);
   }
   return isBeyond;
 };
