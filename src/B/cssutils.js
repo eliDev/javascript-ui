@@ -167,9 +167,16 @@ class CSSUtils {
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
-    static clipInsideRectangle(element, clipBounds) {
+    static clipInsideBounds(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
         var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
+    }
+
+    static clipInsideRect(element, clipFrame) {
+        var elementRect = element.getBoundingClientRect();
+        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var clipBounds = RectFromDOMRect(elementRect).boundsForRect(clipFrame);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
@@ -193,5 +200,5 @@ class CSSUtils {
     static removeClipPath(element) {
         element.style['-webkit-clip-path'] = '';
     }
-    
+
 }

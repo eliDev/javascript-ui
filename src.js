@@ -412,6 +412,12 @@ function RectZero(){
   return new Rectangle();
 }
 
+function RectFromDOMRect(DOMRect) {
+  var r = new Rectangle();
+  r.initFromDOMRect(DOMRect);
+  return r;
+}
+
 /** =================
       Initialisers
   ===================*/
@@ -543,6 +549,14 @@ Rectangle.prototype.setCentre = function (centre) {
 /** =============
       Size
   ===============*/
+
+Rectangle.prototype.boundsForRect = function (otherRect) {
+    var bounds = new Rectangle();
+    bounds.copy(otherRect);
+    bounds.x -= this.x;
+    bounds.y -= this.y;
+    return bounds;
+};
 
 Rectangle.prototype.halfWidth = function () {
   var halfWidth = (this.width / 2);
@@ -1145,9 +1159,16 @@ class CSSUtils {
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
-    static clipInsideRectangle(element, clipBounds) {
+    static clipInsideBounds(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
         var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
+    }
+
+    static clipInsideRect(element, clipFrame) {
+        var elementRect = element.getBoundingClientRect();
+        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var clipBounds = RectFromDOMRect(elementRect).boundsForRect(clipFrame);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
@@ -1171,7 +1192,7 @@ class CSSUtils {
     static removeClipPath(element) {
         element.style['-webkit-clip-path'] = '';
     }
-    
+
 }﻿/**
  * 
  */

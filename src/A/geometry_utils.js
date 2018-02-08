@@ -164,6 +164,12 @@ function RectZero(){
   return new Rectangle();
 }
 
+function RectFromDOMRect(DOMRect) {
+  var r = new Rectangle();
+  r.initFromDOMRect(DOMRect);
+  return r;
+}
+
 /** =================
       Initialisers
   ===================*/
@@ -295,6 +301,14 @@ Rectangle.prototype.setCentre = function (centre) {
 /** =============
       Size
   ===============*/
+
+Rectangle.prototype.boundsForRect = function (otherRect) {
+    var bounds = new Rectangle();
+    bounds.copy(otherRect);
+    bounds.x -= this.x;
+    bounds.y -= this.y;
+    return bounds;
+};
 
 Rectangle.prototype.halfWidth = function () {
   var halfWidth = (this.width / 2);
