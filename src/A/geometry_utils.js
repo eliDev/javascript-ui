@@ -68,6 +68,13 @@ GeometryUtils.elementPostitionForDirection = function (direction) {
   return property;
 };
 
+function DirectionRect() {
+  this.top = -1;
+  this.right = -1;
+  this.bottom = -1;
+  this.left = -1;
+}
+
 /** ============
     Points
  ============== */
@@ -489,48 +496,51 @@ Rectangle.prototype.overlappingRect = function (otherRect) {
     Negative x: the point is outside to the left.
 
     @param {point} 'point' has x: y: properties.
-    @return {Point} (x === 0): Given x is within the rectangle
-                    (x < 0): Given x is left of the rectangle
-                    (x > 0): Given x is right of the rectangle
-                    (y === 0): Given y is within the rectangle
-                    (y < 0): Given y is above the rectangle
-                    (y > 0): Given y is below the rectangle
+    @return {DirectionRect} (top >= 0): Given point is above rect
+                            (top < 0): Given point is not above rect.
+                            (right >= 0): Given point is right of rect
+                            (right < 0): Given point is not right of rect.
+                            (bottom >= 0): Given point is below rect
+                            (bottom < 0): Given point is not below rect.
+                            (left >= 0): Given point is left of rect
+                            (left < 0): Given point is not left of rect.
+    All negatives means point is within rect.
 */
 Rectangle.prototype.distanceOutside = function (point) {
   if (this.containsPoint(point)) {
-    return PointZero();
+    return DirectionRect();
   }
-  var x, y;
+  var directionRect = DirectionRect();
   if (point.x >= this.getRight()) {
-    x = point.x - this.getRight() + 1;
+    directionRect.right = point.x - this.getRight();
   }
   else if (point.x < this.x) {
-    x = point.x - this.x;
+    directionRect.left = point.x - this.x;
   }
   if (point.y >= this.getBottom()) {
-    y = point.y - this.getBottom() + 1;
+    directionRect.bottom = point.y - this.getBottom();
   }
   else if (point.y < this.y) {
-    y = point.y - this.y;
+    directionRect.top = point.y - this.y;
   }
-  return new Point(x, y);
+  return directionRect;
 };
 
 Rectangle.prototype.isBeyondSide = function(point, thisRectSide) {
   var isBeyond = false;
-  var outsidePoint = this.distanceOutside(point);
+  var directionRect = this.distanceOutside(point);
   switch (thisRectSide) {
     case GeometryUtils.DIRECTION_TOP:
-      isBeyond = outsidePoint.y < 0;
+      isBeyond = directionRect.top >= 0;
       break;
     case GeometryUtils.DIRECTION_RIGHT:
-      isBeyond = outsidePoint.x > 0;
+      isBeyond = directionRect.right >= 0;
       break;
     case GeometryUtils.DIRECTION_BOTTOM:
-      isBeyond = outsidePoint.y > 0;
+      isBeyond = directionRect.bottom >= 0;
       break;
     case GeometryUtils.DIRECTION_LEFT:
-      isBeyond = outsidePoint.x < 0;
+      isBeyond = directionRect.left >= 0;
       break;
       default:
       console.log("Rectangle.prototype.isBeyondSide unhandled case: ", thisRectSide);
