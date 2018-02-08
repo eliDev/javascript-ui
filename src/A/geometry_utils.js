@@ -165,8 +165,7 @@ function RectZero(){
 }
 
 function RectFromDOMRect(DOMRect) {
-  var r = new Rectangle();
-  r.initFromDOMRect(DOMRect);
+  var r = RectangleUtils.initFromDOMRect(DOMRect);
   return r;
 }
 
