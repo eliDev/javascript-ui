@@ -130,20 +130,10 @@ GeometryUtils.addPoints = function (point1, point2) {
 RectangleUtils = {};
 
 function Rectangle(x, y, width, height) {
-
-  if (undefined === x) {
-    x = 0;
-  }
-  if (undefined === y) {
-    y = 0;
-  }
-  if (undefined === width) {
-    width = 0;
-  }
-  if (undefined === height) {
-    height = 0;
-  }
-
+  if (undefined === x) { x = 0;}
+  if (undefined === y) {  y = 0; }
+  if (undefined === width) { width = 0; }
+  if (undefined === height) { height = 0; }
   this.x = x;
   this.y = y;
   this.height = height;

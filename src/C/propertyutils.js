@@ -202,9 +202,7 @@ class PropertyUtils {
       var key;
 
       for (index = 0; index < orderedKeys.length; index++) {
-
         key = orderedKeys[index];
-
         if (propertyValue[key]) {
             value += PropertyUtils.composeProperty(propertyName + "+component", propertyValue[key]);
         }
@@ -259,9 +257,7 @@ class PropertyUtils {
      * @return {String} An Empty string when no prefix is needed.
      */
     static getPropertyPrefix (propertyName) {
-      
       var prefix = "";
-      
       switch(propertyName) {
         case 'translateY':
           prefix = "translateY(";
@@ -300,9 +296,7 @@ class PropertyUtils {
      * @return {String} An Empty string when no suffix is needed.
      */
     static getPropertySuffix (propertyName) {
-      
       var suffix = "px";
-      
       switch(propertyName) {
         case 'scrollTop':
         case 'scrollHeight':
@@ -345,14 +339,11 @@ class PropertyUtils {
      * "rgb(0, 102, 33)" -> {r:0, g:102, b:33, a:0}
      */
     static parseProperty (propertyName, propertyValue) {
-      
       var value;
       
       // parsing vriables.
       var components;
-      
       switch (propertyName) {
-        
         case 'clip':
           if (propertyValue === 'auto'){
             value = {

@@ -378,20 +378,10 @@ GeometryUtils.addPoints = function (point1, point2) {
 RectangleUtils = {};
 
 function Rectangle(x, y, width, height) {
-
-  if (undefined === x) {
-    x = 0;
-  }
-  if (undefined === y) {
-    y = 0;
-  }
-  if (undefined === width) {
-    width = 0;
-  }
-  if (undefined === height) {
-    height = 0;
-  }
-
+  if (undefined === x) { x = 0;}
+  if (undefined === y) {  y = 0; }
+  if (undefined === width) { width = 0; }
+  if (undefined === height) { height = 0; }
   this.x = x;
   this.y = y;
   this.height = height;
@@ -1545,9 +1535,7 @@ class PropertyUtils {
       var key;
 
       for (index = 0; index < orderedKeys.length; index++) {
-
         key = orderedKeys[index];
-
         if (propertyValue[key]) {
             value += PropertyUtils.composeProperty(propertyName + "+component", propertyValue[key]);
         }
@@ -1602,9 +1590,7 @@ class PropertyUtils {
      * @return {String} An Empty string when no prefix is needed.
      */
     static getPropertyPrefix (propertyName) {
-      
       var prefix = "";
-      
       switch(propertyName) {
         case 'translateY':
           prefix = "translateY(";
@@ -1643,9 +1629,7 @@ class PropertyUtils {
      * @return {String} An Empty string when no suffix is needed.
      */
     static getPropertySuffix (propertyName) {
-      
       var suffix = "px";
-      
       switch(propertyName) {
         case 'scrollTop':
         case 'scrollHeight':
@@ -1688,14 +1672,11 @@ class PropertyUtils {
      * "rgb(0, 102, 33)" -> {r:0, g:102, b:33, a:0}
      */
     static parseProperty (propertyName, propertyValue) {
-      
       var value;
       
       // parsing vriables.
       var components;
-      
       switch (propertyName) {
-        
         case 'clip':
           if (propertyValue === 'auto'){
             value = {
