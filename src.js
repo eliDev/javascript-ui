@@ -749,13 +749,13 @@ Rectangle.prototype.distanceOutside = function (point) {
     return PointZero();
   }
   var x, y;
-  if (point.x > this.getRight()) {
+  if (point.x >= this.getRight()) {
     x = point.x - this.getRight();
   }
   else if (point.x < this.x) {
     x = point.x - this.x;
   }
-  if (point.y > this.getBottom()) {
+  if (point.y >= this.getBottom()) {
     y = point.y - this.getBottom();
   }
   else if (point.y < this.y) {
