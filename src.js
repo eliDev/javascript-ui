@@ -2210,7 +2210,7 @@ class ElementUtils {
     static frames(elements){
         var rects = [];
         for (var i = 0; i < elements.length; i ++) {
-          var r = RectRectangleUtils.initFromDOMRect(elements[i].getBoundingClientRect());
+          var r = RectangleUtils.initFromDOMRect(elements[i].getBoundingClientRect());
           rects.push(r);
         }
         return rects;
