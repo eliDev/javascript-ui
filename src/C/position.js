@@ -20,7 +20,6 @@ class Position {
    * @return {link Rectangle} 
   */
  static getFrame (element) {
-
     if (!Boolean(element)) {
       return undefined;
     }
@@ -39,7 +38,6 @@ class Position {
     // Discount any scrolling in parent.
     frame.y += parent.scrollTop;
     frame.x += parent.scrollLeft;
-
     return frame;
   }
 

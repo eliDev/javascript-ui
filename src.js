@@ -1294,7 +1294,6 @@ class Position {
    * @return {link Rectangle} 
   */
  static getFrame (element) {
-
     if (!Boolean(element)) {
       return undefined;
     }
@@ -1313,7 +1312,6 @@ class Position {
     // Discount any scrolling in parent.
     frame.y += parent.scrollTop;
     frame.x += parent.scrollLeft;
-
     return frame;
   }
 
@@ -2130,7 +2128,6 @@ class ElementUtils {
       else {
         preparedValue = PropertyUtils.composeProperty(propertyName, value);
       }
-
       if (PropertyUtils.isCSSStyle(propertyName)) {
         CSSUtils.setStyle(element, propertyKey, preparedValue);
         // element.style[propertyKey] = preparedValue;
@@ -2138,7 +2135,6 @@ class ElementUtils {
       else {
         element[propertyKey] = preparedValue;
       }
-
       return preparedValue;
     }
     
@@ -2151,11 +2147,9 @@ class ElementUtils {
      * @param {Number} 'extraValue'
      */
     static setValuePlus (element, propertyName, extraValue) {
-      
       if (extraValue === 0) {
         return;
       }
-      
       var value = this.getValue(element, propertyName);
       value += extraValue;
       this.setValue(element, propertyName, value);
@@ -2174,9 +2168,7 @@ class ElementUtils {
      * @example: { "bottom": -12, "top": 2 }
      */
     static setValues (element, values) {
-
       var transforms = {};
-
       var propertyName;
       var value;
       var hasTransforms = false;
@@ -2211,9 +2203,17 @@ class ElementUtils {
      * @example: { "scale": 12 }
      */
     static setTransforms (element, transforms) {
-
       var value = PropertyUtils.composeTransform(transforms);
       element.style[TransformUtils.getVendorPrefix()] = value;
+    }
+
+    static frames(elements){
+        var rects = [];
+        for (var i = 0; i < elements.length; i ++) {
+          var r = RectRectangleUtils.initFromDOMRect(elements[i].getBoundingClientRect());
+          rects.push(r);
+        }
+        return rects;
     }
 
 
