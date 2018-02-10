@@ -983,8 +983,12 @@ RectangleUtils.combineRects = function(rect1, rect2) {
   return r;
 };
 
-
- 
+DOMUtils = {};
+DOMUtils.combineRects = function(DOMrect1, DOMrect2) {
+  var r1 = RectFromDOMRect(DOMrect1);
+  var r2 = RectFromDOMRect(DOMrect2);
+  return RectangleUtils.combineRects(r1, r2);
+};
   
 /**
  * 
