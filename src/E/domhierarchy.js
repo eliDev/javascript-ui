@@ -178,7 +178,7 @@ class DOMHierarchy {
                 }
             }
             return false;
-        }
+        };
 
         var hasTag = function(element, tag) {
             if (tag) {

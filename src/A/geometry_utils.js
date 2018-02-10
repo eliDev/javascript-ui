@@ -26,20 +26,16 @@ GeometryUtils.isHorizontal = function (direction) {
 
 GeometryUtils.sideOpposite = function(side) {
   var oppositeSide = this.DIRECTION_UNDEFINED;
-
   switch (side) {
     case GeometryUtils.DIRECTION_TOP:
       oppositeSide = this.DIRECTION_BOTTOM;
       break;
-
     case GeometryUtils.DIRECTION_RIGHT:
       oppositeSide = this.DIRECTION_LEFT;
       break;
-
     case GeometryUtils.DIRECTION_BOTTOM:
       oppositeSide = this.DIRECTION_TOP;
       break;
-
     case GeometryUtils.DIRECTION_LEFT:
       oppositeSide = this.DIRECTION_RIGHT;
       break;
@@ -68,12 +64,75 @@ GeometryUtils.elementPostitionForDirection = function (direction) {
   return property;
 };
 
-function DirectionRect() {
-  this.top = -1;
-  this.right = -1;
-  this.bottom = -1;
-  this.left = -1;
-}
+/** ==========================
+      Edges Manipulations
+  ========================*/
+
+  GeometryUtils.centreOfSide = function(DOMRect, side) {
+    var rect = GeometryUtils.initFromDOMRect(DOMRect);
+    return rect.centreOfSide(side);
+  };
+
+  GeometryUtils.originToCentreSide = function (domRect, side, centreOfSide) {
+    var origin = this.originToCentreSidePlus(domRect, side, centreOfSide, 0);
+    return origin;
+  };
+  
+  /**
+    Returns what the origin should be inorder
+    to have the 'domRect' 'side' centred at the given
+    'centreOfSize'.
+  
+    e.g. [] RIGHT by x
+          looks like []x
+  
+  */
+  GeometryUtils.originToCentreSidePlus = function (domRect, side, centreOfSide, extraDistance) {
+    var origin = {};
+    switch (side) {
+  
+      case GeometryUtils.DIRECTION_TOP:
+        origin.x = centreOfSide.x - this.halfWidth(domRect);
+        origin.y = centreOfSide.y - extraDistance;
+        break;
+  
+      case GeometryUtils.DIRECTION_RIGHT:
+        origin.x = centreOfSide.x - domRect.width - extraDistance;
+        origin.y = centreOfSide.y - this.halfHeight(domRect);
+        break;
+  
+      case GeometryUtils.DIRECTION_BOTTOM:
+        origin.x = centreOfSide.x - this.halfWidth(domRect);
+        origin.y = centreOfSide.y + domRect.height + extraDistance;
+        break;
+  
+      case GeometryUtils.DIRECTION_LEFT:
+        origin.x = centreOfSide.x - extraDistance;
+        origin.y = centreOfSide.y - this.halfHeight(domRect);
+        break;
+    }
+    return origin;
+  };
+  
+  /**
+      Gives the origin in order to place 'domRect' beside the 
+      given reference rectangle so that their centres align.
+  */
+  GeometryUtils.originToCentreBesideRect = function (domRect, referenceDomRect, referenceSide) {
+    var origin = this.originToCentreBesideRectPlus(domRect, referenceDomRect, referenceSide, 0);
+    return origin;
+  };
+  
+  GeometryUtils.originToCentreBesideRectPlus = function (domRect, referenceDomRect, referenceSide, extraDistance) {
+    if (undefined === extraDistance) {
+      extraDistance = 0;
+    }
+    var centreReferenceSide = GeometryUtils.centreOfSide(referenceDomRect, referenceSide);
+    var oppositeSide = GeometryUtils.sideOpposite(referenceSide);
+    var origin = this.originToCentreSidePlus(domRect, oppositeSide, centreReferenceSide, -extraDistance);
+    return origin;
+  };
+
 
 /** ============
     Points
@@ -107,6 +166,20 @@ function DirectionRect() {
   function pointPlusX(point, xPlus) {
    point.x += xPlus;
  }
+
+ function minPoint(p1, p2) {
+   var p = new Point();
+   p.x = Math.min(p1.x, p2.x);
+   p.y = Math.min(p1.y, p2.y);
+   return p;
+ }
+
+ function maxPoint(p1, p2) {
+  var p = new Point();
+  p.x = Math.max(p1.x, p2.x);
+  p.y = Math.max(p1.y, p2.y);
+  return p;
+}
  
  function distanceFromPointToPoint(startPoint, endPoint) {
    var xDiff = endPoint.x - startPoint.x;
@@ -135,19 +208,19 @@ GeometryUtils.addPoints = function (point1, point2) {
   return point;
 };
 
-GeometryUtils.distanceFromSourcePoint = function (source, other) {
+GeometryUtils.distanceFromSourcePoint = function (sourcePoint, other) {
   var directionRect = new DirectionRect();
-  if (other.x >= source.x) {
-    directionRect.right = other.x - source.x;
+  if (other.x >= sourcePoint.x) {
+    directionRect.right = other.x - sourcePoint.x;
   }
-  else if (other.x <= source.x) {
-    directionRect.left = source.x - other.x;
+  else if (other.x <= sourcePoint.x) {
+    directionRect.left = sourcePoint.x - other.x;
   }
-  if (other.y >= source.y) {
-    directionRect.bottom = other.y - source.y;
+  if (other.y >= sourcePoint.y) {
+    directionRect.bottom = other.y - sourcePoint.y;
   }
-  else if (other.y < source.y) {
-    directionRect.top = source.y - other.y;
+  else if (other.y < sourcePoint.y) {
+    directionRect.top = sourcePoint.y - other.y;
   }
   return directionRect;
 };
@@ -190,6 +263,14 @@ function RectZero(){
 function RectFromDOMRect(DOMRect) {
   var r = RectangleUtils.initFromDOMRect(DOMRect);
   return r;
+}
+
+/** For distance from a point in 4 directions of a 2d plane. */
+function DirectionRect() {
+  this.top = -1;
+  this.right = -1;
+  this.bottom = -1;
+  this.left = -1;
 }
 
 /** =================
@@ -252,9 +333,9 @@ Rectangle.prototype.DOMRect = function() {
             (otherRect.width === this.width && otherRect.height === this.height));
   };
 
-/** ==============
-      PROPERTIES
-  ===============*/
+/** =======================
+      PROPERTIES - Points
+  ========================*/
 
 Rectangle.prototype.getOrigin = function () {
   return { x: this.x, y: this.y };
@@ -276,6 +357,32 @@ Rectangle.prototype.getMaxYPoint = function () {
 Rectangle.prototype.getMaxPoint = function () {
   return new Point(this.getRight(), this.getBottom());
 };
+
+Rectangle.prototype.setMaxPoint = function (point) {
+  this.setRight(point.x);
+  this.setBottom(point.y);
+};
+
+Rectangle.prototype.getBoundsCentre = function () {
+  var centre = {};
+  centre.x = this.halfWidth();
+  centre.y = this.halfHeight();
+  return centre;
+};
+
+Rectangle.prototype.getCentre = function () {
+  var centre = {};
+  centre.x = this.x + this.halfWidth();
+  centre.y = this.y + this.halfHeight();
+  return centre;
+};
+
+Rectangle.prototype.setCentre = function (centre) {
+  this.x = (centre.x - this.halfWidth());
+  this.y = (centre.y - this.halfHeight());
+};
+
+//  PROPERTIES - DOMRect support
 
 Rectangle.prototype.getTop = function () {
   return this.y;
@@ -301,24 +408,7 @@ Rectangle.prototype.setBottom = function (y) {
   this.height = (y - this.y);
 };
 
-Rectangle.prototype.getBoundsCentre = function () {
-  var centre = {};
-  centre.x = this.halfWidth();
-  centre.y = this.halfHeight();
-  return centre;
-};
 
-Rectangle.prototype.getCentre = function () {
-  var centre = {};
-  centre.x = this.x + this.halfWidth();
-  centre.y = this.y + this.halfHeight();
-  return centre;
-};
-
-Rectangle.prototype.setCentre = function (centre) {
-  this.x = (centre.x - this.halfWidth());
-  this.y = (centre.y - this.halfHeight());
-};
 
 /** =============
       Size
@@ -614,10 +704,6 @@ Rectangle.prototype.horizontalSideClosestToXPos = function (xPos) {
       GEOMETRY
   ===============*/
 
-GeometryUtils.centreOfSide = function(DOMRect, side) {
-  var rect = GeometryUtils.initFromDOMRect(DOMRect);
-  return rect.centreOfSide(side);
-};
 
 /**
     Returns the point representings the 
@@ -642,70 +728,13 @@ Rectangle.prototype.centreOfSide = function(side) {
   return point;
 };
 
-/** ==========================
-      Edges Manipulations
-  ========================*/
-
-GeometryUtils.originToCentreSide = function (domRect, side, centreOfSide) {
-  var origin = this.originToCentreSidePlus(domRect, side, centreOfSide, 0);
-  return origin;
-};
-
-/**
-  Returns what the origin should be inorder
-  to have the 'domRect' 'side' centred at the given
-  'centreOfSize'.
-
-  e.g. [] RIGHT by x
-        looks like []x
-
-*/
-GeometryUtils.originToCentreSidePlus = function (domRect, side, centreOfSide, extraDistance) {
-  var origin = {};
-  switch (side) {
-
-    case GeometryUtils.DIRECTION_TOP:
-      origin.x = centreOfSide.x - this.halfWidth(domRect);
-      origin.y = centreOfSide.y - extraDistance;
-      break;
-
-    case GeometryUtils.DIRECTION_RIGHT:
-      origin.x = centreOfSide.x - domRect.width - extraDistance;
-      origin.y = centreOfSide.y - this.halfHeight(domRect);
-      break;
-
-    case GeometryUtils.DIRECTION_BOTTOM:
-      origin.x = centreOfSide.x - this.halfWidth(domRect);
-      origin.y = centreOfSide.y + domRect.height + extraDistance;
-      break;
-
-    case GeometryUtils.DIRECTION_LEFT:
-      origin.x = centreOfSide.x - extraDistance;
-      origin.y = centreOfSide.y - this.halfHeight(domRect);
-      break;
-  }
-  return origin;
+RectangleUtils.combineRects = function(rect1, rect2) {
+  var r = new Rectangle();
+  r.setOriginPoint(minPoint(rect1.getOrigin(), rec2.getOrigin()));
+  r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rec2.getMaxPoint()));
+  return r;
 };
 
 
-
-/**
-    Gives the origin in order to place 'domRect' beside the 
-    given reference rectangle so that their centres align.
-*/
-GeometryUtils.originToCentreBesideRect = function (domRect, referenceDomRect, referenceSide) {
-  var origin = this.originToCentreBesideRectPlus(domRect, referenceDomRect, referenceSide, 0);
-  return origin;
-};
-
-GeometryUtils.originToCentreBesideRectPlus = function (domRect, referenceDomRect, referenceSide, extraDistance) {
-  if (undefined === extraDistance) {
-    extraDistance = 0;
-  }
-  var centreReferenceSide = GeometryUtils.centreOfSide(referenceDomRect, referenceSide);
-  var oppositeSide = GeometryUtils.sideOpposite(referenceSide);
-  var origin = this.originToCentreSidePlus(domRect, oppositeSide, centreReferenceSide, -extraDistance);
-  return origin;
-};
  
   
