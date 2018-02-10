@@ -978,8 +978,8 @@ Rectangle.prototype.centreOfSide = function(side) {
 
 RectangleUtils.combineRects = function(rect1, rect2) {
   var r = new Rectangle();
-  r.setOriginPoint(minPoint(rect1.getOrigin(), rec2.getOrigin()));
-  r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rec2.getMaxPoint()));
+  r.setOriginPoint(minPoint(rect1.getOrigin(), rect2.getOrigin()));
+  r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rect2.getMaxPoint()));
   return r;
 };
 
