@@ -1,4 +1,5 @@
-﻿/**
+﻿/*jshint esversion: 6 */
+/**
  * 
  */
 class Position {
@@ -64,7 +65,7 @@ class Position {
     var frame = this.getFrame(element);
     var contains = frame.containsPoint(localPoint);
     return contains;
-  };
+  }
 
   /**
     Iterates through the list of children from the start
@@ -157,22 +158,22 @@ class Position {
     element.style.right = parent.clientWidth - frame.getRight() + "px";
     element.style.bottom = parent.clientHeight - frame.getBottom() + "px";
     element.style.left = frame.x + "px";
-  };
+  }
 
   static setBottom(element, bottom) {
     element.style.bottom = bottom + "px";
-  };
+  }
 
   static setRight(element, right) {
     element.style.right = right + "px";
-  };
+  }
 
   static setCentre (element, centre) {
 
     var frame = this.getFrame(element);
     frame.setCentre(centre);
     this.setPositionsToFrame(element, frame);
-  };
+  }
 
   static logPositions(element) {
 
@@ -181,6 +182,6 @@ class Position {
       ", right: ", element.style.right,
       ", bottom: ", element.style.bottom,
       ", left: ", element.style.left);
-  };
+  }
 
 }

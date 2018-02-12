@@ -1,6 +1,5 @@
 var globals = {
     singletons: {
-        main: new Main(), // Provided by application. Contains at least the function run()
         windowEventManager: new WindowEventManager(),
         clickmanager: new ClickManager()
     }
@@ -8,8 +7,14 @@ var globals = {
 
 globals.singletons.windowEventManager.init();
 globals.singletons.clickmanager.init();
+
 // Call into application code.
-globals.singletons.main.run();
+// Provided by application. Contains at least the function run()
+if (typeof Main === undefined) {
+    console.log("no Main class provided externally.  Cannot call run() after library initialized.");
+} else {
+    new Main().run();
+}
 
 (function(window,document) {
 

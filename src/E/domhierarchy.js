@@ -63,11 +63,11 @@ class DOMHierarchy {
             var child;
             for (loopIndex = 0; loopIndex < children.length; loopIndex++) {
                 child = children[loopIndex];
-                this.insertChildAtIndex(parentElement,child,index+loopIndex)
+                this.insertChildAtIndex(parentElement,child,index+loopIndex);
             }
         }
         else {
-            this.insertChildAtIndex(parentElement,children,index)
+            this.insertChildAtIndex(parentElement,children,index);
         }
     }
 
@@ -186,7 +186,7 @@ class DOMHierarchy {
             } else {
                 return true;
             }
-        }
+        };
 
         if (includeClasses && !Array.isArray(includeClasses)) {
             includeClasses = [includeClasses];

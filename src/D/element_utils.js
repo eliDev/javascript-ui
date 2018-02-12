@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 /**
  * Provides static helper functions for common Element manipulations.
  * Support is not exhaustive. Certain methods need updating to handle properties
