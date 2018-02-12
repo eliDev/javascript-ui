@@ -346,6 +346,10 @@ Rectangle.prototype.setOriginPoint = function (point) {
   this.y = point.y;
 };
 
+Rectangle.prototype.getMaxX = function () {
+  return this.getRight();
+};
+
 Rectangle.prototype.getMaxXPoint = function () {
   return new Point(this.getRight(), this.y);
 };
