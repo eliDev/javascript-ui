@@ -24,7 +24,7 @@ class ElementUtils {
      *          (e.g. 'scale' is '1' when not present vs. '0' for margin-left')
      */
     static getValue (element, propertyNames, elementStyles) {
-      if (!window) {
+      if (typeof window === 'undefined') {
         return;
       }
     

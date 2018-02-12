@@ -1068,7 +1068,7 @@ class WindowEventManager {
   }
 
   init() {
-    if (window) {
+    if (typeof window !== 'undefined') {
       window.addEventListener('load', this.onPageLoad.bind(this));
     }
   }
@@ -2090,7 +2090,7 @@ class ElementUtils {
      *          (e.g. 'scale' is '1' when not present vs. '0' for margin-left')
      */
     static getValue (element, propertyNames, elementStyles) {
-      if (!window) {
+      if (typeof window === 'undefined') {
         return;
       }
     

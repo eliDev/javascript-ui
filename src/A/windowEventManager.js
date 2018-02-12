@@ -9,7 +9,7 @@ class WindowEventManager {
   }
 
   init() {
-    if (window) {
+    if (typeof window !== 'undefined') {
       window.addEventListener('load', this.onPageLoad.bind(this));
     }
   }
