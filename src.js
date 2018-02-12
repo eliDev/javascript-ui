@@ -1068,7 +1068,9 @@ class WindowEventManager {
   }
 
   init() {
-    window.addEventListener('load', this.onPageLoad.bind(this));
+    if (window) {
+      window.addEventListener('load', this.onPageLoad.bind(this));
+    }
   }
 
   registerForLoadEvent(callback) {
@@ -2088,6 +2090,9 @@ class ElementUtils {
      *          (e.g. 'scale' is '1' when not present vs. '0' for margin-left')
      */
     static getValue (element, propertyNames, elementStyles) {
+      if (!window) {
+        return;
+      }
     
       // Create an array with the property if not 
       // provided with multiple properties to look up.

@@ -9,7 +9,9 @@ class WindowEventManager {
   }
 
   init() {
-    window.addEventListener('load', this.onPageLoad.bind(this));
+    if (window) {
+      window.addEventListener('load', this.onPageLoad.bind(this));
+    }
   }
 
   registerForLoadEvent(callback) {

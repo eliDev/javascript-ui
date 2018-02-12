@@ -24,6 +24,9 @@ class ElementUtils {
      *          (e.g. 'scale' is '1' when not present vs. '0' for margin-left')
      */
     static getValue (element, propertyNames, elementStyles) {
+      if (!window) {
+        return;
+      }
     
       // Create an array with the property if not 
       // provided with multiple properties to look up.
