@@ -2936,7 +2936,7 @@ globals.singletons.clickmanager.init();
 
 // Call into application code.
 // Provided by application. Contains at least the function run()
-if (typeof Main === undefined) {
+if (typeof Main === 'undefined') {
     console.log("no Main class provided externally.  Cannot call run() after library initialized.");
 } else {
     new Main().run();
