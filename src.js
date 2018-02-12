@@ -1085,7 +1085,8 @@ class WindowEventManager {
     });
   }
 
-}/**
+}/*jshint esversion: 6 */
+/**
  * 
  */
 class CSSUtils {
@@ -1288,7 +1289,8 @@ class CSSUtils {
         element.style['-webkit-clip-path'] = '';
     }
 
-}﻿/**
+}﻿/*jshint esversion: 6 */
+/**
  * 
  */
 class Position {
@@ -1354,7 +1356,7 @@ class Position {
     var frame = this.getFrame(element);
     var contains = frame.containsPoint(localPoint);
     return contains;
-  };
+  }
 
   /**
     Iterates through the list of children from the start
@@ -1447,22 +1449,22 @@ class Position {
     element.style.right = parent.clientWidth - frame.getRight() + "px";
     element.style.bottom = parent.clientHeight - frame.getBottom() + "px";
     element.style.left = frame.x + "px";
-  };
+  }
 
   static setBottom(element, bottom) {
     element.style.bottom = bottom + "px";
-  };
+  }
 
   static setRight(element, right) {
     element.style.right = right + "px";
-  };
+  }
 
   static setCentre (element, centre) {
 
     var frame = this.getFrame(element);
     frame.setCentre(centre);
     this.setPositionsToFrame(element, frame);
-  };
+  }
 
   static logPositions(element) {
 
@@ -1471,7 +1473,7 @@ class Position {
       ", right: ", element.style.right,
       ", bottom: ", element.style.bottom,
       ", left: ", element.style.left);
-  };
+  }
 
 }/**
  * Conveniences for accessing and setting properties values
@@ -2060,7 +2062,8 @@ class TransformUtils {
     }
 
 
-}/**
+}/*jshint esversion: 6 */
+/**
  * Provides static helper functions for common Element manipulations.
  * Support is not exhaustive. Certain methods need updating to handle properties
  * not yet encountered.
@@ -2300,11 +2303,11 @@ class DOMHierarchy {
             var child;
             for (loopIndex = 0; loopIndex < children.length; loopIndex++) {
                 child = children[loopIndex];
-                this.insertChildAtIndex(parentElement,child,index+loopIndex)
+                this.insertChildAtIndex(parentElement,child,index+loopIndex);
             }
         }
         else {
-            this.insertChildAtIndex(parentElement,children,index)
+            this.insertChildAtIndex(parentElement,children,index);
         }
     }
 
@@ -2423,7 +2426,7 @@ class DOMHierarchy {
             } else {
                 return true;
             }
-        }
+        };
 
         if (includeClasses && !Array.isArray(includeClasses)) {
             includeClasses = [includeClasses];
@@ -2918,7 +2921,6 @@ class ElementCache {
     }
 }var globals = {
     singletons: {
-        main: new Main(), // Provided by application. Contains at least the function run()
         windowEventManager: new WindowEventManager(),
         clickmanager: new ClickManager()
     }
@@ -2926,8 +2928,14 @@ class ElementCache {
 
 globals.singletons.windowEventManager.init();
 globals.singletons.clickmanager.init();
+
 // Call into application code.
-globals.singletons.main.run();
+// Provided by application. Contains at least the function run()
+if (typeof Main === undefined) {
+    console.log("no Main class provided externally.  Cannot call run() after library initialized.");
+} else {
+    new Main().run();
+}
 
 (function(window,document) {
 
