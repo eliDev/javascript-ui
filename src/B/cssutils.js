@@ -176,7 +176,7 @@ class CSSUtils {
     static clipInsideRect(element, clipFrame) {
         var elementRect = element.getBoundingClientRect();
         var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
-        var clipBounds = RectFromDOMRect(elementRect).boundsForRect(clipFrame);
+        var clipBounds = RectFromDOMRect(elementRect).boundsForFrame(clipFrame);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 

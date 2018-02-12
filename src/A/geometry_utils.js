@@ -358,6 +358,10 @@ Rectangle.prototype.getMaxX = function () {
   return this.getRight();
 };
 
+Rectangle.prototype.getMaxY = function () {
+  return this.getBottom();
+};
+
 Rectangle.prototype.getMaxXPoint = function () {
   return new Point(this.getRight(), this.y);
 };
@@ -426,7 +430,7 @@ Rectangle.prototype.setBottom = function (y) {
       Size
   ===============*/
 
-Rectangle.prototype.boundsForRect = function (otherRect) {
+Rectangle.prototype.boundsForFrame = function (otherRect) {
     var bounds = RectangleUtils.initFromRect(otherRect);
     bounds.x -= this.x;
     bounds.y -= this.y;
@@ -569,7 +573,7 @@ Rectangle.prototype.containsX = function (x) {
 };
 
 Rectangle.prototype.overlaps = function (otherRect, outRect) {
-    var overlappingRect = this.overlappingRect(otherRect);
+    var overlappingRect = this.overlappingFrame(otherRect);
     if (overlappingRect.equals(RectZero())) {
       return false;
     }
@@ -596,7 +600,7 @@ Rectangle.prototype.overlaps = function (otherRect, outRect) {
     // return overlaps;
 };
 
-Rectangle.prototype.overlappingRect = function (otherRect) {
+Rectangle.prototype.overlappingFrame = function (otherRect) {
   var overlapRect = new Rectangle();
   overlapRect.y = Math.max(otherRect.y, this.y);
   overlapRect.x = Math.max(otherRect.x, this.x);
