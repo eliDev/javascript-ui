@@ -851,7 +851,7 @@ Rectangle.prototype.overlappingRect = function (otherRect) {
   overlapRect.setBottom(Math.min(otherRect.getBottom(), this.getBottom()));
   overlapRect.setRight(Math.min(otherRect.getRight(), this.getRight()));
   if (overlapRect.width <= 0 || overlapRect.height <= 0){
-    overlapRect = RectZero();
+    overlapRect = undefined;
   }
   return overlapRect;
 };
