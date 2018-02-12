@@ -333,6 +333,14 @@ Rectangle.prototype.DOMRect = function() {
             (otherRect.width === this.width && otherRect.height === this.height));
   };
 
+  Rectangle.prototype.hasSize = function() {
+    return this.width > 0 && this.height > 0;
+  };
+
+  Rectangle.prototype.hasZeroSize = function() {
+    return this.width === 0 && this.height === 0;
+  };
+
 /** =======================
       PROPERTIES - Points
   ========================*/
