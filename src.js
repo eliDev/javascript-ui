@@ -1033,15 +1033,15 @@ class Rectangle {
     */
   static fromDOMRect(DOMRect) {
     var rectangle = new Rectangle();
-    rectangle.x = domRect.left;
-    rectangle.y = domRect.top;
-    rectangle.width = domRect.right - domRect.left;
-    rectangle.height = domRect.bottom - domRect.top;
+    rectangle.x = DOMRect.left;
+    rectangle.y = DOMRect.top;
+    rectangle.width = DOMRect.right - DOMRect.left;
+    rectangle.height = DOMRect.bottom - DOMRect.top;
     return rectangle;
   }
 
-  static boundsFromDOMRect(domRect) {
-    var rectangle = Rectangle.fromDOMRect(domRect);
+  static boundsFromDOMRect(DOMRect) {
+    var rectangle = Rectangle.fromDOMRect(DOMRect);
     return rectangle.bounds();
   }
 
