@@ -334,13 +334,13 @@ class Rectangle {
       directionRect.right = point.x - this.getRight();
     }
     else if (point.x < this.x) {
-      directionRect.left = point.x - this.x;
+      directionRect.left = this.x  - point.x;
     }
     if (point.y >= this.getBottom()) {
       directionRect.bottom = point.y - this.getBottom();
     }
     else if (point.y < this.y) {
-      directionRect.top = point.y - this.y;
+      directionRect.top = this.y - point.y;
     }
     return directionRect;
   }
