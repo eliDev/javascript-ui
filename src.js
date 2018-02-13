@@ -246,766 +246,29 @@ class ClickManager {
     //     });
     // }
 
-}// class GeomtryUtils {
-  
-GeometryUtils = {};
+}/*jshint esversion: 6 */
+/** 
+ * For distance from a point in 4 directions of a 2d plane. 
+ * */
+class DirectionRect {
 
-GeometryUtils.DIRECTION_UNDEFINED = -1;
-GeometryUtils.DIRECTION_UP = 0;
-GeometryUtils.DIRECTION_TOP = GeometryUtils.DIRECTION_UP;
-GeometryUtils.DIRECTION_ABOVE = GeometryUtils.DIRECTION_UP;
-GeometryUtils.DIRECTION_RIGHT = 1;
-GeometryUtils.DIRECTION_BOTTOM = 2;
-GeometryUtils.DIRECTION_DOWN = GeometryUtils.DIRECTION_BOTTOM;
-GeometryUtils.DIRECTION_BELOW = GeometryUtils.DIRECTION_BOTTOM;
-GeometryUtils.DIRECTION_LEFT = 3;
-GeometryUtils.DIRECTION_CENTRE = 4;
-
-
-GeometryUtils.isDirectionDown = function (direction) {
-  return direction === GeometryUtils.DIRECTION_DOWN;
-};
-GeometryUtils.isDirectionUp = function (direction) {
-  return direction === GeometryUtils.DIRECTION_UP;
-};
-GeometryUtils.isHorizontal = function (direction) {
-  return (direction === GeometryUtils.DIRECTION_LEFT || direction === GeometryUtils.DIRECTION_RIGHT);
-};
-
-GeometryUtils.sideOpposite = function(side) {
-  var oppositeSide = this.DIRECTION_UNDEFINED;
-  switch (side) {
-    case GeometryUtils.DIRECTION_TOP:
-      oppositeSide = this.DIRECTION_BOTTOM;
-      break;
-    case GeometryUtils.DIRECTION_RIGHT:
-      oppositeSide = this.DIRECTION_LEFT;
-      break;
-    case GeometryUtils.DIRECTION_BOTTOM:
-      oppositeSide = this.DIRECTION_TOP;
-      break;
-    case GeometryUtils.DIRECTION_LEFT:
-      oppositeSide = this.DIRECTION_RIGHT;
-      break;
+/** For distance from a point in 4 directions of a 2d plane. */
+  constructor() {
+    this.top = -1;
+    this.right = -1;
+    this.bottom = -1;
+    this.left = -1;
   }
-  return oppositeSide;
-};
-
-GeometryUtils.elementPostitionForDirection = function (direction) {
-  var property = '';
-  switch (direction) {
-    case GeometryUtils.DIRECTION_TOP:
-      property = 'top';
-      break;
-    case GeometryUtils.DIRECTION_RIGHT:
-      property = 'right';
-      break;
-    case GeometryUtils.DIRECTION_BOTTOM:
-      property = 'bottom';
-      break;
-    case GeometryUtils.DIRECTION_LEFT:
-      property = 'left';
-      break;
-    default:
-      console.log("GeometryUtils.elementPostitionForDirection unhandled case: ", direction);
-  }
-  return property;
-};
-
-/** ==========================
-      Edges Manipulations
-  ========================*/
-
-  GeometryUtils.centreOfSide = function(DOMRect, side) {
-    var rect = GeometryUtils.initFromDOMRect(DOMRect);
-    return rect.centreOfSide(side);
-  };
-
-  GeometryUtils.originToCentreSide = function (domRect, side, centreOfSide) {
-    var origin = this.originToCentreSidePlus(domRect, side, centreOfSide, 0);
-    return origin;
-  };
-  
-  /**
-    Returns what the origin should be inorder
-    to have the 'domRect' 'side' centred at the given
-    'centreOfSize'.
-  
-    e.g. [] RIGHT by x
-          looks like []x
-  
-  */
-  GeometryUtils.originToCentreSidePlus = function (domRect, side, centreOfSide, extraDistance) {
-    var origin = {};
-    switch (side) {
-  
-      case GeometryUtils.DIRECTION_TOP:
-        origin.x = centreOfSide.x - this.halfWidth(domRect);
-        origin.y = centreOfSide.y - extraDistance;
-        break;
-  
-      case GeometryUtils.DIRECTION_RIGHT:
-        origin.x = centreOfSide.x - domRect.width - extraDistance;
-        origin.y = centreOfSide.y - this.halfHeight(domRect);
-        break;
-  
-      case GeometryUtils.DIRECTION_BOTTOM:
-        origin.x = centreOfSide.x - this.halfWidth(domRect);
-        origin.y = centreOfSide.y + domRect.height + extraDistance;
-        break;
-  
-      case GeometryUtils.DIRECTION_LEFT:
-        origin.x = centreOfSide.x - extraDistance;
-        origin.y = centreOfSide.y - this.halfHeight(domRect);
-        break;
-    }
-    return origin;
-  };
-  
-  /**
-      Gives the origin in order to place 'domRect' beside the 
-      given reference rectangle so that their centres align.
-  */
-  GeometryUtils.originToCentreBesideRect = function (domRect, referenceDomRect, referenceSide) {
-    var origin = this.originToCentreBesideRectPlus(domRect, referenceDomRect, referenceSide, 0);
-    return origin;
-  };
-  
-  GeometryUtils.originToCentreBesideRectPlus = function (domRect, referenceDomRect, referenceSide, extraDistance) {
-    if (undefined === extraDistance) {
-      extraDistance = 0;
-    }
-    var centreReferenceSide = GeometryUtils.centreOfSide(referenceDomRect, referenceSide);
-    var oppositeSide = GeometryUtils.sideOpposite(referenceSide);
-    var origin = this.originToCentreSidePlus(domRect, oppositeSide, centreReferenceSide, -extraDistance);
-    return origin;
-  };
-
-
-/** ============
-    Points
- ============== */
- 
-  function Point(x, y) {
-   return {x: x, y: y};
- }
- 
- function PointZero() {
-   return Point(0,0);
- }
-
- 
- function PointFromPoint(otherPoint) {
-   return Point(otherPoint.x, otherPoint.y);
- }
- 
- function PointFromPointPlusX(otherPoint, x) {
-   var point = PointFromPoint(otherPoint);
-   point.x += x;
-   return point;
- }
- 
-  function PointFromPointPlusY(otherPoint, y) {
-   var point = PointFromPoint(otherPoint);
-   point.y += y;
-   return point;
- }
- 
-  function pointPlusX(point, xPlus) {
-   point.x += xPlus;
- }
-
- function minPoint(p1, p2) {
-   var p = new Point();
-   p.x = Math.min(p1.x, p2.x);
-   p.y = Math.min(p1.y, p2.y);
-   return p;
- }
-
- function maxPoint(p1, p2) {
-  var p = new Point();
-  p.x = Math.max(p1.x, p2.x);
-  p.y = Math.max(p1.y, p2.y);
-  return p;
-}
- 
- function distanceFromPointToPoint(startPoint, endPoint) {
-   var xDiff = endPoint.x - startPoint.x;
-   var yDiff = endPoint.y - startPoint.y;
-   return Point(xDiff, yDiff);
- }
- 
- function pointToString(point){
-   return "{".concat(point.x.toString())
-   .concat(", ")
-   .concat(point.y.toString())
-   .concat("}"); 
- }
-
- GeometryUtils.subtractPoints = function (point1, point2) {
-  var point;
-  point.x = point1.x - point2.x;
-  point.y = point1.y - point2.y;
-  return point;
-};
-
-GeometryUtils.addPoints = function (point1, point2) {
-  var point;
-  point.x = point1.x + point2.x;
-  point.y = point1.y + point2.y;
-  return point;
-};
-
-GeometryUtils.distanceFromSourcePoint = function (sourcePoint, other) {
-  var directionRect = new DirectionRect();
-  if (other.x >= sourcePoint.x) {
-    directionRect.right = other.x - sourcePoint.x;
-  }
-  else if (other.x <= sourcePoint.x) {
-    directionRect.left = sourcePoint.x - other.x;
-  }
-  if (other.y >= sourcePoint.y) {
-    directionRect.bottom = other.y - sourcePoint.y;
-  }
-  else if (other.y < sourcePoint.y) {
-    directionRect.top = sourcePoint.y - other.y;
-  }
-  return directionRect;
-};
-
- 
- /** ============
-      Lines
- ============== */
- 
+} /*jshint esversion: 6 */
  /**
   * 2 Points (start, end)
   */
- function Line(startPoint, endPoint) {
-   return {start: startPoint, end: endPoint};
+ class Line {
+  constructor(startPoint, endPoint) {
+    return {start: startPoint, end: endPoint};
+  }
  }
-
-
-
-/** =================
-     Rectangle
-  ==================*/
-
-RectangleUtils = {};
-
-function Rectangle(x, y, width, height) {
-  if (undefined === x) { x = 0;}
-  if (undefined === y) {  y = 0; }
-  if (undefined === width) { width = 0; }
-  if (undefined === height) { height = 0; }
-  this.x = x;
-  this.y = y;
-  this.height = height;
-  this.width = width;
-}
-
-function RectZero(){
-  return new Rectangle();
-}
-
-function RectFromDOMRect(DOMRect) {
-  var r = RectangleUtils.initFromDOMRect(DOMRect);
-  return r;
-}
-
-/** For distance from a point in 4 directions of a 2d plane. */
-function DirectionRect() {
-  this.top = -1;
-  this.right = -1;
-  this.bottom = -1;
-  this.left = -1;
-}
-
-/** =================
-      Initialisers
-  ===================*/
-
-/**
-  @param {ClientRect} 'clientRect'
-*/
-RectangleUtils.initFromDOMRect = function(domRect) {
-  var rectangle = new Rectangle();
-  rectangle.x = domRect.left;
-  rectangle.y = domRect.top;
-  rectangle.width = domRect.right - domRect.left;
-  rectangle.height = domRect.bottom - domRect.top;
-  return rectangle;
-};
-
-RectangleUtils.boundsFromDOMRect = function(domRect) {
-  var rectangle = RectangleUtils.initFromDOMRect(domRect);
-  rectangle.setOriginPoint(PointZero());
-  return rectangle;
-};
-
-RectangleUtils.initFromRect = function (rectangle) {
-  var rect = new Rectangle();
-  rect.x = rectangle.x;
-  rect.y = rectangle.y;
-  rect.width = rectangle.width;
-  rect.height = rectangle.height;
-  return rect;
-};
-
-Rectangle.prototype.copy = function (rectangle) {
-  this.x = rectangle.x;
-  this.y = rectangle.y;
-  this.width = rectangle.width;
-  this.height = rectangle.height;
-};
-
-Rectangle.prototype.DOMRect = function() {
-  return {
-    bottom: this.getBottom(),
-    height: this.height,
-    left: this.getLeft(),
-    right: this.getRight(),
-    top: this.getTop(),
-    width: this.width,
-    x: this.x,
-    y: this.y
-  };
-};
-
-/** ==============
-    EQUALITY
-  ===============*/
-
-  Rectangle.prototype.equals = function (otherRect) {
-    return ((otherRect.x === this.x && otherRect.y === this.y) &&
-            (otherRect.width === this.width && otherRect.height === this.height));
-  };
-
-  Rectangle.prototype.hasSize = function() {
-    return this.width > 0 && this.height > 0;
-  };
-
-  Rectangle.prototype.hasZeroSize = function() {
-    return this.width === 0 && this.height === 0;
-  };
-
-/** =======================
-      PROPERTIES - Points
-  ========================*/
-
-Rectangle.prototype.getOrigin = function () {
-  return { x: this.x, y: this.y };
-};
-
-Rectangle.prototype.setOriginPoint = function (point) {
-  this.x = point.x;
-  this.y = point.y;
-};
-
-Rectangle.prototype.getMaxX = function () {
-  return this.getRight();
-};
-
-Rectangle.prototype.getMaxY = function () {
-  return this.getBottom();
-};
-
-Rectangle.prototype.getMaxXPoint = function () {
-  return new Point(this.getRight(), this.y);
-};
-
-Rectangle.prototype.getMaxYPoint = function () {
-  return new Point(this.x, this.getBottom());
-};
-
-Rectangle.prototype.getMaxPoint = function () {
-  return new Point(this.getRight(), this.getBottom());
-};
-
-Rectangle.prototype.setMaxPoint = function (point) {
-  this.setRight(point.x);
-  this.setBottom(point.y);
-};
-
-Rectangle.prototype.getBoundsCentre = function () {
-  var centre = {};
-  centre.x = this.halfWidth();
-  centre.y = this.halfHeight();
-  return centre;
-};
-
-Rectangle.prototype.getCentre = function () {
-  var centre = {};
-  centre.x = this.x + this.halfWidth();
-  centre.y = this.y + this.halfHeight();
-  return centre;
-};
-
-Rectangle.prototype.setCentre = function (centre) {
-  this.x = (centre.x - this.halfWidth());
-  this.y = (centre.y - this.halfHeight());
-};
-
-//  PROPERTIES - DOMRect support
-
-Rectangle.prototype.getTop = function () {
-  return this.y;
-};
-
-Rectangle.prototype.getLeft = function () {
-  return this.x;
-};
-
-Rectangle.prototype.getRight = function () {
-  return this.x + this.width;
-};
-
-Rectangle.prototype.setRight = function (right) {
-  this.width = (right - this.x);
-};
-
-Rectangle.prototype.getBottom = function () {
-  return this.y + this.height;
-};
-
-Rectangle.prototype.setBottom = function (y) {
-  this.height = (y - this.y);
-};
-
-
-
-/** =============
-      Size
-  ===============*/
-
-Rectangle.prototype.boundsForFrame = function (otherRect) {
-    var bounds = RectangleUtils.initFromRect(otherRect);
-    bounds.x -= this.x;
-    bounds.y -= this.y;
-    return bounds;
-};
-
-Rectangle.prototype.halfWidth = function () {
-  var halfWidth = (this.width / 2);
-  return halfWidth;
-};
-
-Rectangle.prototype.halfHeight = function () {
-  var halfHeight = (this.height / 2);
-  return halfHeight;
-};
-
-/**
-  @param {Number} 'height'
-  @param {Boolean} 'stickyCentre'
-*/
-Rectangle.prototype.setHeight = function(height, stickyCentre) {
-  this.setSize(this.width, height, stickyCentre);
-};
-
-Rectangle.prototype.setHeightPlus = function (extraHeight, stickyCentre) {
-  this.setSizePlus(0, extraHeight, stickyCentre);
-};
-
-/**
-  @param {Number} 'width'
-  @param {Boolean} 'stickyCentre'
-*/
-Rectangle.prototype.setWidth = function (width, stickyCentre) {
-  this.setSize(width, this.height, stickyCentre);
-};
-
-Rectangle.prototype.setWidthPlus = function (extraWidth, stickyCentre) {
-  this.setSizePlus(extraWidth, 0, stickyCentre);
-};
-
-/**
-  @param {Number} 'width'
-  @param {Number} 'height'
-  @param {Boolean} 'stickyCentre' If true, centre remains the same 
-                    after applying size.
-*/
-Rectangle.prototype.setSize = function (width, height, stickyCentre) {
-  var centre = this.getCentre();
-  this.height = height;
-  this.width = width;
-
-  if (stickyCentre) {
-    this.setCentre(centre);
-  }
-};
-
-Rectangle.prototype.setSizePlus = function (extraWidth, extraHeight, stickyCentre) {
-  this.setSize(this.width + extraWidth, this.height + extraHeight, stickyCentre);
-};
-
-Rectangle.prototype.moveBy = function(point) {
-  this.x = this.x + point.x;
-  this.y = this.y + point.y;
-};
-
-/** =============
-      Resize
-  ===============*/
-
-/**
-    Enlarges the frame on all sides, centre remains the same.
-    @param {Number} 'amount' size to increase by.
-*/
-Rectangle.prototype.stretchBy = function (amount) {
-  this.stretchHoriztonally(amount);
-  this.stretchVertically(amount);
-};
-
-/** 
-    Width increase by 2 * amount.
-    Centre remains the same.
-*/
-Rectangle.prototype.stretchHoriztonally = function (amount) {
-  this.x -= amount;
-  this.width += (2 * amount);
-};
-
-Rectangle.prototype.stretchVertically = function (amount) {
-  this.y -= amount;
-  this.height += (2 * amount);
-};
-
-/**
-    If the x position is close to the left edge, the rectangle's
-    x-position will be set, and right edge will remain the same.
-
-    If 'xPos' is closer to the right side, width will change and 
-    the rectangle's x-position will remain unchanged.
-
-    @param {Number} 'xPos' Coordinate on screen.
-    @param {Number} 'plusDistance' Any additional padding beyond the xPos.
-*/
-Rectangle.prototype.stretchToXPos = function (xPos, plusDistance) {
-
-  var rightPos;
-  var sideNearXPos = this.horizontalSideClosestToXPos(xPos);
-  if (!Boolean(plusDistance)) {
-    plusDistance = 0;
-  }
-
-  if (sideNearXPos === GeometryUtils.DIRECTION_LEFT) {
-    rightPos = this.getRight();
-    this.x = (xPos - plusDistance);
-    this.setRight(rightPos);
-  }
-  else if (sideNearXPos === GeometryUtils.DIRECTION_RIGHT) {
-    // No change in x pos.
-    this.setRight(xPos + plusDistance);
-  }
-};
-
-/** =============
-      Hit Test
-  ===============*/
-
-Rectangle.prototype.containsPoint = function (point) {
-    var contains = ((point.x >= this.x && point.x < this.getRight()) &&
-        (point.y >= this.y && point.y < this.getBottom()));
-    return contains;
-};
-
-Rectangle.prototype.containsXY = function (x, y) {
-    var point = new Point(x,y);
-    return this.containsPoint(point);
-};
-
-Rectangle.prototype.containsX = function (x) {
-    var point = new Point(x, this.y);
-    return this.containsPoint(point);
-};
-
-Rectangle.prototype.overlaps = function (otherRect, outRect) {
-    var overlappingRect = this.overlappingFrame(otherRect);
-    if (overlappingRect.equals(RectZero())) {
-      return false;
-    }
-    if (outRect){
-      outRect.copy(overlappingRect);
-    }
-    return true;
-    // var overlaps = false;
-    // if (this.containsPoint(otherRect.getOrigin()) || otherRect.containsPoint(this.getOrigin())) {
-    //   overlaps = true;
-    // }
-    // else if (this.containsPoint(otherRect.getMaxXPoint()) || otherRect.containsPoint(this.getMaxXPoint())) {
-    //   overlaps = true;
-    // }
-    // else if (this.containsPoint(otherRect.getMaxYPoint()) || otherRect.containsPoint(this.getMaxYPoint())) {
-    //   overlaps = true;
-    // }
-    // else if (this.containsPoint(otherRect.getMaxPoint()) || otherRect.containsPoint(this.getMaxPoint())) {
-    //   overlaps = true;
-    // }
-    // if (outRect){
-    //   outRect.copy(this.overlappingRect(otherRect));
-    // }
-    // return overlaps;
-};
-
-Rectangle.prototype.overlappingFrame = function (otherRect) {
-  var overlapRect = new Rectangle();
-  overlapRect.y = Math.max(otherRect.y, this.y);
-  overlapRect.x = Math.max(otherRect.x, this.x);
-  overlapRect.setBottom(Math.min(otherRect.getBottom(), this.getBottom()));
-  overlapRect.setRight(Math.min(otherRect.getRight(), this.getRight()));
-  if (overlapRect.width <= 0 || overlapRect.height <= 0){
-    overlapRect = undefined;
-  }
-  return overlapRect;
-};
-
-
-/**
-    Zero if point is within the rectangle or outside vertically.
-    Negative x: the point is outside to the left.
-
-    @param {point} 'point' has x: y: properties.
-    @return {DirectionRect} (top >= 0): Given point is above rect
-                            (top < 0): Given point is not above rect.
-                            (right >= 0): Given point is right of rect
-                            (right < 0): Given point is not right of rect.
-                            (bottom >= 0): Given point is below rect
-                            (bottom < 0): Given point is not below rect.
-                            (left >= 0): Given point is left of rect
-                            (left < 0): Given point is not left of rect.
-    All negatives means point is within rect.
-*/
-Rectangle.prototype.distanceOutside = function (point) {
-  if (this.containsPoint(point)) {
-    return new DirectionRect();
-  }
-  var directionRect = new DirectionRect();
-  if (point.x >= this.getRight()) {
-    directionRect.right = point.x - this.getRight();
-  }
-  else if (point.x < this.x) {
-    directionRect.left = point.x - this.x;
-  }
-  if (point.y >= this.getBottom()) {
-    directionRect.bottom = point.y - this.getBottom();
-  }
-  else if (point.y < this.y) {
-    directionRect.top = point.y - this.y;
-  }
-  return directionRect;
-};
-
-Rectangle.prototype.isOutsideEdge = function(point, thisRectSide) {
-  var isBeyond = false;
-  var directionRect = this.distanceOutside(point);
-  switch (thisRectSide) {
-    case GeometryUtils.DIRECTION_TOP:
-      isBeyond = directionRect.top >= 0;
-      break;
-    case GeometryUtils.DIRECTION_RIGHT:
-      isBeyond = directionRect.right >= 0;
-      break;
-    case GeometryUtils.DIRECTION_BOTTOM:
-      isBeyond = directionRect.bottom >= 0;
-      break;
-    case GeometryUtils.DIRECTION_LEFT:
-      isBeyond = directionRect.left >= 0;
-      break;
-      default:
-      console.log("Rectangle.prototype.isOutsideEdge unhandled case: ", thisRectSide);
-  }
-  return isBeyond;
-};
-
-Rectangle.prototype.isInsideEdge = function(point, thisRectSide) {
-  var isInside = false;
-  var directionRect = GeometryUtils.distanceFromSourcePoint(this.centreOfSide(thisRectSide), point);
-  switch (thisRectSide) {
-    case GeometryUtils.DIRECTION_TOP:
-    isInside = directionRect.bottom >= 0;
-      break;
-    case GeometryUtils.DIRECTION_RIGHT:
-    isInside = directionRect.left >= 0;
-      break;
-    case GeometryUtils.DIRECTION_BOTTOM:
-    isInside = directionRect.top >= 0;
-      break;
-    case GeometryUtils.DIRECTION_LEFT:
-    isInside = directionRect.right >= 0;
-      break;
-      default:
-      console.log("Rectangle.prototype.isInsideEdge unhandled case: ", thisRectSide);
-  }
-  return isInside;
-};
-
-
-/**
-  The given is either closer to the left or right side 
-  of the rectangle (unless centred, in which case DIRECTION_CENTRE
-  is returned).
-
-  @see {@link GeometryUtils.DIRECTION_RIGHT}
-  @see {@link GeometryUtils.DIRECTION_LEFT}
-
-  @param {Number} 'xPos' horizontal coordinate.
-  @return {Number} A GeometryUtils 'direction'
-*/
-Rectangle.prototype.horizontalSideClosestToXPos = function (xPos) {
-  var side = GeometryUtils.DIRECTION_CENTRE;
-  if (xPos > this.getCentre().x) {
-    side = GeometryUtils.DIRECTION_RIGHT;
-  }
-  else if (xPos < this.getCentre().x) {
-    side = GeometryUtils.DIRECTION_LEFT;
-  }
-  return side;
-};
-
-
-/** ==============
-      GEOMETRY
-  ===============*/
-
-
-/**
-    Returns the point representings the 
-    centre along the top of the rectangle.
-*/
-Rectangle.prototype.centreOfSide = function(side) {
-  var point;
-  switch (side) {
-    case GeometryUtils.DIRECTION_TOP:
-      point = new Point(this.x + this.halfWidth(), this.y);
-      break;
-    case GeometryUtils.DIRECTION_RIGHT:
-      point = new Point(this.x + this.width, this.y + this.halfHeight());
-      break;
-    case GeometryUtils.DIRECTION_BOTTOM:
-      point = new Point(this.x + this.halfWidth(), this.y + this.height);
-      break;
-    case GeometryUtils.DIRECTION_LEFT:
-      point = new Point(this.x, this.y + this.halfHeight());
-      break;
-  } 
-  return point;
-};
-
-RectangleUtils.combineRects = function(rect1, rect2) {
-  var r = new Rectangle();
-  r.setOriginPoint(minPoint(rect1.getOrigin(), rect2.getOrigin()));
-  r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rect2.getMaxPoint()));
-  return r;
-};
-
-DOMUtils = {};
-DOMUtils.combineRects = function(DOMrect1, DOMrect2) {
-  var r1 = RectFromDOMRect(DOMrect1);
-  var r2 = RectFromDOMRect(DOMrect2);
-  return RectangleUtils.combineRects(r1, r2);
-};
-  
+/*jshint esversion: 6 */
 /**
  * 
  */
@@ -1039,7 +302,163 @@ class MathUtils {
     return roundedValue;
   }
 
-}/**
+}/*jshint esversion: 6 */
+/**
+ * 
+ */
+class Point {
+  constructor(x,y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  static zero(){
+    return new Point(0,0);
+  }
+
+  static copy(point) {
+    return new Point(point.x, point.y);
+  }
+
+  static copyPlusX(point, x) {
+    var p = Point.copy(point);
+    p.plusX(x);
+    return p;
+  }
+
+  static copyPlusY(point, y) {
+    var p = Point.copy(point);
+    p.y += y;
+    return p;
+  }
+
+  plusX(xPlus) {
+    this.x += xPlus;
+  }
+ 
+  static minPoint(p1, p2) {
+    var p = new Point();
+    p.x = Math.min(p1.x, p2.x);
+    p.y = Math.min(p1.y, p2.y);
+    return p;
+  }
+ 
+  static maxPoint(p1, p2) {
+   var p = new Point();
+   p.x = Math.max(p1.x, p2.x);
+   p.y = Math.max(p1.y, p2.y);
+   return p;
+ }
+
+ static subtract(point1, point2) {
+  var point;
+  point.x = point1.x - point2.x;
+  point.y = point1.y - point2.y;
+  return point;
+}
+
+static add(point1, point2) {
+  var point;
+  point.x = point1.x + point2.x;
+  point.y = point1.y + point2.y;
+  return point;
+}
+  
+ static distanceBetweenPoints(startPoint, endPoint) {
+    var xDiff = endPoint.x - startPoint.x;
+    var yDiff = endPoint.y - startPoint.y;
+    return Point(xDiff, yDiff);
+  }
+
+  static directionalDistranceBetweenPoints(sourcePoint, other) {
+    var directionRect = new DirectionRect();
+    if (other.x >= sourcePoint.x) {
+      directionRect.right = other.x - sourcePoint.x;
+    }
+    else if (other.x <= sourcePoint.x) {
+      directionRect.left = sourcePoint.x - other.x;
+    }
+    if (other.y >= sourcePoint.y) {
+      directionRect.bottom = other.y - sourcePoint.y;
+    }
+    else if (other.y < sourcePoint.y) {
+      directionRect.top = sourcePoint.y - other.y;
+    }
+    return directionRect;
+  }
+  
+  toString() {
+    return "{".concat(this.x.toString())
+    .concat(", ")
+    .concat(this.y.toString())
+    .concat("}"); 
+  }
+}
+RectangleSide = {};
+
+RectangleSide.UNDEFINED = -1;
+RectangleSide.UP = 0;
+RectangleSide.TOP = RectangleSide.UP;
+RectangleSide.ABOVE = RectangleSide.UP;
+RectangleSide.RIGHT = 1;
+RectangleSide.BOTTOM = 2;
+RectangleSide.DOWN = RectangleSide.BOTTOM;
+RectangleSide.BELOW = RectangleSide.BOTTOM;
+RectangleSide.LEFT = 3;
+RectangleSide.CENTRE = 4;
+
+
+RectangleSide.isDirectionDown = function (direction) {
+  return direction === RectangleSide.DOWN;
+};
+RectangleSide.isDirectionUp = function (direction) {
+  return direction === RectangleSide.UP;
+};
+RectangleSide.isHorizontal = function (direction) {
+  return (direction === RectangleSide.LEFT || direction === RectangleSide.RIGHT);
+};
+
+RectangleSide.sideOpposite = function(side) {
+  var oppositeSide = this.UNDEFINED;
+  switch (side) {
+    case RectangleSide.TOP:
+      oppositeSide = this.BOTTOM;
+      break;
+    case RectangleSide.RIGHT:
+      oppositeSide = this.LEFT;
+      break;
+    case RectangleSide.BOTTOM:
+      oppositeSide = this.TOP;
+      break;
+    case RectangleSide.LEFT:
+      oppositeSide = this.RIGHT;
+      break;
+  }
+  return oppositeSide;
+};
+
+RectangleSide.elementPostitionForDirection = function (direction) {
+  var property = '';
+  switch (direction) {
+    case RectangleSide.TOP:
+      property = 'top';
+      break;
+    case RectangleSide.RIGHT:
+      property = 'right';
+      break;
+    case RectangleSide.BOTTOM:
+      property = 'bottom';
+      break;
+    case RectangleSide.LEFT:
+      property = 'left';
+      break;
+    default:
+      console.log("RectangleSides.elementPostitionForDirection unhandled case: ", direction);
+  }
+  return property;
+};
+/*jshint esversion: 6 */
+/**
  * 
  */
 class TableUtils {
@@ -1057,6 +476,7 @@ class TableUtils {
         return data;
     }
 }
+/*jshint esversion: 6 */
 /**
  * 
  */
@@ -1085,6 +505,556 @@ class WindowEventManager {
     this.onLoadCallbacks.forEach(function(callback) {
       callback();
     });
+  }
+
+}/*jshint esversion: 6 */
+/**
+ * 
+ */
+class Rectangle {
+  constructor(x, y, width, height) {
+    if (undefined === x) { x = 0;}
+    if (undefined === y) {  y = 0; }
+    if (undefined === width) { width = 0; }
+    if (undefined === height) { height = 0; }
+    this.x = x;
+    this.y = y;
+    this.height = height;
+    this.width = width;
+  }
+
+  static zero() {
+    return new Rectangle();
+  }
+
+  copy(rectangle) {
+    this.x = rectangle.x;
+    this.y = rectangle.y;
+    this.width = rectangle.width;
+    this.height = rectangle.height;
+  }
+
+  static copy(rectangle) {
+    var rect = new Rectangle();
+    rect.x = rectangle.x;
+    rect.y = rectangle.y;
+    rect.width = rectangle.width;
+    rect.height = rectangle.height;
+    return rect;
+  }
+
+  static combineRects(rect1, rect2) {
+    var r = new Rectangle();
+    r.setOrigin(minPoint(rect1.getOrigin(), rect2.getOrigin()));
+    r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rect2.getMaxPoint()));
+    return r;
+  }
+
+  /** ==============
+      EQUALITY
+    ===============*/
+
+    equals(otherRect) {
+      return ((otherRect.x === this.x && otherRect.y === this.y) &&
+              (otherRect.width === this.width && otherRect.height === this.height));
+    }
+
+    hasSize() {
+      return this.width > 0 && this.height > 0;
+    }
+
+    hasZeroSize() {
+      return this.width === 0 && this.height === 0;
+    }
+
+  /** =======================
+        PROPERTIES - Points
+    ========================*/
+
+  getOrigin() {
+    return { x: this.x, y: this.y };
+  }
+
+  setXY(x, y) {
+    this.x = point.x;
+    this.y = point.y;
+  }
+
+  setOrigin(point) {
+    this.setXY(point.x, point.y);
+  }
+
+  getMaxX() {
+    return this.getRight();
+  }
+
+  getMaxY() {
+    return this.getBottom();
+  }
+
+  getMaxXPoint() {
+    return new Point(this.getRight(), this.y);
+  }
+
+  getMaxYPoint() {
+    return new Point(this.x, this.getBottom());
+  }
+
+  getMaxPoint() {
+    return new Point(this.getRight(), this.getBottom());
+  }
+
+  setMaxPoint(point) {
+    this.setRight(point.x);
+    this.setBottom(point.y);
+  }
+
+  getBoundsCentre() {
+    var centre = {};
+    centre.x = this.halfWidth();
+    centre.y = this.halfHeight();
+    return centre;
+  }
+
+  getCentre() {
+    var centre = {};
+    centre.x = this.x + this.halfWidth();
+    centre.y = this.y + this.halfHeight();
+    return centre;
+  }
+
+  setCentre(centre) {
+    this.x = (centre.x - this.halfWidth());
+    this.y = (centre.y - this.halfHeight());
+  }
+
+  //  PROPERTIES - DOMRect support
+
+  getTop() {
+    return this.y;
+  }
+
+  getLeft() {
+    return this.x;
+  }
+
+  getRight() {
+    return this.x + this.width;
+  }
+
+  setRight(right) {
+    this.width = (right - this.x);
+  }
+
+  getBottom() {
+    return this.y + this.height;
+  }
+
+  setBottom(y) {
+    this.height = (y - this.y);
+  }
+
+  /** =============
+        Size
+    ===============*/
+
+  boundsForFrame(otherRect) {
+      var bounds = Rectangle.copy(otherRect);
+      bounds.x -= this.x;
+      bounds.y -= this.y;
+      return bounds;
+  }
+
+  halfWidth() {
+    var halfWidth = (this.width / 2);
+    return halfWidth;
+  }
+
+  halfHeight() {
+    var halfHeight = (this.height / 2);
+    return halfHeight;
+  }
+
+  /**
+    @param {Number} 'height'
+    @param {Boolean} 'stickyCentre'
+  */
+  setHeight(height, stickyCentre) {
+    this.setSize(this.width, height, stickyCentre);
+  }
+
+  setHeightPlus(extraHeight, stickyCentre) {
+    this.setSizePlus(0, extraHeight, stickyCentre);
+  }
+
+  /**
+    @param {Number} 'width'
+    @param {Boolean} 'stickyCentre'
+  */
+  setWidth(width, stickyCentre) {
+    this.setSize(width, this.height, stickyCentre);
+  }
+
+  setWidthPlus(extraWidth, stickyCentre) {
+    this.setSizePlus(extraWidth, 0, stickyCentre);
+  }
+
+  /**
+    @param {Number} 'width'
+    @param {Number} 'height'
+    @param {Boolean} 'stickyCentre' If true, centre remains the same 
+                      after applying size.
+  */
+  setSize(width, height, stickyCentre) {
+    var centre = this.getCentre();
+    this.height = height;
+    this.width = width;
+
+    if (stickyCentre) {
+      this.setCentre(centre);
+    }
+  }
+
+  setSizePlus(extraWidth, extraHeight, stickyCentre) {
+    this.setSize(this.width + extraWidth, this.height + extraHeight, stickyCentre);
+  }
+
+  moveBy(point) {
+    this.x = this.x + point.x;
+    this.y = this.y + point.y;
+  }
+
+  /** =============
+        Resize
+    ===============*/
+
+  /**
+      Enlarges the frame on all sides, centre remains the same.
+      @param {Number} 'amount' size to increase by.
+  */
+  stretchBy(amount) {
+    this.stretchHoriztonally(amount);
+    this.stretchVertically(amount);
+  }
+
+  /** 
+      Width increase by 2 * amount.
+      Centre remains the same.
+  */
+  stretchHoriztonally(amount) {
+    this.x -= amount;
+    this.width += (2 * amount);
+  }
+
+  stretchVertically(amount) {
+    this.y -= amount;
+    this.height += (2 * amount);
+  }
+
+  /**
+      If the x position is close to the left edge, the rectangle's
+      x-position will be set, and right edge will remain the same.
+
+      If 'xPos' is closer to the right side, width will change and 
+      the rectangle's x-position will remain unchanged.
+
+      @param {Number} 'xPos' Coordinate on screen.
+      @param {Number} 'plusDistance' Any additional padding beyond the xPos.
+  */
+  stretchToXPos(xPos, plusDistance) {
+    var rightPos;
+    var sideNearXPos = this.horizontalSideClosestToXPos(xPos);
+    if (!Boolean(plusDistance)) {
+      plusDistance = 0;
+    }
+
+    if (sideNearXPos === RectangleSide.LEFT) {
+      rightPos = this.getRight();
+      this.x = (xPos - plusDistance);
+      this.setRight(rightPos);
+    }
+    else if (sideNearXPos === RectangleSide.RIGHT) {
+      // No change in x pos.
+      this.setRight(xPos + plusDistance);
+    }
+  }
+
+  /** =============
+        Hit Test
+    ===============*/
+
+  containsPoint(point) {
+      var contains = ((point.x >= this.x && point.x < this.getRight()) &&
+          (point.y >= this.y && point.y < this.getBottom()));
+      return contains;
+  }
+
+  containsXY(x, y) {
+      var point = new Point(x,y);
+      return this.containsPoint(point);
+  }
+
+  containsX(x) {
+      var point = new Point(x, this.y);
+      return this.containsPoint(point);
+  }
+
+  overlaps(otherRect, outRect) {
+      var overlappingRect = this.overlappingFrame(otherRect);
+      if (overlappingRect.equals(RectZero())) {
+        return false;
+      }
+      if (outRect){
+        outRect.copy(overlappingRect);
+      }
+      return true;
+      // var overlaps = false;
+      // if (this.containsPoint(otherRect.getOrigin()) || otherRect.containsPoint(this.getOrigin())) {
+      //   overlaps = true;
+      // }
+      // else if (this.containsPoint(otherRect.getMaxXPoint()) || otherRect.containsPoint(this.getMaxXPoint())) {
+      //   overlaps = true;
+      // }
+      // else if (this.containsPoint(otherRect.getMaxYPoint()) || otherRect.containsPoint(this.getMaxYPoint())) {
+      //   overlaps = true;
+      // }
+      // else if (this.containsPoint(otherRect.getMaxPoint()) || otherRect.containsPoint(this.getMaxPoint())) {
+      //   overlaps = true;
+      // }
+      // if (outRect){
+      //   outRect.copy(this.overlappingRect(otherRect));
+      // }
+      // return overlaps;
+  }
+
+  overlappingFrame(otherRect) {
+    var overlapRect = new Rectangle();
+    overlapRect.y = Math.max(otherRect.y, this.y);
+    overlapRect.x = Math.max(otherRect.x, this.x);
+    overlapRect.setBottom(Math.min(otherRect.getBottom(), this.getBottom()));
+    overlapRect.setRight(Math.min(otherRect.getRight(), this.getRight()));
+    if (overlapRect.width <= 0 || overlapRect.height <= 0){
+      overlapRect = undefined;
+    }
+    return overlapRect;
+  }
+
+
+
+  /**
+      Zero if point is within the rectangle or outside vertically.
+      Negative x: the point is outside to the left.
+
+      @param {point} 'point' has x: y: properties.
+      @return {DirectionRect} (top >= 0): Given point is above rect
+                              (top < 0): Given point is not above rect.
+                              (right >= 0): Given point is right of rect
+                              (right < 0): Given point is not right of rect.
+                              (bottom >= 0): Given point is below rect
+                              (bottom < 0): Given point is not below rect.
+                              (left >= 0): Given point is left of rect
+                              (left < 0): Given point is not left of rect.
+      All negatives means point is within rect.
+  */
+  distanceOutside(point) {
+    if (this.containsPoint(point)) {
+      return new DirectionRect();
+    }
+    var directionRect = new DirectionRect();
+    if (point.x >= this.getRight()) {
+      directionRect.right = point.x - this.getRight();
+    }
+    else if (point.x < this.x) {
+      directionRect.left = point.x - this.x;
+    }
+    if (point.y >= this.getBottom()) {
+      directionRect.bottom = point.y - this.getBottom();
+    }
+    else if (point.y < this.y) {
+      directionRect.top = point.y - this.y;
+    }
+    return directionRect;
+  }
+
+    /** ==============
+        SIDES
+    ===============*/
+
+  isOutsideEdge(point, thisRectSide) {
+    var isBeyond = false;
+    var directionRect = this.distanceOutside(point);
+    switch (thisRectSide) {
+      case RectangleSide.TOP:
+        isBeyond = directionRect.top >= 0;
+        break;
+      case RectangleSide.RIGHT:
+        isBeyond = directionRect.right >= 0;
+        break;
+      case RectangleSide.BOTTOM:
+        isBeyond = directionRect.bottom >= 0;
+        break;
+      case RectangleSide.LEFT:
+        isBeyond = directionRect.left >= 0;
+        break;
+        default:
+        console.log("Rectangle isOutsideEdge() unhandled case: ", thisRectSide);
+    }
+    return isBeyond;
+  }
+
+  isInsideEdge(point, thisRectSide) {
+    var isInside = false;
+    var directionRect = Point.directionalDistranceBetweenPoints(this.centreOfSide(thisRectSide), point);
+    switch (thisRectSide) {
+      case RectangleSide.TOP:
+      isInside = directionRect.bottom >= 0;
+        break;
+      case RectangleSide.RIGHT:
+      isInside = directionRect.left >= 0;
+        break;
+      case RectangleSide.BOTTOM:
+      isInside = directionRect.top >= 0;
+        break;
+      case RectangleSide.LEFT:
+      isInside = directionRect.right >= 0;
+        break;
+        default:
+        console.log("Rectangle isInsideEdge() unhandled case: ", thisRectSide);
+    }
+    return isInside;
+  }
+
+  /**
+    The given is either closer to the left or right side 
+    of the rectangle (unless centred, in which case CENTRE
+    is returned).
+
+    @see {@link GeometryUtils.RIGHT}
+    @see {@link GeometryUtils.LEFT}
+
+    @param {Number} 'xPos' horizontal coordinate.
+    @return {Number} A GeometryUtils 'direction'
+  */
+  horizontalSideClosestToXPos(xPos) {
+    var side = RectangleSide.CENTRE;
+    if (xPos > this.getCentre().x) {
+      side = RectangleSide.RIGHT;
+    }
+    else if (xPos < this.getCentre().x) {
+      side = RectangleSide.LEFT;
+    }
+    return side;
+  }
+
+  /**
+      Returns the point representings the 
+      centre along the top of the rectangle.
+  */
+  centreOfSide(side) {
+    var point;
+    switch (side) {
+      case RectangleSide.TOP:
+        point = new Point(this.x + this.halfWidth(), this.y);
+        break;
+      case RectangleSide.RIGHT:
+        point = new Point(this.x + this.width, this.y + this.halfHeight());
+        break;
+      case RectangleSide.BOTTOM:
+        point = new Point(this.x + this.halfWidth(), this.y + this.height);
+        break;
+      case RectangleSide.LEFT:
+        point = new Point(this.x, this.y + this.halfHeight());
+        break;
+    } 
+    return point;
+  }
+
+  static originToCentreSide(rect, side, centreOfSide) {
+    var origin = rect.originToCentreSidePlus(side, centreOfSide, 0);
+    return origin;
+  }
+
+  originToCentreSidePlus(side, centreOfSide, extraDistance) {
+    var origin = {};
+    switch (side) {
+  
+      case RectangleSide.TOP:
+        origin.x = centreOfSide.x - this.halfWidth();
+        origin.y = centreOfSide.y - extraDistance;
+        break;
+  
+      case RectangleSide.RIGHT:
+        origin.x = centreOfSide.x - this.width - extraDistance;
+        origin.y = centreOfSide.y - this.halfHeight();
+        break;
+  
+      case RectangleSide.BOTTOM:
+        origin.x = centreOfSide.x - this.halfWidth();
+        origin.y = centreOfSide.y + this.height + extraDistance;
+        break;
+  
+      case RectangleSide.LEFT:
+        origin.x = centreOfSide.x - extraDistance;
+        origin.y = centreOfSide.y - this.halfHeight();
+        break;
+    }
+    return origin;
+  }
+
+  originToCentreBesideRect(referenceRect, referenceSide) {
+    var origin = this.originToCentreBesideRectPlus(referenceRect, referenceSide, 0);
+    return origin;
+  }
+  
+  originToCentreBesideRectPlus(referenceRect, referenceSide, extraDistance) {
+    if (undefined === extraDistance) {
+      extraDistance = 0;
+    }
+    var centreReferenceSide = referenceDomRect.centreOfSide(referenceSide);
+    var oppositeSide = RectangleSide.sideOpposite(referenceSide);
+    var origin = this.originToCentreSidePlus(oppositeSide, centreReferenceSide, -extraDistance);
+    return origin;
+  }
+
+  /** ==============
+    DOMRect Utils
+  ================== */
+
+  static combineDOMRects(DOMrect1, DOMrect2) {
+    var r1 = Rectangle.fromDOMRect(DOMrect1);
+    var r2 = Rectangle.fromDOMRect(DOMrect2);
+    return Rectangle.combineRects(r1, r2);
+  }
+
+    /**
+    @param {ClientRect} 'clientRect'
+    */
+  static fromDOMRect(DOMRect) {
+    var rectangle = new Rectangle();
+    rectangle.x = domRect.left;
+    rectangle.y = domRect.top;
+    rectangle.width = domRect.right - domRect.left;
+    rectangle.height = domRect.bottom - domRect.top;
+    return rectangle;
+  }
+
+  static boundsFromDOMRect(domRect) {
+    var rectangle = Rectangle.fromDOMRect(domRect);
+    rectangle.setOrigin(PointZero());
+    return rectangle;
+  }
+
+  toDOMRect() {
+    return {
+      bottom: this.getBottom(),
+      height: this.height,
+      left: this.getLeft(),
+      right: this.getRight(),
+      top: this.getTop(),
+      width: this.width,
+      x: this.x,
+      y: this.y
+    };
   }
 
 }/*jshint esversion: 6 */
@@ -1244,29 +1214,29 @@ class CSSUtils {
 
     static clipLeftInset(element, leftInset) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
-        var clipBounds = RectangleUtils.initFromRect(elementBounds);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
+        var clipBounds = Rectangle.copy(elementBounds);
         clipBounds.setWidth(leftInset);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipBetweenHorizontal(element, minX, maxX) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
         var clipBounds = new Rectangle(minX, 0, maxX - minX, elementBounds.height);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipInsideBounds(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipInsideRect(element, clipFrame) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
-        var clipBounds = RectFromDOMRect(elementRect).boundsForFrame(clipFrame);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
+        var clipBounds = Rectangle.fromDOMRect(elementRect).boundsForFrame(clipFrame);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
@@ -1291,17 +1261,168 @@ class CSSUtils {
         element.style['-webkit-clip-path'] = '';
     }
 
+}/*jshint esversion: 6 */
+/**
+ * 
+ */
+class TransformUtils {
+
+  constructor() {
+  }
+
+  static getVendorPrefix () {
+    return 'transform';
+  }
+
+     /**
+     * Parses the transform to find the given property 
+     * (e.g. 'scale', 'translateY', ...);
+     * 
+     * @see https://css-tricks.com/get-value-of-css-rotation-through-javascript/
+     * @see https://www.w3.org/TR/2011/WD-css3-2d-transforms-20111215/#matrix-decomposition
+     * @see https://www.w3.org/TR/SVG/coords.html#RotationDefined
+     * 
+     * @param {HTMLElement} 'element'
+     * @param {CSSStyleDeclaration} 'styles' Optional. HTMLElement.style
+     * @param {String} 'propertyName' The name of the type of transform.
+     * @return {Number} A default appropriate to the property will be 
+     *                  returned if no transform is present.
+     */
+    static getValue (styles, propertyName) {
+      
+      var transform = styles.getPropertyValue(this.getVendorPrefix());
+
+
+      // var transform = styles.getPropertyValue("-webkit-transform") ||
+      //                 styles.getPropertyValue("-moz-transform") ||
+      //                 styles.getPropertyValue("-ms-transform") ||
+      //                 styles.getPropertyValue("-o-transform") ||
+      //                 styles.getPropertyValue("transform") ||
+      //                 "";
+      
+      var value = 0;
+      if (transform === 'none') {
+        
+        switch(propertyName){
+          case 'scale':
+            value = 1;
+          break;
+        }
+
+        return value;
+      }
+      
+      var matrix = this._parseMatrix(transform);
+      
+      switch(propertyName) {
+          case 'scale':
+            value = Math.sqrt((matrix.m11 * matrix.m11) + (matrix.m12 * matrix.m12));
+          break;
+          case 'translateY':
+            value = matrix.m42;
+          break;
+          
+          case 'rotateX':
+          case 'rotateY':
+          case 'rotateZ':
+          {
+            var rotateY = Math.asin(-matrix.m13);
+            if (propertyName === 'rotateY') {
+              value = rotateY;  
+            }
+            else if (propertyName === 'rotateX') {
+              
+              if (Math.cos(rotateY) !== 0) {
+                value = Math.atan2(matrix.m23, matrix.m33);
+              } 
+              else {
+                value = Math.atan2(-matrix.m31, matrix.m22);
+              }
+            }
+            // rotateZ
+            else {
+              value = 0;
+              if (Math.cos(rotateY) !== 0) {
+                value = Math.atan2(matrix.m12, matrix.m11);
+              } 
+            }
+            value = MathUtils.convertToDegress(value);
+          }
+          break;
+      }
+      return value;
+    }
+
+    /**
+     * @see http://keithclark.co.uk/articles/calculating-element-vertex-data-from-css-transforms/
+     */
+    static _parseMatrix (matrixString) {
+        var c = matrixString.split(/\s*[(),]\s*/).slice(1,-1),
+            matrix;
+    
+        if (c.length === 6) {
+            // 'matrix()' (3x2)
+            matrix = {
+                m11: +c[0], m21: +c[2], m31: 0, m41: +c[4],
+                m12: +c[1], m22: +c[3], m32: 0, m42: +c[5],
+                m13: 0,     m23: 0,     m33: 1, m43: 0,
+                m14: 0,     m24: 0,     m34: 0, m44: 1
+            };
+        } else if (c.length === 16) {
+            // matrix3d() (4x4)
+            matrix = {
+                m11: +c[0], m21: +c[4], m31: +c[8], m41: +c[12],
+                m12: +c[1], m22: +c[5], m32: +c[9], m42: +c[13],
+                m13: +c[2], m23: +c[6], m33: +c[10], m43: +c[14],
+                m14: +c[3], m24: +c[7], m34: +c[11], m44: +c[15]
+            };
+    
+        } else {
+            // handle 'none' or invalid values.
+            matrix = {
+                m11: 1, m21: 0, m31: 0, m41: 0,
+                m12: 0, m22: 1, m32: 0, m42: 0,
+                m13: 0, m23: 0, m33: 1, m43: 0,
+                m14: 0, m24: 0, m34: 0, m44: 1
+            };
+        }
+        return matrix;
+    }
+
+    static isTransform(propertyName) {
+      var isTransform = false;
+      switch (propertyName){
+        case 'scale':
+        case 'translateY':
+        case 'translateX':
+        case 'rotateX':
+        case 'rotateY':
+          isTransform = true;
+          break;
+      }
+      return isTransform;
+    }
+
 }﻿/*jshint esversion: 6 */
 /**
  * 
  */
-class Position {
+class ElementPosition {
 
   constructor() { }
 
   /** ==============
      Frame
   ===============*/
+
+  static clientRects(elements) {
+    var rects = [];
+    for (var i = 0; i < elements.length; i ++) {
+      var r = Rectangle.fromDOMRect(elements[i].getBoundingClientRect());
+      rects.push(r);
+    }
+    return rects;
+}
 
   /**
    * Returns the element's coordinates in its 
@@ -1313,7 +1434,7 @@ class Position {
    * @param {HTML Element} 'element' element in DOM
    * @return {link Rectangle} 
   */
- static getFrame (element) {
+ static getFrame(element) {
     if (!Boolean(element)) {
       return undefined;
     }
@@ -1328,7 +1449,6 @@ class Position {
     frame.y = elementRect.top - parentRect.top;
     frame.width = elementRect.width;
     frame.height = elementRect.height;
-
     // Discount any scrolling in parent.
     frame.y += parent.scrollTop;
     frame.x += parent.scrollLeft;
@@ -1336,26 +1456,22 @@ class Position {
   }
 
   static getFrameOfContent(element) {
-
-    var elementFrame = this.getFrame(element);
+    var elementFrame = ElementPosition.getFrame(element);
     var x = 0;
     var y = 0;
     var font = CSSUtils.getStyle(element, "font");
     var width = StringUtils.measureStringWidth(element.innerHTML, font);
     var height = parseInt(CSSUtils.getStyle(element, "font-size"));
     var textAlignment = CSSUtils.getStyle(element, "text-align");
-
     var frame = new Rectangle(x, y, width, height);
-
     if (textAlignment === "center") {
       frame.setCentre(elementFrame.getBoundsCentre());
     }
-
     return frame;
   }
 
   static containsPoint(element, localPoint) {
-    var frame = this.getFrame(element);
+    var frame = ElementPosition.getFrame(element);
     var contains = frame.containsPoint(localPoint);
     return contains;
   }
@@ -1373,8 +1489,7 @@ class Position {
     Note: All children are considered when optional class names are omitted.
 */
   static childAtPoint(parent, localPoint, includeClass, excludeClass) {
-
-    var children = this.getChildren(parent);
+    var children = ElementPosition.getChildren(parent);
     var childIndex;
     var child;
     var foundChild;
@@ -1387,8 +1502,7 @@ class Position {
       else if (undefined !== includeClass && !CSSUtils.elementHasClass(child, includeClass)) {
         continue;
       }
-
-      if (this.containsPoint(child, localPoint)) {
+      if (ElementPosition.containsPoint(child, localPoint)) {
         foundChild = child;
         break;
       }
@@ -1396,19 +1510,16 @@ class Position {
     return foundChild;
   }
 
-
   /** ==============
        Position
     ===============*/
 
   static originToCentreBesideElement(element, referenceElement, referenceSide) {
-
-    var origin = this.originToCentreBesideElementPlus(element, referenceElement, referenceSide, 0);
+    var origin = ElementPosition.originToCentreBesideElementPlus(element, referenceElement, referenceSide, 0);
     return origin;
   }
 
   static originToCentreBesideElementPlus(element, referenceElement, referenceSide, extraDistance) {
-
     var referenceRect = referenceElement.getBoundingClientRect();
     var rect = element.getBoundingClientRect();
     var origin = GeometryUtils.originToCentreBesideRectPlus(rect, referenceRect, referenceSide, extraDistance);
@@ -1416,18 +1527,16 @@ class Position {
   }
 
   static centreElementBeside(element, referenceElement, direction) {
-    this.centreElementBesidePlus(element, referenceElement, direction, 0);
+    ElementPosition.centreElementBesidePlus(element, referenceElement, direction, 0);
   }
 
   static centreElementBesidePlus (element, referenceElement, direction, extraDistance) {
-
     // Includes scrolling, otherwise gets viewport coordinates.
-    var origin = this.originToCentreBesideElementPlus(element, referenceElement, direction, extraDistance);
-    this.setOrigin(element, origin);
+    var origin = ElementPosition.originToCentreBesideElementPlus(element, referenceElement, direction, extraDistance);
+    ElementPosition.setOrigin(element, origin);
   }
 
   static setOrigin (element, origin) {
-
     element.style.left = origin.x + "px";
     element.style.top = origin.y + "px";
   }
@@ -1444,9 +1553,7 @@ class Position {
     @param {Rectangle} 'frame' element's rectangle within the parent's bounds.
   */
   static setPositionsToFrame(element, frame) {
-
-    var parent = this.getParentElement(element);
-
+    var parent = element.parentElement;
     element.style.top = frame.y + "px";
     element.style.right = parent.clientWidth - frame.getRight() + "px";
     element.style.bottom = parent.clientHeight - frame.getBottom() + "px";
@@ -1462,14 +1569,12 @@ class Position {
   }
 
   static setCentre (element, centre) {
-
-    var frame = this.getFrame(element);
+    var frame = ElementPosition.getFrame(element);
     frame.setCentre(centre);
-    this.setPositionsToFrame(element, frame);
+    ElementPosition.setPositionsToFrame(element, frame);
   }
 
   static logPositions(element) {
-
     console.log(
       "top: ", element.style.top,
       ", right: ", element.style.right,
@@ -1477,7 +1582,8 @@ class Position {
       ", left: ", element.style.left);
   }
 
-}/**
+}/*jshint esversion: 6 */
+/**
  * Conveniences for accessing and setting properties values
  * on HTMLElements. 
  * 
@@ -1489,7 +1595,7 @@ class Position {
  *                   scrollTop + clientHeight.
  * 
  */
-class PropertyUtils {
+class ElementProperties {
 
   constructor() { }
 
@@ -1502,21 +1608,18 @@ class PropertyUtils {
      * @return {Number} Will be undefined for unsupported element properties.
      */
     static getElementProperty (element, propertyName) {
-      
       var value;
       
       // Custom properties not implemented by
       // any browser.
       switch(propertyName) {
-        
         case 'scrollBottom':
-          value = parseFloat(PropertyUtils.getElementProperty(element, 'scrollTop') + 
-                  parseFloat(PropertyUtils.getElementProperty(element, 'clientHeight')));
+          value = parseFloat(ElementProperties.getElementProperty(element, 'scrollTop') + 
+                  parseFloat(ElementProperties.getElementProperty(element, 'clientHeight')));
         break;
     
-        // Browser supported properties.        
+        // Browser supported properties.
         default:
-
           if (element instanceof Element) {
             value = element[propertyName];
           }
@@ -1576,7 +1679,6 @@ class PropertyUtils {
      * @return {String} 
      */
     static getPropertyKey (propertyName) {
-      
       var name = propertyName;
       switch(propertyName) {
         case 'scale':
@@ -1605,9 +1707,8 @@ class PropertyUtils {
      *                            format accepted by the property.
      */
     static composeProperty (propertyName, propertyValue) {
-      
-      var prefix = PropertyUtils.getPropertyPrefix(propertyName);
-      var suffix = PropertyUtils.getPropertySuffix(propertyName);
+      var prefix = ElementProperties.getPropertyPrefix(propertyName);
+      var suffix = ElementProperties.getPropertySuffix(propertyName);
       var value;
       
       switch (propertyName) {
@@ -1616,15 +1717,13 @@ class PropertyUtils {
             value = 'auto';
           }
           else {
-            value = prefix + PropertyUtils.composeValues(propertyName, propertyValue) + suffix;
+            value = prefix + ElementProperties.composeValues(propertyName, propertyValue) + suffix;
           }
         break;
-        
         case 'color':
         case 'background-color':
-          value = prefix + PropertyUtils.composeValues(propertyName, propertyValue) + suffix;
+          value = prefix + ElementProperties.composeValues(propertyName, propertyValue) + suffix;
         break;
-        
         case 'color+component':
         case 'background-color+component':
           value = prefix + MathUtils.roundValue(propertyValue) + suffix;
@@ -1657,18 +1756,15 @@ class PropertyUtils {
      *                  Does not return fully formatted value. 
      */
       static composeValues (propertyName, propertyValue) {
-      
       // Order matters in composing the style's value.      
       var orderedKeys = [];
       var defaultValue;
 
       switch (propertyName) {
-
         case 'clip':
           orderedKeys = ['top', 'right', 'bottom', 'left'];
           defaultValue = "0";
         break;
-
         case 'color':
         case 'background-color':
           orderedKeys = ['r', 'g', 'b', 'a'];
@@ -1683,7 +1779,7 @@ class PropertyUtils {
       for (index = 0; index < orderedKeys.length; index++) {
         key = orderedKeys[index];
         if (propertyValue[key]) {
-            value += PropertyUtils.composeProperty(propertyName + "+component", propertyValue[key]);
+            value += ElementProperties.composeProperty(propertyName + "+component", propertyValue[key]);
         }
         else {
           value = defaultValue;
@@ -1830,7 +1926,7 @@ class PropertyUtils {
             };
           }
           else {
-            components = PropertyUtils.parseComponents(propertyValue);
+            components = ElementProperties.parseComponents(propertyValue);
             value = {
               top: components[0],
               right: components[1],
@@ -1841,7 +1937,7 @@ class PropertyUtils {
           break;
         case 'color':
         case 'background-color':
-          components = PropertyUtils.parseComponents(propertyValue);
+          components = ElementProperties.parseComponents(propertyValue);
           value = {
             r: components[0],
             g: components[1],
@@ -1894,7 +1990,6 @@ class PropertyUtils {
      *                  }
      */
     static composeTransform (transformSet) {
-
       var value = "";
       var transformName;
       var transformValue;
@@ -1904,7 +1999,7 @@ class PropertyUtils {
       for (transformName in transformSet) {
 
         if (transformSet.hasOwnProperty(transformName)) {
-          transformValue = PropertyUtils.composeProperty(transformName, transformSet[transformName]);
+          transformValue = ElementProperties.composeProperty(transformName, transformSet[transformName]);
           
           if (index > 0 && index < count) {
             value += " ";
@@ -1916,165 +2011,7 @@ class PropertyUtils {
       return value;
     }
 
-}/**
- * 
- */
-class TransformUtils {
-
-  constructor() {
-
-
-  }
-
-  static getVendorPrefix () {
-    return 'transform';
-  }
-
-     /**
-     * Parses the transform to find the given property 
-     * (e.g. 'scale', 'translateY', ...);
-     * 
-     * @see https://css-tricks.com/get-value-of-css-rotation-through-javascript/
-     * @see https://www.w3.org/TR/2011/WD-css3-2d-transforms-20111215/#matrix-decomposition
-     * @see https://www.w3.org/TR/SVG/coords.html#RotationDefined
-     * 
-     * @param {HTMLElement} 'element'
-     * @param {CSSStyleDeclaration} 'styles' Optional. HTMLElement.style
-     * @param {String} 'propertyName' The name of the type of transform.
-     * @return {Number} A default appropriate to the property will be 
-     *                  returned if no transform is present.
-     */
-    static getValue (styles, propertyName) {
-      
-      var transform = styles.getPropertyValue(this.getVendorPrefix());
-
-
-      // var transform = styles.getPropertyValue("-webkit-transform") ||
-      //                 styles.getPropertyValue("-moz-transform") ||
-      //                 styles.getPropertyValue("-ms-transform") ||
-      //                 styles.getPropertyValue("-o-transform") ||
-      //                 styles.getPropertyValue("transform") ||
-      //                 "";
-      
-      var value = 0;
-      if (transform === 'none') {
-        
-        switch(propertyName){
-          case 'scale':
-            value = 1;
-          break;
-        }
-
-        return value;
-      }
-      
-      var matrix = this._parseMatrix(transform);
-      
-      switch(propertyName) {
-          case 'scale':
-            value = Math.sqrt((matrix.m11 * matrix.m11) + (matrix.m12 * matrix.m12));
-          break;
-          case 'translateY':
-            value = matrix.m42;
-          break;
-          
-          case 'rotateX':
-          case 'rotateY':
-          case 'rotateZ':
-          {
-            var rotateY = Math.asin(-matrix.m13);
-            if (propertyName === 'rotateY') {
-              value = rotateY;  
-            }
-            else if (propertyName === 'rotateX') {
-              
-              if (Math.cos(rotateY) !== 0) {
-                value = Math.atan2(matrix.m23, matrix.m33);
-              } 
-              else {
-                value = Math.atan2(-matrix.m31, matrix.m22);
-              }
-            }
-            // rotateZ
-            else {
-              value = 0;
-              if (Math.cos(rotateY) !== 0) {
-                value = Math.atan2(matrix.m12, matrix.m11);
-              } 
-            }
-            value = MathUtils.convertToDegress(value);
-          }
-          break;
-      }
-      return value;
-    }
-
-    /**
-     * @see http://keithclark.co.uk/articles/calculating-element-vertex-data-from-css-transforms/
-     */
-    static _parseMatrix (matrixString) {
-        var c = matrixString.split(/\s*[(),]\s*/).slice(1,-1),
-            matrix;
-    
-        if (c.length === 6) {
-            // 'matrix()' (3x2)
-            matrix = {
-                m11: +c[0], m21: +c[2], m31: 0, m41: +c[4],
-                m12: +c[1], m22: +c[3], m32: 0, m42: +c[5],
-                m13: 0,     m23: 0,     m33: 1, m43: 0,
-                m14: 0,     m24: 0,     m34: 0, m44: 1
-            };
-        } else if (c.length === 16) {
-            // matrix3d() (4x4)
-            matrix = {
-                m11: +c[0], m21: +c[4], m31: +c[8], m41: +c[12],
-                m12: +c[1], m22: +c[5], m32: +c[9], m42: +c[13],
-                m13: +c[2], m23: +c[6], m33: +c[10], m43: +c[14],
-                m14: +c[3], m24: +c[7], m34: +c[11], m44: +c[15]
-            };
-    
-        } else {
-            // handle 'none' or invalid values.
-            matrix = {
-                m11: 1, m21: 0, m31: 0, m41: 0,
-                m12: 0, m22: 1, m32: 0, m42: 0,
-                m13: 0, m23: 0, m33: 1, m43: 0,
-                m14: 0, m24: 0, m34: 0, m44: 1
-            };
-        }
-        return matrix;
-    }
-
-    static isTransform(propertyName) {
-
-      var isTransform = false;
-
-      switch (propertyName){
-
-        case 'scale':
-        case 'translateY':
-        case 'translateX':
-        case 'rotateX':
-        case 'rotateY':
-          isTransform = true;
-          break;
-
-      }
-      return isTransform;
-    }
-
-
-}/*jshint esversion: 6 */
-/**
- * Provides static helper functions for common Element manipulations.
- * Support is not exhaustive. Certain methods need updating to handle properties
- * not yet encountered.
- * 
- * @see {@link PropertyUtils}
- */
-class ElementUtils {
-    
-    /**
+        /**
      * Returns the CSS or element value for the given property.
      * If no styles are given, one is computed. 
      * 
@@ -2104,22 +2041,22 @@ class ElementUtils {
       
       properties.forEach(function(propertyName) {
         var value = 0;
-        if (PropertyUtils.isCSSStyle(propertyName)) {
+        if (ElementProperties.isCSSStyle(propertyName)) {
           if (!elementStyles){
             elementStyles = window.getComputedStyle(element, null);
           }
-          var propertyKey = PropertyUtils.getPropertyKey(propertyName);
+          var propertyKey = ElementProperties.getPropertyKey(propertyName);
           if (propertyKey === 'transform') {
             value = TransformUtils.getValue(elementStyles, propertyName);
           }
           else {
-            value = PropertyUtils.parseProperty(propertyKey, elementStyles.getPropertyValue(propertyKey));
+            value = ElementProperties.parseProperty(propertyKey, elementStyles.getPropertyValue(propertyKey));
           }
         } 
         
         // Is element property.
         else {
-          value = PropertyUtils.getElementProperty(element, propertyName);
+          value = ElementProperties.getElementProperty(element, propertyName);
         }
         
         if (undefined === value || (!value && isNaN(value))) {
@@ -2144,15 +2081,15 @@ class ElementUtils {
      * @param {Number} 'value'
      */
     static setValue (element, propertyName, value, customSuffix) {
-      var propertyKey = PropertyUtils.getPropertyKey(propertyName);
+      var propertyKey = ElementProperties.getPropertyKey(propertyName);
       var preparedValue;  
       if (customSuffix) {
         preparedValue = (value + customSuffix);
       }
       else {
-        preparedValue = PropertyUtils.composeProperty(propertyName, value);
+        preparedValue = ElementProperties.composeProperty(propertyName, value);
       }
-      if (PropertyUtils.isCSSStyle(propertyName)) {
+      if (ElementProperties.isCSSStyle(propertyName)) {
         CSSUtils.setStyle(element, propertyKey, preparedValue);
         // element.style[propertyKey] = preparedValue;
       }
@@ -2198,10 +2135,8 @@ class ElementUtils {
       var hasTransforms = false;
 
       for (propertyName in values) {
-
         if (values.hasOwnProperty(propertyName)) {
           value = values[propertyName];
-          
           if (TransformUtils.isTransform(propertyName)) {
               transforms[propertyName] = value;
               hasTransforms = true;
@@ -2213,7 +2148,7 @@ class ElementUtils {
       }
 
       if (hasTransforms) {
-          value = PropertyUtils.composeTransform(transforms);
+          value = ElementProperties.composeTransform(transforms);
           this.setValue(element, TransformUtils.getVendorPrefix(), value);
       }
     }
@@ -2227,22 +2162,11 @@ class ElementUtils {
      * @example: { "scale": 12 }
      */
     static setTransforms (element, transforms) {
-      var value = PropertyUtils.composeTransform(transforms);
+      var value = ElementProperties.composeTransform(transforms);
       element.style[TransformUtils.getVendorPrefix()] = value;
     }
 
-    static frames(elements){
-        var rects = [];
-        for (var i = 0; i < elements.length; i ++) {
-          var r = RectangleUtils.initFromDOMRect(elements[i].getBoundingClientRect());
-          rects.push(r);
-        }
-        return rects;
-    }
 
-
-      
-         
 }/**
  * 
  */
@@ -2266,7 +2190,6 @@ class DOMHierarchy {
     static getChildren(element) {
         var children = [];
         var child = element.firstElementChild;
-
         while (null !== child) {
             children.push(child);
             child = child.nextElementSibling;
@@ -2284,7 +2207,7 @@ class DOMHierarchy {
     }
 
     static removeChild(parentElement, childElement) {
-        var parent = ElementUtils.parentElement(childElement);
+        var parent = childElement.parentElement;
         if (!parent || parent !== parentElement) {
             return;
         }
@@ -2349,12 +2272,10 @@ class DOMHierarchy {
      children (or children who match 'includeClass' when given).
      */
     static getIndexOfChild(element, child, includeClass, excludeClass) {
-
         var subView = element.firstElementChild;
         if (!subView) {
             return -1;
         }
-
         var index = 0;
         while (child !== subView && null !== subView) {
             if (CSSUtils.elementHasClass(subView, includeClass)) {
@@ -2388,10 +2309,8 @@ class DOMHierarchy {
     }
 
     /** ==============
-     Children
+        Children
      ===============*/
-
-
 
     /**
      * Traverse up the hierarchy to find the first parent
@@ -2403,16 +2322,13 @@ class DOMHierarchy {
      * @returns {HTML Element} {null}
      */
     static parentElement(childElement, tag, includeClasses) {
-
         if (!childElement || !childElement.parentNode) {
             return null;
         }
-
         var parent = childElement.parentNode;
         if (!includeClasses && !tag) {
             return parent;
         }
-
         var hasClass = function(element, classes) {
             if (!classes || classes.length === 0){
                 return true;
@@ -2424,7 +2340,6 @@ class DOMHierarchy {
             }
             return false;
         };
-
         var hasTag = function(element, tag) {
             if (tag) {
                 return (parent.tagName === tag);
@@ -2449,45 +2364,13 @@ class DOMHierarchy {
         return null;
     }
 
-}/**
- *
- */
-class ElementFactory {
-
-    constructor() { }
-
-    static createElements(HTMLstring, tag) {
-        if (!tag) {
-            tag = 'div';
-        }
-        var wrapper = ElementFactory.createElement(tag, null, HTMLstring);
-        return Array.from(wrapper.children);
-    }
-
-    static createElement(tag, classes, innerHTML) {
-        var element = document.createElement(tag);
-        if (classes) {
-            if (classes.constructor === Array) {
-                var index;
-                for (index = 0; index < classes.length; index++) {
-                    element.classList.add(classes[index]);
-                }
-            }
-            else {
-                element.classList.add(classes);
-            }
-        }
-        if (innerHTML) {
-            element.innerHTML = innerHTML;
-        }
-        return element;
-    }
 }
+/*jshint esversion: 6 */
 /**
  * Holds state about element properties/CSS values
  * that are current vs. dirty (has no stored value in this class).
  * 
- * Interfaces with {@link ElementUtils} so state
+ * Interfaces with {@link ElementProperties} so state
  * can be updated by these calls and values lazily updated 
  * upon request. 
  * 
@@ -2536,7 +2419,7 @@ class ElementCache {
   refreshValueOnProperty (elementId, propertyName){
     
     var element = this.getElement(elementId);
-    var value = ElementUtils.getValue(element, propertyName);
+    var value = ElementProperties.getValue(element, propertyName);
     this._saveValueForId(elementId, propertyName, value);
     return value;
   }
@@ -2551,13 +2434,11 @@ class ElementCache {
    *          is applied.
    */
   _saveValueForId(elementId, propertyName, value) {
-
     var _elementId = this.getElementId(elementId);
     var elementProperties = this.elementPropertiesById[_elementId];
     if (!this.elementPropertiesById[_elementId]) {
       throw "[ElementCache: _saveValueForId] elementId: " + "\'" + _elementId + "\'" + "does not exist";
     }
-
     elementProperties[propertyName] = value;
   }
 
@@ -2570,8 +2451,7 @@ class ElementCache {
  * Remove all recorded values. 
  * This is recommended when invalidating the whole screen.
  */
-  clearAll() { 
-
+  clearAll() {
      var elementId;
      for (elementId in this.elementPropertiesById) {
        this.elementPropertiesById[elementId] = {};
@@ -2621,19 +2501,15 @@ class ElementCache {
      * @param {String} 'eventName'. Is added to the element's {@link EventTarget#addEventListener}
      */
     monitorEvent (elementId, eventName) {
-
       this.getElement(elementId).addEventListener(eventName, this.onEventBind);
-
       var elementIds;
       if (this.elementIdsByEvent.hasOwnProperty(eventName)){
         elementIds = this.elementIdsByEvent[eventName];
       }
       else {
-
         elementIds = [];
         this.elementIdsByEvent[eventName] = elementIds;
       }
-
       elementIds.push(this.getElementId(elementId));
     }
 
@@ -2645,7 +2521,6 @@ class ElementCache {
      * @param {String} 'eventName'. Is removed to the element's {@link EventTarget#removeEventListener}
      */
     unMonitorEvent (elementId, eventName) {
-
       this.getElement(elementId).removeEventListener(eventName, this.onEventBind);
       var index = this.elementIdsByEvent[eventName].indexOf(this.getElementId(elementId));
       this.elementIdsByEvent[eventName].splice(index, 1);
@@ -2657,9 +2532,7 @@ class ElementCache {
      * @see {@link #_getPropertiesForEventType}
      */
     _onEvent (event) {
-
       var propertiesToUpdate = this._getPropertiesForEventType(event.type);
-
       var elementIds = this.elementIdsByEvent[event.type];
       var self = this;
       elementIds.forEach(function(elementId){
@@ -2673,11 +2546,8 @@ class ElementCache {
      *                  the given {@link Event#type} fires.
      */
     _getPropertiesForEventType (eventType) {
-
       var propertyNames = [];
-
       switch (eventType) {
-
         case 'scroll':
           propertyNames.push('scrollTop');
           propertyNames.push('scrollBottom');
@@ -2704,11 +2574,9 @@ class ElementCache {
    * @see {@link #setValuePlus}
    */
   registerElement (element, elementId){
-    
     if (this.elementsById[elementId]) {
       throw "[ElementCache: registerElement] Received id: " + "\'" + elementId + "\'" + "is not unique";
     }
-    
     this.elementsById[elementId] = element;
     this.elementPropertiesById[elementId] = {};
   }
@@ -2719,11 +2587,9 @@ class ElementCache {
    * @return {HTMLElement} The registered element (or parameter when given an element)
    */
   getElement (elementId) {
-
-    if (typeof elementId !== 'string'){
+    if (typeof elementId !== 'string') {
       return elementId;
     }
-    
     var element = this.elementsById[elementId];
     if (!element) {
       throw "[ElementCache: getElement] elementId: " + "\'" + elementId + "\'" + "does not exist";
@@ -2736,17 +2602,14 @@ class ElementCache {
    * @return {String} The registered elementId (or the given parameter).
    */
   getElementId (elementId){
-    
     if (typeof elementId === 'string') {
         return elementId;
     }
-
     // Find the ID for the element by looking 
     // for the first match in the list of stored elements.
     var _elementId;
     var entryKey;
     for (entryKey in this.elementsById) {
-
       if (this.elementsById.hasOwnProperty(entryKey) && this.elementsById[entryKey] === element) {
         _elementId = entryKey;
         break;
@@ -2765,7 +2628,6 @@ class ElementCache {
    *                            has multiple values (e.g. 'backgroundColor').
    */
   getValue (elementId, propertyName) {
-    
     var _elementId = this.getElementId(elementId);
     if (!this.elementPropertiesById[_elementId]) {
       throw "[ElementCache: getValue] elementId: " + "\'" + _elementId + "\'" + "does not exist";
@@ -2773,7 +2635,6 @@ class ElementCache {
     
     var value;
     var propertyLookup = this.elementPropertiesById[_elementId];
-
     if (propertyLookup.hasOwnProperty(propertyName)) {
       value = propertyLookup[propertyName];  
       console.log("HIT (",_elementId, ":", propertyName, ")");
@@ -2798,10 +2659,8 @@ class ElementCache {
    * @param {Number} 'value'
    */
   setValue (elementId, propertyName, value) {
-    
     // Assume value is valid.
     // (Otherwise we will store and return an invalid value).
-
     this._saveValueForId(elementId, propertyName, value);
     var element = this.getElement(elementId);
     ElementUtils.setValue(element, propertyName, value);
@@ -2818,11 +2677,9 @@ class ElementCache {
      * @see {@link #setValue}
      */
     setValuePlus (elementId, propertyName, extraValue) {
-
       if (extraValue === 0) {
         return;
       }
-
       var value = this.getValue(elementId, propertyName);
       value += extraValue;
       this.setValue(elementId, propertyName, value);
@@ -2850,15 +2707,12 @@ class ElementCache {
      * }
      */
     setValues (values) {
-
       if (!Array.isArray(values)){
         values = [values];
       }
-
       var index;
       var elementChanges;
       var elementId;
-
       for (index = 0; index < values.length; index++) {
           elementChanges = values[index];
           elementId = elementChanges.element;
@@ -2876,16 +2730,13 @@ class ElementCache {
      * @example: { "bottom": -12 }
      */
     setElementValues (elementId, values) {
-
       var element = this.getElement(elementId);
       var transforms = {};
       var propertyName;
       var hasTransforms = false;
 
       for (propertyName in values) {
-
         if (values.hasOwnProperty(propertyName)) {
-
           if (TransformUtils.isTransform(propertyName)){
             transforms[propertyName] = values[propertyName];
             hasTransforms = true;
@@ -2895,7 +2746,6 @@ class ElementCache {
           }
         }
       }
-
       if (hasTransforms) {
         this.setTransforms(elementId, transforms);
       }
@@ -2910,21 +2760,53 @@ class ElementCache {
      * @example: { "scale": 12 }
      */
     setTransforms (elementId, transforms) {
-
       var transformName;
-
       // Save all the transform values individually.
       for (transformName in transforms) {
-
         if (transforms.hasOwnProperty(transformName)) {
           this._saveValueForId(elementId, transformName, transforms[transformName]);
         }
       }
       
       var element = this.getElement(elementId);
-      ElementUtils.setTransforms(element, transforms);
+      ElementProperties.setTransforms(element, transforms);
     }
-}var globals = {
+}/**
+ *
+ */
+class ElementFactory {
+
+    constructor() { }
+
+    static createElements(HTMLstring, tag) {
+        if (!tag) {
+            tag = 'div';
+        }
+        var wrapper = ElementFactory.createElement(tag, null, HTMLstring);
+        return Array.from(wrapper.children);
+    }
+
+    static createElement(tag, classes, innerHTML) {
+        var element = document.createElement(tag);
+        if (classes) {
+            if (classes.constructor === Array) {
+                var index;
+                for (index = 0; index < classes.length; index++) {
+                    element.classList.add(classes[index]);
+                }
+            }
+            else {
+                element.classList.add(classes);
+            }
+        }
+        if (innerHTML) {
+            element.innerHTML = innerHTML;
+        }
+        return element;
+    }
+}
+
+var globals = {
     singletons: {
         windowEventManager: new WindowEventManager(),
         clickmanager: new ClickManager()
@@ -2933,6 +2815,26 @@ class ElementCache {
 
 globals.singletons.windowEventManager.init();
 globals.singletons.clickmanager.init();
+
+
+VBL = {
+    globals: globals,
+    directionRect: GeometryUtils,
+    mathUtils: DirectionRect,
+    line: Line,
+    mathUtils: MathUtils,
+    point: Point,
+    rectangleSide: RectangleSide,
+    stringUtils: StringUtils,
+    tableUtils: TableUtils,
+    rectangle: Rectangle,
+    CSSUtils: CSSUtils,
+    transformUtils: TransformUtils,
+    elementPosition: ElementPosition,
+    elementFactory: ElementFactory
+};
+
+
 
 // Call into application code.
 // Provided by application. Contains at least the function run()
@@ -3007,6 +2909,9 @@ if (typeof window !== 'undefined') {
 
     })(window, document);
 }
+
+
+
 
 
 

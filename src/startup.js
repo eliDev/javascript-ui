@@ -1,3 +1,5 @@
+
+
 var globals = {
     singletons: {
         windowEventManager: new WindowEventManager(),
@@ -7,6 +9,26 @@ var globals = {
 
 globals.singletons.windowEventManager.init();
 globals.singletons.clickmanager.init();
+
+
+VBL = {
+    globals: globals,
+    directionRect: GeometryUtils,
+    mathUtils: DirectionRect,
+    line: Line,
+    mathUtils: MathUtils,
+    point: Point,
+    rectangleSide: RectangleSide,
+    stringUtils: StringUtils,
+    tableUtils: TableUtils,
+    rectangle: Rectangle,
+    CSSUtils: CSSUtils,
+    transformUtils: TransformUtils,
+    elementPosition: ElementPosition,
+    elementFactory: ElementFactory
+};
+
+
 
 // Call into application code.
 // Provided by application. Contains at least the function run()
@@ -81,6 +103,9 @@ if (typeof window !== 'undefined') {
 
     })(window, document);
 }
+
+
+
 
 
 

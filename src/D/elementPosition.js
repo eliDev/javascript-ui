@@ -2,13 +2,22 @@
 /**
  * 
  */
-class Position {
+class ElementPosition {
 
   constructor() { }
 
   /** ==============
      Frame
   ===============*/
+
+  static clientRects(elements) {
+    var rects = [];
+    for (var i = 0; i < elements.length; i ++) {
+      var r = Rectangle.fromDOMRect(elements[i].getBoundingClientRect());
+      rects.push(r);
+    }
+    return rects;
+}
 
   /**
    * Returns the element's coordinates in its 
@@ -20,7 +29,7 @@ class Position {
    * @param {HTML Element} 'element' element in DOM
    * @return {link Rectangle} 
   */
- static getFrame (element) {
+ static getFrame(element) {
     if (!Boolean(element)) {
       return undefined;
     }
@@ -35,7 +44,6 @@ class Position {
     frame.y = elementRect.top - parentRect.top;
     frame.width = elementRect.width;
     frame.height = elementRect.height;
-
     // Discount any scrolling in parent.
     frame.y += parent.scrollTop;
     frame.x += parent.scrollLeft;
@@ -43,26 +51,22 @@ class Position {
   }
 
   static getFrameOfContent(element) {
-
-    var elementFrame = this.getFrame(element);
+    var elementFrame = ElementPosition.getFrame(element);
     var x = 0;
     var y = 0;
     var font = CSSUtils.getStyle(element, "font");
     var width = StringUtils.measureStringWidth(element.innerHTML, font);
     var height = parseInt(CSSUtils.getStyle(element, "font-size"));
     var textAlignment = CSSUtils.getStyle(element, "text-align");
-
     var frame = new Rectangle(x, y, width, height);
-
     if (textAlignment === "center") {
       frame.setCentre(elementFrame.getBoundsCentre());
     }
-
     return frame;
   }
 
   static containsPoint(element, localPoint) {
-    var frame = this.getFrame(element);
+    var frame = ElementPosition.getFrame(element);
     var contains = frame.containsPoint(localPoint);
     return contains;
   }
@@ -80,8 +84,7 @@ class Position {
     Note: All children are considered when optional class names are omitted.
 */
   static childAtPoint(parent, localPoint, includeClass, excludeClass) {
-
-    var children = this.getChildren(parent);
+    var children = ElementPosition.getChildren(parent);
     var childIndex;
     var child;
     var foundChild;
@@ -94,8 +97,7 @@ class Position {
       else if (undefined !== includeClass && !CSSUtils.elementHasClass(child, includeClass)) {
         continue;
       }
-
-      if (this.containsPoint(child, localPoint)) {
+      if (ElementPosition.containsPoint(child, localPoint)) {
         foundChild = child;
         break;
       }
@@ -103,19 +105,16 @@ class Position {
     return foundChild;
   }
 
-
   /** ==============
        Position
     ===============*/
 
   static originToCentreBesideElement(element, referenceElement, referenceSide) {
-
-    var origin = this.originToCentreBesideElementPlus(element, referenceElement, referenceSide, 0);
+    var origin = ElementPosition.originToCentreBesideElementPlus(element, referenceElement, referenceSide, 0);
     return origin;
   }
 
   static originToCentreBesideElementPlus(element, referenceElement, referenceSide, extraDistance) {
-
     var referenceRect = referenceElement.getBoundingClientRect();
     var rect = element.getBoundingClientRect();
     var origin = GeometryUtils.originToCentreBesideRectPlus(rect, referenceRect, referenceSide, extraDistance);
@@ -123,18 +122,16 @@ class Position {
   }
 
   static centreElementBeside(element, referenceElement, direction) {
-    this.centreElementBesidePlus(element, referenceElement, direction, 0);
+    ElementPosition.centreElementBesidePlus(element, referenceElement, direction, 0);
   }
 
   static centreElementBesidePlus (element, referenceElement, direction, extraDistance) {
-
     // Includes scrolling, otherwise gets viewport coordinates.
-    var origin = this.originToCentreBesideElementPlus(element, referenceElement, direction, extraDistance);
-    this.setOrigin(element, origin);
+    var origin = ElementPosition.originToCentreBesideElementPlus(element, referenceElement, direction, extraDistance);
+    ElementPosition.setOrigin(element, origin);
   }
 
   static setOrigin (element, origin) {
-
     element.style.left = origin.x + "px";
     element.style.top = origin.y + "px";
   }
@@ -151,9 +148,7 @@ class Position {
     @param {Rectangle} 'frame' element's rectangle within the parent's bounds.
   */
   static setPositionsToFrame(element, frame) {
-
-    var parent = this.getParentElement(element);
-
+    var parent = element.parentElement;
     element.style.top = frame.y + "px";
     element.style.right = parent.clientWidth - frame.getRight() + "px";
     element.style.bottom = parent.clientHeight - frame.getBottom() + "px";
@@ -169,14 +164,12 @@ class Position {
   }
 
   static setCentre (element, centre) {
-
-    var frame = this.getFrame(element);
+    var frame = ElementPosition.getFrame(element);
     frame.setCentre(centre);
-    this.setPositionsToFrame(element, frame);
+    ElementPosition.setPositionsToFrame(element, frame);
   }
 
   static logPositions(element) {
-
     console.log(
       "top: ", element.style.top,
       ", right: ", element.style.right,

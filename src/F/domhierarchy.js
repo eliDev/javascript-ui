@@ -21,7 +21,6 @@ class DOMHierarchy {
     static getChildren(element) {
         var children = [];
         var child = element.firstElementChild;
-
         while (null !== child) {
             children.push(child);
             child = child.nextElementSibling;
@@ -39,7 +38,7 @@ class DOMHierarchy {
     }
 
     static removeChild(parentElement, childElement) {
-        var parent = ElementUtils.parentElement(childElement);
+        var parent = childElement.parentElement;
         if (!parent || parent !== parentElement) {
             return;
         }
@@ -104,12 +103,10 @@ class DOMHierarchy {
      children (or children who match 'includeClass' when given).
      */
     static getIndexOfChild(element, child, includeClass, excludeClass) {
-
         var subView = element.firstElementChild;
         if (!subView) {
             return -1;
         }
-
         var index = 0;
         while (child !== subView && null !== subView) {
             if (CSSUtils.elementHasClass(subView, includeClass)) {
@@ -143,10 +140,8 @@ class DOMHierarchy {
     }
 
     /** ==============
-     Children
+        Children
      ===============*/
-
-
 
     /**
      * Traverse up the hierarchy to find the first parent
@@ -158,16 +153,13 @@ class DOMHierarchy {
      * @returns {HTML Element} {null}
      */
     static parentElement(childElement, tag, includeClasses) {
-
         if (!childElement || !childElement.parentNode) {
             return null;
         }
-
         var parent = childElement.parentNode;
         if (!includeClasses && !tag) {
             return parent;
         }
-
         var hasClass = function(element, classes) {
             if (!classes || classes.length === 0){
                 return true;
@@ -179,7 +171,6 @@ class DOMHierarchy {
             }
             return false;
         };
-
         var hasTag = function(element, tag) {
             if (tag) {
                 return (parent.tagName === tag);

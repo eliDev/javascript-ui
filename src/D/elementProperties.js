@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 /**
  * Conveniences for accessing and setting properties values
  * on HTMLElements. 
@@ -10,7 +11,7 @@
  *                   scrollTop + clientHeight.
  * 
  */
-class PropertyUtils {
+class ElementProperties {
 
   constructor() { }
 
@@ -23,21 +24,18 @@ class PropertyUtils {
      * @return {Number} Will be undefined for unsupported element properties.
      */
     static getElementProperty (element, propertyName) {
-      
       var value;
       
       // Custom properties not implemented by
       // any browser.
       switch(propertyName) {
-        
         case 'scrollBottom':
-          value = parseFloat(PropertyUtils.getElementProperty(element, 'scrollTop') + 
-                  parseFloat(PropertyUtils.getElementProperty(element, 'clientHeight')));
+          value = parseFloat(ElementProperties.getElementProperty(element, 'scrollTop') + 
+                  parseFloat(ElementProperties.getElementProperty(element, 'clientHeight')));
         break;
     
-        // Browser supported properties.        
+        // Browser supported properties.
         default:
-
           if (element instanceof Element) {
             value = element[propertyName];
           }
@@ -97,7 +95,6 @@ class PropertyUtils {
      * @return {String} 
      */
     static getPropertyKey (propertyName) {
-      
       var name = propertyName;
       switch(propertyName) {
         case 'scale':
@@ -126,9 +123,8 @@ class PropertyUtils {
      *                            format accepted by the property.
      */
     static composeProperty (propertyName, propertyValue) {
-      
-      var prefix = PropertyUtils.getPropertyPrefix(propertyName);
-      var suffix = PropertyUtils.getPropertySuffix(propertyName);
+      var prefix = ElementProperties.getPropertyPrefix(propertyName);
+      var suffix = ElementProperties.getPropertySuffix(propertyName);
       var value;
       
       switch (propertyName) {
@@ -137,15 +133,13 @@ class PropertyUtils {
             value = 'auto';
           }
           else {
-            value = prefix + PropertyUtils.composeValues(propertyName, propertyValue) + suffix;
+            value = prefix + ElementProperties.composeValues(propertyName, propertyValue) + suffix;
           }
         break;
-        
         case 'color':
         case 'background-color':
-          value = prefix + PropertyUtils.composeValues(propertyName, propertyValue) + suffix;
+          value = prefix + ElementProperties.composeValues(propertyName, propertyValue) + suffix;
         break;
-        
         case 'color+component':
         case 'background-color+component':
           value = prefix + MathUtils.roundValue(propertyValue) + suffix;
@@ -178,18 +172,15 @@ class PropertyUtils {
      *                  Does not return fully formatted value. 
      */
       static composeValues (propertyName, propertyValue) {
-      
       // Order matters in composing the style's value.      
       var orderedKeys = [];
       var defaultValue;
 
       switch (propertyName) {
-
         case 'clip':
           orderedKeys = ['top', 'right', 'bottom', 'left'];
           defaultValue = "0";
         break;
-
         case 'color':
         case 'background-color':
           orderedKeys = ['r', 'g', 'b', 'a'];
@@ -204,7 +195,7 @@ class PropertyUtils {
       for (index = 0; index < orderedKeys.length; index++) {
         key = orderedKeys[index];
         if (propertyValue[key]) {
-            value += PropertyUtils.composeProperty(propertyName + "+component", propertyValue[key]);
+            value += ElementProperties.composeProperty(propertyName + "+component", propertyValue[key]);
         }
         else {
           value = defaultValue;
@@ -351,7 +342,7 @@ class PropertyUtils {
             };
           }
           else {
-            components = PropertyUtils.parseComponents(propertyValue);
+            components = ElementProperties.parseComponents(propertyValue);
             value = {
               top: components[0],
               right: components[1],
@@ -362,7 +353,7 @@ class PropertyUtils {
           break;
         case 'color':
         case 'background-color':
-          components = PropertyUtils.parseComponents(propertyValue);
+          components = ElementProperties.parseComponents(propertyValue);
           value = {
             r: components[0],
             g: components[1],
@@ -415,7 +406,6 @@ class PropertyUtils {
      *                  }
      */
     static composeTransform (transformSet) {
-
       var value = "";
       var transformName;
       var transformValue;
@@ -425,7 +415,7 @@ class PropertyUtils {
       for (transformName in transformSet) {
 
         if (transformSet.hasOwnProperty(transformName)) {
-          transformValue = PropertyUtils.composeProperty(transformName, transformSet[transformName]);
+          transformValue = ElementProperties.composeProperty(transformName, transformSet[transformName]);
           
           if (index > 0 && index < count) {
             value += " ";
@@ -436,5 +426,161 @@ class PropertyUtils {
       }
       return value;
     }
+
+        /**
+     * Returns the CSS or element value for the given property.
+     * If no styles are given, one is computed. 
+     * 
+     * @param {HTMLElement} 'element' Optional when CSS styles and property are given.
+     * @param {String or Array} 'propertynames' name of a style or element property.
+     *                           Optionally Provide several names (return value is dictionary).
+     * @param {CSSStyleDeclaration} 'elementStyles' Optional. The element's computed styles.
+     * 
+     * @return {Number} when a single property is given,
+     *         {Object} when several properties are given    
+     *                  key {String} = property name, value: {Number}
+     *          Values default to a number appropriate for the property.
+     *          (e.g. 'scale' is '1' when not present vs. '0' for margin-left')
+     */
+    static getValue (element, propertyNames, elementStyles) {
+      if (typeof window === 'undefined') {
+        return;
+      }
+    
+      // Create an array with the property if not 
+      // provided with multiple properties to look up.
+      var values = {};
+      var properties = [propertyNames];
+      if (Array.isArray(propertyNames)) {
+        properties = propertyNames;
+      }
+      
+      properties.forEach(function(propertyName) {
+        var value = 0;
+        if (ElementProperties.isCSSStyle(propertyName)) {
+          if (!elementStyles){
+            elementStyles = window.getComputedStyle(element, null);
+          }
+          var propertyKey = ElementProperties.getPropertyKey(propertyName);
+          if (propertyKey === 'transform') {
+            value = TransformUtils.getValue(elementStyles, propertyName);
+          }
+          else {
+            value = ElementProperties.parseProperty(propertyKey, elementStyles.getPropertyValue(propertyKey));
+          }
+        } 
+        
+        // Is element property.
+        else {
+          value = ElementProperties.getElementProperty(element, propertyName);
+        }
+        
+        if (undefined === value || (!value && isNaN(value))) {
+          value = 0;
+        }
+        values[propertyName] = value;
+      });
+      
+      var value = values;
+      if (Object.keys(values).length === 1) {
+        value = values[propertyNames]; // This is a String key.
+      }
+      return value;
+    }
+    
+    /**
+     * Converts the given value to an appropriate 
+     * format for the given property before applying.
+     * 
+     * @param {HTMLElement} 'element'
+     * @param {String} 'propertyName' Accepts CSS or element properties.
+     * @param {Number} 'value'
+     */
+    static setValue (element, propertyName, value, customSuffix) {
+      var propertyKey = ElementProperties.getPropertyKey(propertyName);
+      var preparedValue;  
+      if (customSuffix) {
+        preparedValue = (value + customSuffix);
+      }
+      else {
+        preparedValue = ElementProperties.composeProperty(propertyName, value);
+      }
+      if (ElementProperties.isCSSStyle(propertyName)) {
+        CSSUtils.setStyle(element, propertyKey, preparedValue);
+        // element.style[propertyKey] = preparedValue;
+      }
+      else {
+        element[propertyKey] = preparedValue;
+      }
+      return preparedValue;
+    }
+    
+    /**
+     * Applies the addition value to the elements current value for the 
+     * given property. This causes a read before the write.
+     * 
+     * @param {HTMLElement} 'element'
+     * @param {String} 'propertyName' Accepts CSS or element properties.
+     * @param {Number} 'extraValue'
+     */
+    static setValuePlus (element, propertyName, extraValue) {
+      if (extraValue === 0) {
+        return;
+      }
+      var value = this.getValue(element, propertyName);
+      value += extraValue;
+      this.setValue(element, propertyName, value);
+    }
+
+    /** ==========================
+        Designed Data Structures
+      ============================ */
+
+    /**
+     * Applies all the property changes to the given element.
+     * 
+     * @param {HTMLElement} 'element'
+     * @param {Object} 'values' properties to numeric values. 
+     * 
+     * @example: { "bottom": -12, "top": 2 }
+     */
+    static setValues (element, values) {
+      var transforms = {};
+      var propertyName;
+      var value;
+      var hasTransforms = false;
+
+      for (propertyName in values) {
+        if (values.hasOwnProperty(propertyName)) {
+          value = values[propertyName];
+          if (TransformUtils.isTransform(propertyName)) {
+              transforms[propertyName] = value;
+              hasTransforms = true;
+          }
+          else {
+            this.setValue(element, propertyName, value);
+          }
+        }
+      }
+
+      if (hasTransforms) {
+          value = ElementProperties.composeTransform(transforms);
+          this.setValue(element, TransformUtils.getVendorPrefix(), value);
+      }
+    }
+
+        /**
+     * Applies all the property changes to the given element.
+     * 
+     * @param {HTMLElement} 'element'
+     * @param {Object} 'values' properties to numeric values. 
+     * 
+     * @example: { "scale": 12 }
+     */
+    static setTransforms (element, transforms) {
+      var value = ElementProperties.composeTransform(transforms);
+      element.style[TransformUtils.getVendorPrefix()] = value;
+    }
+
 
 }

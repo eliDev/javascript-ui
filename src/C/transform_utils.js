@@ -1,11 +1,10 @@
+/*jshint esversion: 6 */
 /**
  * 
  */
 class TransformUtils {
 
   constructor() {
-
-
   }
 
   static getVendorPrefix () {
@@ -128,11 +127,8 @@ class TransformUtils {
     }
 
     static isTransform(propertyName) {
-
       var isTransform = false;
-
       switch (propertyName){
-
         case 'scale':
         case 'translateY':
         case 'translateX':
@@ -140,10 +136,8 @@ class TransformUtils {
         case 'rotateY':
           isTransform = true;
           break;
-
       }
       return isTransform;
     }
-
 
 }

@@ -1,9 +1,10 @@
 
+/*jshint esversion: 6 */
 /**
  * Holds state about element properties/CSS values
  * that are current vs. dirty (has no stored value in this class).
  * 
- * Interfaces with {@link ElementUtils} so state
+ * Interfaces with {@link ElementProperties} so state
  * can be updated by these calls and values lazily updated 
  * upon request. 
  * 
@@ -52,7 +53,7 @@ class ElementCache {
   refreshValueOnProperty (elementId, propertyName){
     
     var element = this.getElement(elementId);
-    var value = ElementUtils.getValue(element, propertyName);
+    var value = ElementProperties.getValue(element, propertyName);
     this._saveValueForId(elementId, propertyName, value);
     return value;
   }
@@ -67,13 +68,11 @@ class ElementCache {
    *          is applied.
    */
   _saveValueForId(elementId, propertyName, value) {
-
     var _elementId = this.getElementId(elementId);
     var elementProperties = this.elementPropertiesById[_elementId];
     if (!this.elementPropertiesById[_elementId]) {
       throw "[ElementCache: _saveValueForId] elementId: " + "\'" + _elementId + "\'" + "does not exist";
     }
-
     elementProperties[propertyName] = value;
   }
 
@@ -86,8 +85,7 @@ class ElementCache {
  * Remove all recorded values. 
  * This is recommended when invalidating the whole screen.
  */
-  clearAll() { 
-
+  clearAll() {
      var elementId;
      for (elementId in this.elementPropertiesById) {
        this.elementPropertiesById[elementId] = {};
@@ -137,19 +135,15 @@ class ElementCache {
      * @param {String} 'eventName'. Is added to the element's {@link EventTarget#addEventListener}
      */
     monitorEvent (elementId, eventName) {
-
       this.getElement(elementId).addEventListener(eventName, this.onEventBind);
-
       var elementIds;
       if (this.elementIdsByEvent.hasOwnProperty(eventName)){
         elementIds = this.elementIdsByEvent[eventName];
       }
       else {
-
         elementIds = [];
         this.elementIdsByEvent[eventName] = elementIds;
       }
-
       elementIds.push(this.getElementId(elementId));
     }
 
@@ -161,7 +155,6 @@ class ElementCache {
      * @param {String} 'eventName'. Is removed to the element's {@link EventTarget#removeEventListener}
      */
     unMonitorEvent (elementId, eventName) {
-
       this.getElement(elementId).removeEventListener(eventName, this.onEventBind);
       var index = this.elementIdsByEvent[eventName].indexOf(this.getElementId(elementId));
       this.elementIdsByEvent[eventName].splice(index, 1);
@@ -173,9 +166,7 @@ class ElementCache {
      * @see {@link #_getPropertiesForEventType}
      */
     _onEvent (event) {
-
       var propertiesToUpdate = this._getPropertiesForEventType(event.type);
-
       var elementIds = this.elementIdsByEvent[event.type];
       var self = this;
       elementIds.forEach(function(elementId){
@@ -189,11 +180,8 @@ class ElementCache {
      *                  the given {@link Event#type} fires.
      */
     _getPropertiesForEventType (eventType) {
-
       var propertyNames = [];
-
       switch (eventType) {
-
         case 'scroll':
           propertyNames.push('scrollTop');
           propertyNames.push('scrollBottom');
@@ -220,11 +208,9 @@ class ElementCache {
    * @see {@link #setValuePlus}
    */
   registerElement (element, elementId){
-    
     if (this.elementsById[elementId]) {
       throw "[ElementCache: registerElement] Received id: " + "\'" + elementId + "\'" + "is not unique";
     }
-    
     this.elementsById[elementId] = element;
     this.elementPropertiesById[elementId] = {};
   }
@@ -235,11 +221,9 @@ class ElementCache {
    * @return {HTMLElement} The registered element (or parameter when given an element)
    */
   getElement (elementId) {
-
-    if (typeof elementId !== 'string'){
+    if (typeof elementId !== 'string') {
       return elementId;
     }
-    
     var element = this.elementsById[elementId];
     if (!element) {
       throw "[ElementCache: getElement] elementId: " + "\'" + elementId + "\'" + "does not exist";
@@ -252,17 +236,14 @@ class ElementCache {
    * @return {String} The registered elementId (or the given parameter).
    */
   getElementId (elementId){
-    
     if (typeof elementId === 'string') {
         return elementId;
     }
-
     // Find the ID for the element by looking 
     // for the first match in the list of stored elements.
     var _elementId;
     var entryKey;
     for (entryKey in this.elementsById) {
-
       if (this.elementsById.hasOwnProperty(entryKey) && this.elementsById[entryKey] === element) {
         _elementId = entryKey;
         break;
@@ -281,7 +262,6 @@ class ElementCache {
    *                            has multiple values (e.g. 'backgroundColor').
    */
   getValue (elementId, propertyName) {
-    
     var _elementId = this.getElementId(elementId);
     if (!this.elementPropertiesById[_elementId]) {
       throw "[ElementCache: getValue] elementId: " + "\'" + _elementId + "\'" + "does not exist";
@@ -289,7 +269,6 @@ class ElementCache {
     
     var value;
     var propertyLookup = this.elementPropertiesById[_elementId];
-
     if (propertyLookup.hasOwnProperty(propertyName)) {
       value = propertyLookup[propertyName];  
       console.log("HIT (",_elementId, ":", propertyName, ")");
@@ -314,10 +293,8 @@ class ElementCache {
    * @param {Number} 'value'
    */
   setValue (elementId, propertyName, value) {
-    
     // Assume value is valid.
     // (Otherwise we will store and return an invalid value).
-
     this._saveValueForId(elementId, propertyName, value);
     var element = this.getElement(elementId);
     ElementUtils.setValue(element, propertyName, value);
@@ -334,11 +311,9 @@ class ElementCache {
      * @see {@link #setValue}
      */
     setValuePlus (elementId, propertyName, extraValue) {
-
       if (extraValue === 0) {
         return;
       }
-
       var value = this.getValue(elementId, propertyName);
       value += extraValue;
       this.setValue(elementId, propertyName, value);
@@ -366,15 +341,12 @@ class ElementCache {
      * }
      */
     setValues (values) {
-
       if (!Array.isArray(values)){
         values = [values];
       }
-
       var index;
       var elementChanges;
       var elementId;
-
       for (index = 0; index < values.length; index++) {
           elementChanges = values[index];
           elementId = elementChanges.element;
@@ -392,16 +364,13 @@ class ElementCache {
      * @example: { "bottom": -12 }
      */
     setElementValues (elementId, values) {
-
       var element = this.getElement(elementId);
       var transforms = {};
       var propertyName;
       var hasTransforms = false;
 
       for (propertyName in values) {
-
         if (values.hasOwnProperty(propertyName)) {
-
           if (TransformUtils.isTransform(propertyName)){
             transforms[propertyName] = values[propertyName];
             hasTransforms = true;
@@ -411,7 +380,6 @@ class ElementCache {
           }
         }
       }
-
       if (hasTransforms) {
         this.setTransforms(elementId, transforms);
       }
@@ -426,18 +394,15 @@ class ElementCache {
      * @example: { "scale": 12 }
      */
     setTransforms (elementId, transforms) {
-
       var transformName;
-
       // Save all the transform values individually.
       for (transformName in transforms) {
-
         if (transforms.hasOwnProperty(transformName)) {
           this._saveValueForId(elementId, transformName, transforms[transformName]);
         }
       }
       
       var element = this.getElement(elementId);
-      ElementUtils.setTransforms(element, transforms);
+      ElementProperties.setTransforms(element, transforms);
     }
 }

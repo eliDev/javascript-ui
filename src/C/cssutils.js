@@ -155,29 +155,29 @@ class CSSUtils {
 
     static clipLeftInset(element, leftInset) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
-        var clipBounds = RectangleUtils.initFromRect(elementBounds);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
+        var clipBounds = Rectangle.copy(elementBounds);
         clipBounds.setWidth(leftInset);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipBetweenHorizontal(element, minX, maxX) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
         var clipBounds = new Rectangle(minX, 0, maxX - minX, elementBounds.height);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipInsideBounds(element, clipBounds) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
     static clipInsideRect(element, clipFrame) {
         var elementRect = element.getBoundingClientRect();
-        var elementBounds = RectangleUtils.boundsFromDOMRect(elementRect);
-        var clipBounds = RectFromDOMRect(elementRect).boundsForFrame(clipFrame);
+        var elementBounds = Rectangle.boundsFromDOMRect(elementRect);
+        var clipBounds = Rectangle.fromDOMRect(elementRect).boundsForFrame(clipFrame);
         CSSUtils.clipOutRectangle(element, elementBounds, clipBounds);
     }
 
