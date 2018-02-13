@@ -367,8 +367,8 @@ class Point {
   }
 
   subtract(point) {
-    var point = Point.subtract(this, point);
-    return point;
+    var p = Point.subtract(this, point);
+    return p;
   }
 
  static subtract(point1, point2) {
@@ -376,6 +376,11 @@ class Point {
     point.x = point1.x - point2.x;
     point.y = point1.y - point2.y;
     return point;
+  }
+
+  add(point) {
+    var p = Point.add(this, point);
+    return p;
   }
 
   static add(point1, point2) {
