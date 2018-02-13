@@ -564,12 +564,12 @@ class Rectangle {
     ============*/
 
   setXY(x, y) {
-    this.x = point.x;
-    this.y = point.y;
+    this.x = x;
+    this.y = y;
   }
 
   getOrigin() {
-    return { x: this.x, y: this.y };
+    return new Point(this.x,this.y);
   }
 
   getMaxX() {
