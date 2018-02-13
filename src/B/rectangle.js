@@ -420,11 +420,11 @@ class Rectangle {
     of the rectangle (unless centred, in which case CENTRE
     is returned).
 
-    @see {@link GeometryUtils.RIGHT}
-    @see {@link GeometryUtils.LEFT}
+    @see {@link RectangleSide.RIGHT}
+    @see {@link RectangleSide.LEFT}
 
     @param {Number} 'xPos' horizontal coordinate.
-    @return {Number} A GeometryUtils 'direction'
+    @return {Number} A RectangleSide 'direction'
   */
   horizontalSideClosestToXPos(xPos) {
     var side = RectangleSide.CENTRE;

@@ -117,7 +117,7 @@ class ElementPosition {
   static originToCentreBesideElementPlus(element, referenceElement, referenceSide, extraDistance) {
     var referenceRect = referenceElement.getBoundingClientRect();
     var rect = element.getBoundingClientRect();
-    var origin = GeometryUtils.originToCentreBesideRectPlus(rect, referenceRect, referenceSide, extraDistance);
+    var origin = rect.originToCentreBesideRectPlus(referenceRect, referenceSide, extraDistance);
     return origin;
   }
 

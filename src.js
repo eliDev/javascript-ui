@@ -929,11 +929,11 @@ class Rectangle {
     of the rectangle (unless centred, in which case CENTRE
     is returned).
 
-    @see {@link GeometryUtils.RIGHT}
-    @see {@link GeometryUtils.LEFT}
+    @see {@link RectangleSide.RIGHT}
+    @see {@link RectangleSide.LEFT}
 
     @param {Number} 'xPos' horizontal coordinate.
-    @return {Number} A GeometryUtils 'direction'
+    @return {Number} A RectangleSide 'direction'
   */
   horizontalSideClosestToXPos(xPos) {
     var side = RectangleSide.CENTRE;
@@ -1522,7 +1522,7 @@ class ElementPosition {
   static originToCentreBesideElementPlus(element, referenceElement, referenceSide, extraDistance) {
     var referenceRect = referenceElement.getBoundingClientRect();
     var rect = element.getBoundingClientRect();
-    var origin = GeometryUtils.originToCentreBesideRectPlus(rect, referenceRect, referenceSide, extraDistance);
+    var origin = rect.originToCentreBesideRectPlus(referenceRect, referenceSide, extraDistance);
     return origin;
   }
 
@@ -2819,7 +2819,7 @@ globals.singletons.clickmanager.init();
 
 VBL = {
     globals: globals,
-    DirectionRect: GeometryUtils,
+    DirectionRect: DirectionRect,
     MathUtils: DirectionRect,
     Line: Line,
     MathUtils: MathUtils,

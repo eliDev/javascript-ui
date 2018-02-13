@@ -13,7 +13,7 @@ globals.singletons.clickmanager.init();
 
 VBL = {
     globals: globals,
-    DirectionRect: GeometryUtils,
+    DirectionRect: DirectionRect,
     MathUtils: DirectionRect,
     Line: Line,
     MathUtils: MathUtils,
