@@ -62,7 +62,7 @@ class Point {
   }
 
  static subtract(point1, point2) {
-    var point;
+    var point = new Point();
     point.x = point1.x - point2.x;
     point.y = point1.y - point2.y;
     return point;
@@ -74,7 +74,7 @@ class Point {
   }
 
   static add(point1, point2) {
-    var point;
+    var point = new Point();
     point.x = point1.x + point2.x;
     point.y = point1.y + point2.y;
     return point;
