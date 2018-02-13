@@ -924,9 +924,9 @@ class Rectangle {
     return side;
   }
 
-  /**
-      Returns the point representings the 
-      centre along the top of the rectangle.
+ /**
+  * Returns the point representings the
+  * centre along the top of the rectangle.
   */
   centreOfSide(side) {
     var point;
@@ -1028,8 +1028,8 @@ class Rectangle {
     return Rectangle.combineRects(r1, r2);
   }
 
-    /**
-    @param {ClientRect} 'clientRect'
+   /**
+    * @param {ClientRect} 'clientRect'
     */
   static fromDOMRect(DOMRect) {
     var rectangle = new Rectangle();
