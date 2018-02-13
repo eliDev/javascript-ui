@@ -23,11 +23,11 @@ class ClickManager {
     onBodyClick(event) {
         console.log('clicked: ', event);
         var element = event.srcElement;
-        this._handleIdClick(element);
-        if (!this._handleClassClick(element)){
+        this._handleIdClick(element, event);
+        if (!this._handleClassClick(element, event)){
             event.preventDefault();
         }
-        this._handleTagClick(element);
+        this._handleTagClick(element, event);
     }
 
     _handleIdClick(element){
@@ -56,15 +56,15 @@ class ClickManager {
         return didHandle;
     }
 
-    _handleTagClick(element) {
+    _handleTagClick(element, event) {
         if (this.registeredTags[element.tagName]) {
-            this.registeredTags[element.tagName](element);
+            this.registeredTags[element.tagName](element, event);
         }
         else {
             var parentNode = element.parentNode;
             while (parentNode.nodeName != 'BODY') {
                 if (this.registeredTags[parentNode.tagName]) {
-                    this.registeredTags[parentNode.tagName](parentNode);
+                    this.registeredTags[parentNode.tagName](parentNode, event);
                     break;
                 }
                 parentNode = parentNode.parentNode;
