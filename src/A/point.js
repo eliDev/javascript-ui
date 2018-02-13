@@ -16,6 +16,10 @@ class Point {
     return new Point(point.x, point.y);
   }
 
+  equals(otherPoint) {
+    return this.x === otherPoint.x && this.y === otherPoint.y;
+  }
+
   static copyPlusX(point, x) {
     var p = Point.copy(point);
     p.plusX(x);
