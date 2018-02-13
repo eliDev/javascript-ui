@@ -50,29 +50,17 @@ class Rectangle {
               (otherRect.width === this.width && otherRect.height === this.height));
     }
 
-    hasSize() {
-      return this.width > 0 && this.height > 0;
-    }
-
-    hasZeroSize() {
-      return this.width === 0 && this.height === 0;
-    }
-
-  /** =======================
-        PROPERTIES - Points
-    ========================*/
-
-  getOrigin() {
-    return { x: this.x, y: this.y };
-  }
+  /** =========
+        Points
+    ============*/
 
   setXY(x, y) {
     this.x = point.x;
     this.y = point.y;
   }
 
-  setOrigin(point) {
-    this.setXY(point.x, point.y);
+  getOrigin() {
+    return { x: this.x, y: this.y };
   }
 
   getMaxX() {
@@ -81,6 +69,10 @@ class Rectangle {
 
   getMaxY() {
     return this.getBottom();
+  }
+
+  setOrigin(point) {
+    this.setXY(point.x, point.y);
   }
 
   getMaxXPoint() {
@@ -119,35 +111,22 @@ class Rectangle {
     this.y = (centre.y - this.halfHeight());
   }
 
-  //  PROPERTIES - DOMRect support
-
-  getTop() {
-    return this.y;
-  }
-
-  getLeft() {
-    return this.x;
-  }
-
-  getRight() {
-    return this.x + this.width;
-  }
-
-  setRight(right) {
-    this.width = (right - this.x);
-  }
-
-  getBottom() {
-    return this.y + this.height;
-  }
-
-  setBottom(y) {
-    this.height = (y - this.y);
+  moveBy(point) {
+    this.x = this.x + point.x;
+    this.y = this.y + point.y;
   }
 
   /** =============
         Size
     ===============*/
+
+  hasSize() {
+    return this.width > 0 && this.height > 0;
+  }
+
+  hasZeroSize() {
+    return this.width === 0 && this.height === 0;
+  }
 
   boundsForFrame(otherRect) {
       var bounds = Rectangle.copy(otherRect);
@@ -156,19 +135,26 @@ class Rectangle {
       return bounds;
   }
 
+  /**
+  @param {Number} 'width'
+  @param {Boolean} 'stickyCentre'
+  */
+  setWidth(width, stickyCentre) {
+    this.setSize(width, this.height, stickyCentre);
+  }
+
+  setWidthPlus(extraWidth, stickyCentre) {
+    this.setSizePlus(extraWidth, 0, stickyCentre);
+  }
+
   halfWidth() {
     var halfWidth = (this.width / 2);
     return halfWidth;
   }
 
-  halfHeight() {
-    var halfHeight = (this.height / 2);
-    return halfHeight;
-  }
-
-  /**
-    @param {Number} 'height'
-    @param {Boolean} 'stickyCentre'
+ /**
+  * @param {Number} 'height'
+  * @param {Boolean} 'stickyCentre'
   */
   setHeight(height, stickyCentre) {
     this.setSize(this.width, height, stickyCentre);
@@ -178,16 +164,9 @@ class Rectangle {
     this.setSizePlus(0, extraHeight, stickyCentre);
   }
 
-  /**
-    @param {Number} 'width'
-    @param {Boolean} 'stickyCentre'
-  */
-  setWidth(width, stickyCentre) {
-    this.setSize(width, this.height, stickyCentre);
-  }
-
-  setWidthPlus(extraWidth, stickyCentre) {
-    this.setSizePlus(extraWidth, 0, stickyCentre);
+  halfHeight() {
+    var halfHeight = (this.height / 2);
+    return halfHeight;
   }
 
   /**
@@ -210,9 +189,8 @@ class Rectangle {
     this.setSize(this.width + extraWidth, this.height + extraHeight, stickyCentre);
   }
 
-  moveBy(point) {
-    this.x = this.x + point.x;
-    this.y = this.y + point.y;
+  bounds() {
+    return new Rectangle(0,0,this.width,this.height);
   }
 
   /** =============
@@ -367,9 +345,9 @@ class Rectangle {
     return directionRect;
   }
 
-    /** ==============
-        SIDES
-    ===============*/
+  /** ==============
+      SIDES
+  ===============*/
 
   isOutsideEdge(point, thisRectSide) {
     var isBeyond = false;
@@ -511,6 +489,30 @@ class Rectangle {
     DOMRect Utils
   ================== */
 
+  getTop() {
+    return this.y;
+  }
+
+  getLeft() {
+    return this.x;
+  }
+
+  getRight() {
+    return this.x + this.width;
+  }
+
+  setRight(right) {
+    this.width = (right - this.x);
+  }
+
+  getBottom() {
+    return this.y + this.height;
+  }
+
+  setBottom(y) {
+    this.height = (y - this.y);
+  }
+
   static combineDOMRects(DOMrect1, DOMrect2) {
     var r1 = Rectangle.fromDOMRect(DOMrect1);
     var r2 = Rectangle.fromDOMRect(DOMrect2);
@@ -531,8 +533,7 @@ class Rectangle {
 
   static boundsFromDOMRect(domRect) {
     var rectangle = Rectangle.fromDOMRect(domRect);
-    rectangle.setOrigin(PointZero());
-    return rectangle;
+    return rectangle.bounds();
   }
 
   toDOMRect() {
