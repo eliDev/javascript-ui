@@ -135,9 +135,9 @@ class Rectangle {
       return bounds;
   }
 
-  /**
-  @param {Number} 'width'
-  @param {Boolean} 'stickyCentre'
+ /**
+  * @param {Number} 'width'
+  * @param {Boolean} 'stickyCentre'
   */
   setWidth(width, stickyCentre) {
     this.setSize(width, this.height, stickyCentre);
@@ -197,18 +197,17 @@ class Rectangle {
         Resize
     ===============*/
 
-  /**
-      Enlarges the frame on all sides, centre remains the same.
-      @param {Number} 'amount' size to increase by.
+ /**
+  * Enlarges the frame on all sides, centre remains the same.
+  * @param {Number} 'amount' size to increase by.
   */
   stretchBy(amount) {
     this.stretchHoriztonally(amount);
     this.stretchVertically(amount);
   }
 
-  /** 
-      Width increase by 2 * amount.
-      Centre remains the same.
+ /**
+  * Width increase by 2 * amount. Centre remains the same.
   */
   stretchHoriztonally(amount) {
     this.x -= amount;
@@ -220,15 +219,15 @@ class Rectangle {
     this.height += (2 * amount);
   }
 
-  /**
-      If the x position is close to the left edge, the rectangle's
-      x-position will be set, and right edge will remain the same.
-
-      If 'xPos' is closer to the right side, width will change and 
-      the rectangle's x-position will remain unchanged.
-
-      @param {Number} 'xPos' Coordinate on screen.
-      @param {Number} 'plusDistance' Any additional padding beyond the xPos.
+ /**
+  * If the x position is close to the left edge, the rectangle's
+  * x-position will be set, and right edge will remain the same.
+  * 
+  * If 'xPos' is closer to the right side, width will change and 
+  * the rectangle's x-position will remain unchanged.
+  * 
+  * @param {Number} 'xPos' Coordinate on screen.
+  * @param {Number} 'plusDistance' Any additional padding beyond the xPos.
   */
   stretchToXPos(xPos, plusDistance) {
     var rightPos;
