@@ -297,6 +297,7 @@ class ElementProperties {
         case 'background-color+component':
         case 'visibility':
         case 'position':
+        case 'z-index':
           suffix = "";
           break;
         case 'translateY':
@@ -332,7 +333,6 @@ class ElementProperties {
      */
     static parseProperty (propertyName, propertyValue) {
       var value;
-      
       // parsing vriables.
       var components;
       switch (propertyName) {
@@ -475,7 +475,6 @@ class ElementProperties {
         else {
           value = ElementProperties.getElementProperty(element, propertyName);
         }
-        
         if (undefined === value || (!value && isNaN(value))) {
           value = 0;
         }
