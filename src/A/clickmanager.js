@@ -24,7 +24,9 @@ class ClickManager {
         console.log('clicked: ', event);
         var element = event.srcElement;
         this._handleIdClick(element);
-        this._handleClassClick(element);
+        if (!this._handleClassClick(element)){
+            event.preventDefault();
+        }
         this._handleTagClick(element);
     }
 
@@ -35,19 +37,23 @@ class ClickManager {
     }
 
     _handleClassClick(element) {
+        var didHandle = false;
         if (this.registeredClasses[element.className]) {
             this.registeredClasses[element.className](element);
+            didHandle = true;
         }
         else {
             var parentNode = element.parentNode;
             while (parentNode.nodeName != 'BODY') {
                 if (this.registeredClasses[parentNode.className]) {
                     this.registeredClasses[parentNode.className](element);
+                    didHandle = true;
                     break;
                 }
                 parentNode = parentNode.parentNode;
             }
         }
+        return didHandle;
     }
 
     _handleTagClick(element) {

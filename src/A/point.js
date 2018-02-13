@@ -14,7 +14,7 @@ class Point {
     this.y = y;
   }
 
-  static zero(){
+  static zero() {
     return new Point(0,0);
   }
 

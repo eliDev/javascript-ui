@@ -98,6 +98,7 @@ class ElementProperties {
       var name = propertyName;
       switch(propertyName) {
         case 'scale':
+        case 'scaleX':
         case 'translateY':
         case 'translateX':
         case 'rotateX':

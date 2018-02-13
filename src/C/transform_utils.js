@@ -39,13 +39,11 @@ class TransformUtils {
       
       var value = 0;
       if (transform === 'none') {
-        
         switch(propertyName){
           case 'scale':
             value = 1;
           break;
         }
-
         return value;
       }
       
