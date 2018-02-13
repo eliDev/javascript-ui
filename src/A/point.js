@@ -32,14 +32,14 @@ class Point {
     this.x += xPlus;
   }
  
-  static minPoint(p1, p2) {
+  static min(p1, p2) {
     var p = new Point();
     p.x = Math.min(p1.x, p2.x);
     p.y = Math.min(p1.y, p2.y);
     return p;
   }
  
-  static maxPoint(p1, p2) {
+  static max(p1, p2) {
    var p = new Point();
    p.x = Math.max(p1.x, p2.x);
    p.y = Math.max(p1.y, p2.y);

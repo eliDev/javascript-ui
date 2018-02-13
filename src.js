@@ -336,14 +336,14 @@ class Point {
     this.x += xPlus;
   }
  
-  static minPoint(p1, p2) {
+  static min(p1, p2) {
     var p = new Point();
     p.x = Math.min(p1.x, p2.x);
     p.y = Math.min(p1.y, p2.y);
     return p;
   }
  
-  static maxPoint(p1, p2) {
+  static max(p1, p2) {
    var p = new Point();
    p.x = Math.max(p1.x, p2.x);
    p.y = Math.max(p1.y, p2.y);
@@ -545,8 +545,8 @@ class Rectangle {
 
   static combineRects(rect1, rect2) {
     var r = new Rectangle();
-    r.setOrigin(minPoint(rect1.getOrigin(), rect2.getOrigin()));
-    r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rect2.getMaxPoint()));
+    r.setOrigin(Point.min(rect1.getOrigin(), rect2.getOrigin()));
+    r.setMaxPoint(Point.max(rect1.getMaxPoint(), rect2.getMaxPoint()));
     return r;
   }
 

@@ -36,8 +36,8 @@ class Rectangle {
 
   static combineRects(rect1, rect2) {
     var r = new Rectangle();
-    r.setOrigin(minPoint(rect1.getOrigin(), rect2.getOrigin()));
-    r.setMaxPoint(maxPoint(rect1.getMaxPoint(), rect2.getMaxPoint()));
+    r.setOrigin(Point.min(rect1.getOrigin(), rect2.getOrigin()));
+    r.setMaxPoint(Point.max(rect1.getMaxPoint(), rect2.getMaxPoint()));
     return r;
   }
 
