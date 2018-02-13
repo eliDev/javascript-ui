@@ -2819,19 +2819,19 @@ globals.singletons.clickmanager.init();
 
 VBL = {
     globals: globals,
-    directionRect: GeometryUtils,
-    mathUtils: DirectionRect,
-    line: Line,
-    mathUtils: MathUtils,
-    point: Point,
-    rectangleSide: RectangleSide,
-    stringUtils: StringUtils,
-    tableUtils: TableUtils,
-    rectangle: Rectangle,
+    DirectionRect: GeometryUtils,
+    MathUtils: DirectionRect,
+    Line: Line,
+    MathUtils: MathUtils,
+    Point: Point,
+    RectangleSide: RectangleSide,
+    StringUtils: StringUtils,
+    TableUtils: TableUtils,
+    Rectangle: Rectangle,
     CSSUtils: CSSUtils,
-    transformUtils: TransformUtils,
-    elementPosition: ElementPosition,
-    elementFactory: ElementFactory
+    TransformUtils: TransformUtils,
+    ElementPosition: ElementPosition,
+    ElementFactory: ElementFactory
 };
 
 
