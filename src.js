@@ -360,26 +360,31 @@ class Point {
   }
  
   static max(p1, p2) {
-   var p = new Point();
-   p.x = Math.max(p1.x, p2.x);
-   p.y = Math.max(p1.y, p2.y);
-   return p;
- }
+    var p = new Point();
+    p.x = Math.max(p1.x, p2.x);
+    p.y = Math.max(p1.y, p2.y);
+    return p;
+  }
+
+  subtract(point) {
+    var point = Point.subtract(this, point);
+    return point;
+  }
 
  static subtract(point1, point2) {
-  var point;
-  point.x = point1.x - point2.x;
-  point.y = point1.y - point2.y;
-  return point;
-}
+    var point;
+    point.x = point1.x - point2.x;
+    point.y = point1.y - point2.y;
+    return point;
+  }
 
-static add(point1, point2) {
-  var point;
-  point.x = point1.x + point2.x;
-  point.y = point1.y + point2.y;
-  return point;
-}
-  
+  static add(point1, point2) {
+    var point;
+    point.x = point1.x + point2.x;
+    point.y = point1.y + point2.y;
+    return point;
+  }
+    
  static distanceBetweenPoints(startPoint, endPoint) {
     var xDiff = endPoint.x - startPoint.x;
     var yDiff = endPoint.y - startPoint.y;
