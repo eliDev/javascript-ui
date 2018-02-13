@@ -843,7 +843,7 @@ class Rectangle {
       directionRect.right = point.x - this.getRight();
     }
     else if (point.x < this.x) {
-      directionRect.left = this.x  - point.x;
+      directionRect.left = this.x - point.x;
     }
     if (point.y >= this.getBottom()) {
       directionRect.bottom = point.y - this.getBottom();
@@ -1416,7 +1416,7 @@ class ElementPosition {
      Frame
   ===============*/
 
-  static clientRects(elements) {
+  static viewportFrames(elements) {
     var rects = [];
     for (var i = 0; i < elements.length; i ++) {
       var r = Rectangle.fromDOMRect(elements[i].getBoundingClientRect());

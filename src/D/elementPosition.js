@@ -10,7 +10,7 @@ class ElementPosition {
      Frame
   ===============*/
 
-  static clientRects(elements) {
+  static viewportFrames(elements) {
     var rects = [];
     for (var i = 0; i < elements.length; i ++) {
       var r = Rectangle.fromDOMRect(elements[i].getBoundingClientRect());
