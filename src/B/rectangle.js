@@ -106,9 +106,21 @@ class Rectangle {
     return centre;
   }
 
+  setCentreX(x) {
+    this.x = (x - this.halfWidth());
+  }
+
+  setCentreY(y) {
+    this.y = (y - this.halfHeight());
+  }
+
+  setCentreXY(x, y) {
+    this.setCentreX(x);
+    this.setCentreY(y);
+  }
+
   setCentre(centre) {
-    this.x = (centre.x - this.halfWidth());
-    this.y = (centre.y - this.halfHeight());
+    this.setCentreXY(centre.x, centre.y);
   }
 
   moveBy(point) {
