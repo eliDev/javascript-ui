@@ -663,11 +663,11 @@ class Rectangle {
     return new Point(this.x,this.y);
   }
 
-  getMaxX() {
+  maxX() {
     return this.getRight();
   }
 
-  getMaxY() {
+  maxY() {
     return this.getBottom();
   }
 
