@@ -333,6 +333,9 @@ class Point {
   }
 
   equals(otherPoint) {
+    if (!otherPoint){
+      return false;
+    }
     return this.x === otherPoint.x && this.y === otherPoint.y;
   }
 
