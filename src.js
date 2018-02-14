@@ -759,6 +759,10 @@ class Rectangle {
     this.setSizePlus(extraWidth, 0, stickyCentre);
   }
 
+  setWidthMinus(lessWidth, stickyCentre) {
+    this.setSizeMinus(lessWidth, 0, stickyCentre);
+  }
+
   halfWidth() {
     var halfWidth = (this.width / 2);
     return halfWidth;
@@ -774,6 +778,10 @@ class Rectangle {
 
   setHeightPlus(extraHeight, stickyCentre) {
     this.setSizePlus(0, extraHeight, stickyCentre);
+  }
+
+  setHeightMinus(lessHeight, stickyCentre) {
+    this.setSizeMinus(0, lessHeight, stickyCentre);
   }
 
   halfHeight() {
@@ -799,6 +807,10 @@ class Rectangle {
 
   setSizePlus(extraWidth, extraHeight, stickyCentre) {
     this.setSize(this.width + extraWidth, this.height + extraHeight, stickyCentre);
+  }
+
+  setSizeMinus(lessWidth, lessHeight, stickyCentre) {
+    this.setSize(this.width - lessWidth, this.height - lessHeight, stickyCentre);
   }
 
   bounds() {
