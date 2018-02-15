@@ -13,15 +13,20 @@ RectangleSide.LEFT = 3;
 RectangleSide.CENTRE = 4;
 
 
-RectangleSide.isDirectionDown = function (direction) {
+RectangleSide.isDown = function (direction) {
   return direction === RectangleSide.DOWN;
 };
-RectangleSide.isDirectionUp = function (direction) {
+RectangleSide.isUp = function (direction) {
   return direction === RectangleSide.UP;
+};
+RectangleSide.isLeft = function (direction) {
+  return direction === RectangleSide.LEFT;
 };
 RectangleSide.isHorizontal = function (direction) {
   return (direction === RectangleSide.LEFT || direction === RectangleSide.RIGHT);
 };
+
+
 
 RectangleSide.sideOpposite = function(side) {
   var oppositeSide = this.UNDEFINED;
