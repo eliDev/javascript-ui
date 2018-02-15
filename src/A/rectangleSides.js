@@ -27,7 +27,6 @@ RectangleSide.isHorizontal = function (direction) {
 };
 
 
-
 RectangleSide.sideOpposite = function(side) {
   var oppositeSide = this.UNDEFINED;
   switch (side) {

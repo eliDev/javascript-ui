@@ -328,6 +328,10 @@ class Point {
     return new Point(0,0);
   }
 
+  static fromX(x) {
+    return new Point(x, 0);
+  }
+
   copy() {
     return Point.copy(this);
   }
@@ -453,7 +457,6 @@ RectangleSide.isLeft = function (direction) {
 RectangleSide.isHorizontal = function (direction) {
   return (direction === RectangleSide.LEFT || direction === RectangleSide.RIGHT);
 };
-
 
 
 RectangleSide.sideOpposite = function(side) {
