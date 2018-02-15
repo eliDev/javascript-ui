@@ -18,6 +18,10 @@ class Point {
     return new Point(0,0);
   }
 
+  copy() {
+    return Point.copy(this);
+  }
+
   static copy(point) {
     return new Point(point.x, point.y);
   }
