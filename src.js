@@ -815,6 +815,10 @@ class Rectangle {
     return halfHeight;
   }
 
+  size() {
+    return new Point(this.width, this.height);
+  }
+  
   /**
     @param {Number} 'width'
     @param {Number} 'height'
