@@ -94,7 +94,7 @@ class Rectangle {
     return new Point(this.x, this.getBottom());
   }
 
-  getMaxPoint() {
+  maxPoint() {
     return new Point(this.getRight(), this.getBottom());
   }
 
@@ -203,7 +203,7 @@ class Rectangle {
   size() {
     return new Point(this.width, this.height);
   }
-  
+
   /**
     @param {Number} 'width'
     @param {Number} 'height'
