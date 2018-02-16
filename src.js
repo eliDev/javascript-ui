@@ -633,6 +633,13 @@ class Rectangle {
     return new Rectangle();
   }
 
+  static fromOriginAndSize(origin, size) {
+    var r = new Rectangle();
+    r.setOrigin(origin);
+    r.setSize(size.x, size.y);
+    return r;
+  }
+
   copyValues(rectangle) {
     this.x = rectangle.x;
     this.y = rectangle.y;
