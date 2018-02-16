@@ -331,7 +331,60 @@ class Rectangle {
     return overlapRect;
   }
 
-
+  relativeFramesTo(otherFrame) {
+    var position = {
+        frame: Rectangle.copy(this),
+        topFrame: undefined,
+        rightFrame: undefined,
+        bottomFrame: undefined,
+        leftFrame: undefined,
+        insideFrame: undefined,
+        boundInOriginal: function(originalFrame, positionFrame) {
+            return originalFrame.boundsForFrame(positionFrame);
+        }
+    };
+    var overlapRect = this.overlappingFrame(otherFrame);
+    if (!overlapRect) {
+        var relativeRect = Rectangle.copy(this);
+        var outsideEdgeRect = otherFrame.distanceOutside(this.getCentre());
+        if (outsideEdgeRect.top >= 0) {
+            relativeRect.setCentreY(outsideEdgeRect.top);
+            position.topFrame = relativeRect;
+        }
+        if (outsideEdgeRect.right >= 0) {
+            relativeRect.setCentreX(outsideEdgeRect.right);
+            position.rightFrame = relativeRect;
+        }
+        if (outsideEdgeRect.bottom >= 0) {
+            relativeRect.setCentreY(outsideEdgeRect.bottom);
+            position.bottomFrame = relativeRect;
+        }
+        if (outsideEdgeRect.left >= 0) {
+            relativeRect.setCentreX(outsideEdgeRect.left);
+            position.leftFrame = relativeRect;
+        }
+    }
+    else {
+        position.insideFrame = overlapRect;
+        var rightFrame = new Rectangle(overlapRect.maxX(), this.y, this.maxX() - overlapRect.maxX(), this.height);
+        if (rightFrame.hasSize() && !rightFrame.hasZeroSize()) {
+            position.rightFrame = rightFrame;
+        }
+        var leftFrame = new Rectangle(this.x, this.y, overlapRect.x - this.x, this.height);
+        if (leftFrame.hasSize() && !leftFrame.hasZeroSize()) {
+            position.leftFrame = leftFrame;
+        }
+        var topFrame = new Rectangle(this.x, this.y, this.width, overlapRect.y - this.y);
+        if (topFrame.hasSize() && !topFrame.hasZeroSize()) {
+            position.topFrame = topFrame;
+        }
+        var bottomFrame = new Rectangle(this.x, overlapRect.maxY(), this.width, this.maxY() - overlapRect.maxY());
+        if (bottomFrame.hasSize() && !bottomFrame.hasZeroSize()) {
+            position.bottomFrame = bottomFrame;
+        }
+    }
+    return position;
+}
 
   /**
       Zero if point is within the rectangle or outside vertically.
@@ -469,22 +522,18 @@ class Rectangle {
   originToCentreSidePlus(side, centreOfSide, extraDistance) {
     var origin = {};
     switch (side) {
-  
       case RectangleSide.TOP:
         origin.x = centreOfSide.x - this.halfWidth();
         origin.y = centreOfSide.y - extraDistance;
         break;
-  
       case RectangleSide.RIGHT:
         origin.x = centreOfSide.x - this.width - extraDistance;
         origin.y = centreOfSide.y - this.halfHeight();
         break;
-  
       case RectangleSide.BOTTOM:
         origin.x = centreOfSide.x - this.halfWidth();
         origin.y = centreOfSide.y + this.height + extraDistance;
         break;
-  
       case RectangleSide.LEFT:
         origin.x = centreOfSide.x - extraDistance;
         origin.y = centreOfSide.y - this.halfHeight();
