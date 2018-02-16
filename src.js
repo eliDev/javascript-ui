@@ -633,11 +633,15 @@ class Rectangle {
     return new Rectangle();
   }
 
-  copy(rectangle) {
+  copyValues(rectangle) {
     this.x = rectangle.x;
     this.y = rectangle.y;
     this.width = rectangle.width;
     this.height = rectangle.height;
+  }
+
+  copy() {
+    return Rectangle.copy(this);
   }
 
   static copy(rectangle) {
@@ -673,17 +677,17 @@ class Rectangle {
     this.x = x;
     this.y = y;
   }
-
-  getOrigin() {
-    return new Point(this.x,this.y);
-  }
-
+  
   maxX() {
     return this.getRight();
   }
 
   maxY() {
     return this.getBottom();
+  }
+
+  getOrigin() {
+    return new Point(this.x,this.y);
   }
 
   setOrigin(point) {
