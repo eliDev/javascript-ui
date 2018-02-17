@@ -71,3 +71,24 @@ Direction.elementPostitionForDirection = function (direction) {
   }
   return property;
 };
+
+Direction.toString = function (direction) {
+  var s = "";
+  switch (direction) {
+    case Direction.UP:
+    s = 'up';
+      break;
+    case Direction.RIGHT:
+    s = 'right';
+      break;
+    case Direction.DOWN:
+    s = 'down';
+      break;
+    case Direction.LEFT:
+    s = 'left';
+      break;
+    default:
+      console.log("Direction.toString unhandled case: ", direction);
+  }
+  return s;
+};

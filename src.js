@@ -325,6 +325,27 @@ Direction.elementPostitionForDirection = function (direction) {
   }
   return property;
 };
+
+Direction.toString = function (direction) {
+  var s = "";
+  switch (direction) {
+    case Direction.UP:
+    s = 'up';
+      break;
+    case Direction.RIGHT:
+    s = 'right';
+      break;
+    case Direction.DOWN:
+    s = 'down';
+      break;
+    case Direction.LEFT:
+    s = 'left';
+      break;
+    default:
+      console.log("Direction.toString unhandled case: ", direction);
+  }
+  return s;
+};
 /*jshint esversion: 6 */
 /** 
  * For distance from a point in 4 directions of a 2d plane. 
