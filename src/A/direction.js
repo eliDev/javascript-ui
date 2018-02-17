@@ -25,7 +25,10 @@ Direction.isLeft = function (direction) {
   return direction === Direction.LEFT;
 };
 Direction.isHorizontal = function (direction) {
-  return (direction === Direction.LEFT || direction === Direction.RIGHT);
+  return (direction === Direction.LEFT || direction === Direction.RIGHT || Direction.HORIZONTAL);
+};
+Direction.isVertical = function (direction) {
+  return (direction === Direction.DOWN || direction === Direction.UP || Direction.VERTICAL);
 };
 
 

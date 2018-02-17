@@ -266,6 +266,7 @@ Direction.BELOW = Direction.BOTTOM;
 Direction.LEFT = 3;
 Direction.CENTRE = 4;
 Direction.HORIZONTAL = 5;
+Direction.VERTICAL = 6;
 
 
 Direction.isDown = function (direction) {
@@ -278,7 +279,10 @@ Direction.isLeft = function (direction) {
   return direction === Direction.LEFT;
 };
 Direction.isHorizontal = function (direction) {
-  return (direction === Direction.LEFT || direction === Direction.RIGHT);
+  return (direction === Direction.LEFT || direction === Direction.RIGHT || Direction.HORIZONTAL);
+};
+Direction.isVertical = function (direction) {
+  return (direction === Direction.DOWN || direction === Direction.UP || Direction.VERTICAL);
 };
 
 
