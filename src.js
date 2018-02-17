@@ -252,7 +252,75 @@ class ClickManager {
     //     });
     // }
 
-}/*jshint esversion: 6 */
+}
+Direction = {};
+
+Direction.UNDEFINED = -1;
+Direction.UP = 0;
+Direction.TOP = Direction.UP;
+Direction.ABOVE = Direction.UP;
+Direction.RIGHT = 1;
+Direction.BOTTOM = 2;
+Direction.DOWN = Direction.BOTTOM;
+Direction.BELOW = Direction.BOTTOM;
+Direction.LEFT = 3;
+Direction.CENTRE = 4;
+
+
+Direction.isDown = function (direction) {
+  return direction === Direction.DOWN;
+};
+Direction.isUp = function (direction) {
+  return direction === Direction.UP;
+};
+Direction.isLeft = function (direction) {
+  return direction === Direction.LEFT;
+};
+Direction.isHorizontal = function (direction) {
+  return (direction === Direction.LEFT || direction === Direction.RIGHT);
+};
+
+
+Direction.sideOpposite = function(side) {
+  var oppositeSide = this.UNDEFINED;
+  switch (side) {
+    case Direction.TOP:
+      oppositeSide = this.BOTTOM;
+      break;
+    case Direction.RIGHT:
+      oppositeSide = this.LEFT;
+      break;
+    case Direction.BOTTOM:
+      oppositeSide = this.TOP;
+      break;
+    case Direction.LEFT:
+      oppositeSide = this.RIGHT;
+      break;
+  }
+  return oppositeSide;
+};
+
+Direction.elementPostitionForDirection = function (direction) {
+  var property = '';
+  switch (direction) {
+    case Direction.TOP:
+      property = 'top';
+      break;
+    case Direction.RIGHT:
+      property = 'right';
+      break;
+    case Direction.BOTTOM:
+      property = 'bottom';
+      break;
+    case Direction.LEFT:
+      property = 'left';
+      break;
+    default:
+      console.log("Direction.elementPostitionForDirection unhandled case: ", direction);
+  }
+  return property;
+};
+/*jshint esversion: 6 */
 /** 
  * For distance from a point in 4 directions of a 2d plane. 
  * */
@@ -430,75 +498,7 @@ class Point {
     .concat(this.y.toString())
     .concat("}"); 
   }
-}
-RectangleSide = {};
-
-RectangleSide.UNDEFINED = -1;
-RectangleSide.UP = 0;
-RectangleSide.TOP = RectangleSide.UP;
-RectangleSide.ABOVE = RectangleSide.UP;
-RectangleSide.RIGHT = 1;
-RectangleSide.BOTTOM = 2;
-RectangleSide.DOWN = RectangleSide.BOTTOM;
-RectangleSide.BELOW = RectangleSide.BOTTOM;
-RectangleSide.LEFT = 3;
-RectangleSide.CENTRE = 4;
-
-
-RectangleSide.isDown = function (direction) {
-  return direction === RectangleSide.DOWN;
-};
-RectangleSide.isUp = function (direction) {
-  return direction === RectangleSide.UP;
-};
-RectangleSide.isLeft = function (direction) {
-  return direction === RectangleSide.LEFT;
-};
-RectangleSide.isHorizontal = function (direction) {
-  return (direction === RectangleSide.LEFT || direction === RectangleSide.RIGHT);
-};
-
-
-RectangleSide.sideOpposite = function(side) {
-  var oppositeSide = this.UNDEFINED;
-  switch (side) {
-    case RectangleSide.TOP:
-      oppositeSide = this.BOTTOM;
-      break;
-    case RectangleSide.RIGHT:
-      oppositeSide = this.LEFT;
-      break;
-    case RectangleSide.BOTTOM:
-      oppositeSide = this.TOP;
-      break;
-    case RectangleSide.LEFT:
-      oppositeSide = this.RIGHT;
-      break;
-  }
-  return oppositeSide;
-};
-
-RectangleSide.elementPostitionForDirection = function (direction) {
-  var property = '';
-  switch (direction) {
-    case RectangleSide.TOP:
-      property = 'top';
-      break;
-    case RectangleSide.RIGHT:
-      property = 'right';
-      break;
-    case RectangleSide.BOTTOM:
-      property = 'bottom';
-      break;
-    case RectangleSide.LEFT:
-      property = 'left';
-      break;
-    default:
-      console.log("RectangleSides.elementPostitionForDirection unhandled case: ", direction);
-  }
-  return property;
-};
-/*jshint esversion: 6 */
+}/*jshint esversion: 6 */
 /**
  * 
  */
@@ -929,12 +929,12 @@ class Rectangle {
       plusDistance = 0;
     }
 
-    if (sideNearXPos === RectangleSide.LEFT) {
+    if (sideNearXPos === Direction.LEFT) {
       rightPos = this.getRight();
       this.x = (xPos - plusDistance);
       this.setRight(rightPos);
     }
-    else if (sideNearXPos === RectangleSide.RIGHT) {
+    else if (sideNearXPos === Direction.RIGHT) {
       // No change in x pos.
       this.setRight(xPos + plusDistance);
     }
@@ -1098,16 +1098,16 @@ class Rectangle {
     var isBeyond = false;
     var directionRect = this.distanceOutside(point);
     switch (thisRectSide) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
         isBeyond = directionRect.top >= 0;
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
         isBeyond = directionRect.right >= 0;
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
         isBeyond = directionRect.bottom >= 0;
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
         isBeyond = directionRect.left >= 0;
         break;
         default:
@@ -1120,16 +1120,16 @@ class Rectangle {
     var isInside = false;
     var directionRect = Point.directionalDistranceBetweenPoints(this.centreOfSide(thisRectSide), point);
     switch (thisRectSide) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
       isInside = directionRect.bottom >= 0;
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
       isInside = directionRect.left >= 0;
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
       isInside = directionRect.top >= 0;
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
       isInside = directionRect.right >= 0;
         break;
         default:
@@ -1150,12 +1150,12 @@ class Rectangle {
     @return {Number} A RectangleSide 'direction'
   */
   horizontalSideClosestToXPos(xPos) {
-    var side = RectangleSide.CENTRE;
+    var side = Direction.CENTRE;
     if (xPos > this.getCentre().x) {
-      side = RectangleSide.RIGHT;
+      side = Direction.RIGHT;
     }
     else if (xPos < this.getCentre().x) {
-      side = RectangleSide.LEFT;
+      side = Direction.LEFT;
     }
     return side;
   }
@@ -1167,16 +1167,16 @@ class Rectangle {
   centreOfSide(side) {
     var point;
     switch (side) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
         point = new Point(this.x + this.halfWidth(), this.y);
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
         point = new Point(this.x + this.width, this.y + this.halfHeight());
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
         point = new Point(this.x + this.halfWidth(), this.y + this.height);
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
         point = new Point(this.x, this.y + this.halfHeight());
         break;
     } 
@@ -1191,19 +1191,19 @@ class Rectangle {
   originToCentreSidePlus(side, centreOfSide, extraDistance) {
     var origin = {};
     switch (side) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
         origin.x = centreOfSide.x - this.halfWidth();
         origin.y = centreOfSide.y - extraDistance;
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
         origin.x = centreOfSide.x - this.width - extraDistance;
         origin.y = centreOfSide.y - this.halfHeight();
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
         origin.x = centreOfSide.x - this.halfWidth();
         origin.y = centreOfSide.y + this.height + extraDistance;
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
         origin.x = centreOfSide.x - extraDistance;
         origin.y = centreOfSide.y - this.halfHeight();
         break;
@@ -1221,7 +1221,7 @@ class Rectangle {
       extraDistance = 0;
     }
     var centreReferenceSide = referenceDomRect.centreOfSide(referenceSide);
-    var oppositeSide = RectangleSide.sideOpposite(referenceSide);
+    var oppositeSide = Direction.sideOpposite(referenceSide);
     var origin = this.originToCentreSidePlus(oppositeSide, centreReferenceSide, -extraDistance);
     return origin;
   }
@@ -3055,7 +3055,7 @@ VBL = {
     Line: Line,
     MathUtils: MathUtils,
     Point: Point,
-    RectangleSide: RectangleSide,
+    RectangleSide: Direction,
     StringUtils: StringUtils,
     TableUtils: TableUtils,
     Rectangle: Rectangle,

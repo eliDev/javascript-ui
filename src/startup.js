@@ -18,7 +18,7 @@ VBL = {
     Line: Line,
     MathUtils: MathUtils,
     Point: Point,
-    RectangleSide: RectangleSide,
+    RectangleSide: Direction,
     StringUtils: StringUtils,
     TableUtils: TableUtils,
     Rectangle: Rectangle,

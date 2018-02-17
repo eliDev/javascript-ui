@@ -275,12 +275,12 @@ class Rectangle {
       plusDistance = 0;
     }
 
-    if (sideNearXPos === RectangleSide.LEFT) {
+    if (sideNearXPos === Direction.LEFT) {
       rightPos = this.getRight();
       this.x = (xPos - plusDistance);
       this.setRight(rightPos);
     }
-    else if (sideNearXPos === RectangleSide.RIGHT) {
+    else if (sideNearXPos === Direction.RIGHT) {
       // No change in x pos.
       this.setRight(xPos + plusDistance);
     }
@@ -444,16 +444,16 @@ class Rectangle {
     var isBeyond = false;
     var directionRect = this.distanceOutside(point);
     switch (thisRectSide) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
         isBeyond = directionRect.top >= 0;
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
         isBeyond = directionRect.right >= 0;
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
         isBeyond = directionRect.bottom >= 0;
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
         isBeyond = directionRect.left >= 0;
         break;
         default:
@@ -466,16 +466,16 @@ class Rectangle {
     var isInside = false;
     var directionRect = Point.directionalDistranceBetweenPoints(this.centreOfSide(thisRectSide), point);
     switch (thisRectSide) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
       isInside = directionRect.bottom >= 0;
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
       isInside = directionRect.left >= 0;
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
       isInside = directionRect.top >= 0;
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
       isInside = directionRect.right >= 0;
         break;
         default:
@@ -496,12 +496,12 @@ class Rectangle {
     @return {Number} A RectangleSide 'direction'
   */
   horizontalSideClosestToXPos(xPos) {
-    var side = RectangleSide.CENTRE;
+    var side = Direction.CENTRE;
     if (xPos > this.getCentre().x) {
-      side = RectangleSide.RIGHT;
+      side = Direction.RIGHT;
     }
     else if (xPos < this.getCentre().x) {
-      side = RectangleSide.LEFT;
+      side = Direction.LEFT;
     }
     return side;
   }
@@ -513,16 +513,16 @@ class Rectangle {
   centreOfSide(side) {
     var point;
     switch (side) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
         point = new Point(this.x + this.halfWidth(), this.y);
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
         point = new Point(this.x + this.width, this.y + this.halfHeight());
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
         point = new Point(this.x + this.halfWidth(), this.y + this.height);
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
         point = new Point(this.x, this.y + this.halfHeight());
         break;
     } 
@@ -537,19 +537,19 @@ class Rectangle {
   originToCentreSidePlus(side, centreOfSide, extraDistance) {
     var origin = {};
     switch (side) {
-      case RectangleSide.TOP:
+      case Direction.TOP:
         origin.x = centreOfSide.x - this.halfWidth();
         origin.y = centreOfSide.y - extraDistance;
         break;
-      case RectangleSide.RIGHT:
+      case Direction.RIGHT:
         origin.x = centreOfSide.x - this.width - extraDistance;
         origin.y = centreOfSide.y - this.halfHeight();
         break;
-      case RectangleSide.BOTTOM:
+      case Direction.BOTTOM:
         origin.x = centreOfSide.x - this.halfWidth();
         origin.y = centreOfSide.y + this.height + extraDistance;
         break;
-      case RectangleSide.LEFT:
+      case Direction.LEFT:
         origin.x = centreOfSide.x - extraDistance;
         origin.y = centreOfSide.y - this.halfHeight();
         break;
@@ -567,7 +567,7 @@ class Rectangle {
       extraDistance = 0;
     }
     var centreReferenceSide = referenceDomRect.centreOfSide(referenceSide);
-    var oppositeSide = RectangleSide.sideOpposite(referenceSide);
+    var oppositeSide = Direction.sideOpposite(referenceSide);
     var origin = this.originToCentreSidePlus(oppositeSide, centreReferenceSide, -extraDistance);
     return origin;
   }
