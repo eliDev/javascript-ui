@@ -11,6 +11,8 @@ Direction.DOWN = Direction.BOTTOM;
 Direction.BELOW = Direction.BOTTOM;
 Direction.LEFT = 3;
 Direction.CENTRE = 4;
+Direction.HORIZONTAL = 5;
+Direction.VERTICAL = 6;
 
 
 Direction.isDown = function (direction) {
