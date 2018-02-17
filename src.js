@@ -330,16 +330,16 @@ Direction.toString = function (direction) {
   var s = "";
   switch (direction) {
     case Direction.UP:
-    s = 'up';
+    s = 'UP';
       break;
     case Direction.RIGHT:
-    s = 'right';
+    s = 'RIGHT';
       break;
     case Direction.DOWN:
-    s = 'down';
+    s = 'DOWN';
       break;
     case Direction.LEFT:
-    s = 'left';
+    s = 'LEFT';
       break;
     default:
       console.log("Direction.toString unhandled case: ", direction);
