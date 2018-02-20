@@ -99,6 +99,7 @@ class ElementProperties {
       switch(propertyName) {
         case 'scale':
         case 'scaleX':
+        case 'scaleY':
         case 'translateY':
         case 'translateX':
         case 'rotateX':

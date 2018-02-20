@@ -155,4 +155,21 @@ class TransformUtils {
       return val;
     }
 
+    static scaleForDirection(direction) {
+      var val;
+      switch (direction) {
+        case Direction.UP:
+        case Direction.DOWN:
+        val = 'scaleY';
+          break;
+        case Direction.LEFT:
+        case Direction.RIGHT:
+        val = 'scaleX';
+          break;
+        default:
+          console.log("TransformUtils.scaleForDirection unhandled case: ", direction);
+      }
+      return val;
+    }
+
 }
