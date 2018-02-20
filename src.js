@@ -779,6 +779,40 @@ class Rectangle {
     return this.getBottom();
   }
 
+  posForDirection(direction) {
+    var pos;
+    switch (direction) {
+      case Direction.UP:
+      case Direction.DOWN:
+      pos = this.y;
+        break;
+      case Direction.LEFT:
+      case Direction.RIGHT:
+      pos = this.x;
+        break;
+      default:
+        console.log("Rectangle.posForDirection unhandled case: ", direction);
+    }
+    return pos;
+  }
+
+  maxPosForDirection(direction) {
+    var pos;
+    switch (direction) {
+      case Direction.UP:
+      case Direction.DOWN:
+      pos = this.maxY();
+        break;
+      case Direction.LEFT:
+      case Direction.RIGHT:
+      pos = this.maxX();
+        break;
+      default:
+        console.log("Rectangle.maxPosForDirection unhandled case: ", direction);
+    }
+    return pos;
+  }
+
   getOrigin() {
     return new Point(this.x,this.y);
   }
@@ -944,6 +978,21 @@ class Rectangle {
 
   setSizeMinus(lessWidth, lessHeight, stickyCentre) {
     this.setSize(this.width - lessWidth, this.height - lessHeight, stickyCentre);
+  }
+
+  setSizeForDirection(size, direction) {
+    switch (direction) {
+      case Direction.UP:
+      case Direction.DOWN:
+      this.setHeight(size);
+        break;
+      case Direction.LEFT:
+      case Direction.RIGHT:
+      this.setWidth(size);
+        break;
+      default:
+        console.log("Rectangle.setSizeForDirection unhandled case: ", direction);
+    }
   }
 
   bounds() {
