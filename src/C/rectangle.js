@@ -423,6 +423,7 @@ class Rectangle {
   relativeFramesTo(otherFrame) {
     var position = {
         frame: Rectangle.copy(this),
+        isValid: false,
         topFrame: undefined,
         rightFrame: undefined,
         bottomFrame: undefined,
@@ -436,7 +437,7 @@ class Rectangle {
     if (!otherFrame.hasSize() || !this.hasSize()) {
       return position;
     }
-
+    position.isValid = true;
     var overlapRect = this.overlappingFrame(otherFrame);
     if (!overlapRect) {
         var relativeRect = Rectangle.copy(this);
