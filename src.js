@@ -1681,6 +1681,23 @@ class TransformUtils {
       return isTransform;
     }
 
+    static translationForDirection(direction) {
+      var val;
+      switch (direction) {
+        case Direction.UP:
+        case Direction.DOWN:
+        val = 'translateY';
+          break;
+        case Direction.LEFT:
+        case Direction.RIGHT:
+        val = 'translateX';
+          break;
+        default:
+          console.log("TransformUtils.translationForDirection unhandled case: ", direction);
+      }
+      return val;
+    }
+
 }﻿/*jshint esversion: 6 */
 /**
  * 
