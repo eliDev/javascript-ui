@@ -238,21 +238,8 @@ class Rectangle {
     return new Point(this.width, this.height);
   }
 
-  sizeForDirection(direction) {
-    var size;
-    switch (direction) {
-      case Direction.UP:
-      case Direction.DOWN:
-      size = this.height;
-        break;
-      case Direction.LEFT:
-      case Direction.RIGHT:
-      size = this.width;
-        break;
-      default:
-        console.log("Rectangle.sizeForDirection unhandled case: ", direction);
-    }
-    return size;
+  sizeToString() {
+    return "width: " + this.width + ", height: " + this.height;
   }
 
   /**
@@ -292,6 +279,23 @@ class Rectangle {
       default:
         console.log("Rectangle.setSizeForDirection unhandled case: ", direction);
     }
+  }
+
+  sizeForDirection(direction) {
+    var size;
+    switch (direction) {
+      case Direction.UP:
+      case Direction.DOWN:
+      size = this.height;
+        break;
+      case Direction.LEFT:
+      case Direction.RIGHT:
+      size = this.width;
+        break;
+      default:
+        console.log("Rectangle.sizeForDirection unhandled case: ", direction);
+    }
+    return size;
   }
 
   bounds() {
