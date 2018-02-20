@@ -701,6 +701,11 @@ class Point {
       }
     }
 
+    setPositionForSidePlus(val, direction) {
+      var addition = this.positionForSide(direction) + val;
+      this.setPositionForSide(addition, direction);
+    }
+
     positionForSide(direction) {
       var val;
       switch (direction) {
