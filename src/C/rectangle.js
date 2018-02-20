@@ -258,6 +258,10 @@ class Rectangle {
     }
   }
 
+  setZeroSize() {
+    this.setSize(0,0);
+  }
+
   setSizePlus(extraWidth, extraHeight, stickyCentre) {
     this.setSize(this.width + extraWidth, this.height + extraHeight, stickyCentre);
   }
