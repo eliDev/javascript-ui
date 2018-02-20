@@ -905,6 +905,23 @@ class Rectangle {
     return new Point(this.width, this.height);
   }
 
+  sizeForDirection(direction) {
+    var size;
+    switch (direction) {
+      case Direction.UP:
+      case Direction.DOWN:
+      size = this.height;
+        break;
+      case Direction.LEFT:
+      case Direction.RIGHT:
+      size = this.width;
+        break;
+      default:
+        console.log("Rectangle.sizeForDirection unhandled case: ", direction);
+    }
+    return size;
+  }
+
   /**
     @param {Number} 'width'
     @param {Number} 'height'
