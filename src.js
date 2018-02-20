@@ -275,6 +275,9 @@ Direction.isDown = function (direction) {
 Direction.isUp = function (direction) {
   return direction === Direction.UP;
 };
+Direction.isTop = function (direction) {
+  return Direction.isUp(direction);
+};
 Direction.isLeft = function (direction) {
   return direction === Direction.LEFT;
 };
