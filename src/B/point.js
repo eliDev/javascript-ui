@@ -120,4 +120,25 @@ class Point {
     .concat(this.y.toString())
     .concat("}"); 
   }
+
+   /** ========
+        Sides
+    =========== */
+
+    positionForSide(direction) {
+      var val;
+      switch (direction) {
+        case Direction.UP:
+        case Direction.DOWN:
+        val = this.y;
+          break;
+        case Direction.LEFT:
+        case Direction.RIGHT:
+        val = this.x;
+          break;
+        default:
+          console.log("Point.positionForSide unhandled case: ", direction);
+      }
+      return val;
+    }
 }
