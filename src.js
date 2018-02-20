@@ -686,6 +686,21 @@ class Point {
         Sides
     =========== */
 
+    setPositionForSide(val, direction) {
+      switch (direction) {
+        case Direction.UP:
+        case Direction.DOWN:
+        this.y = val;
+          break;
+        case Direction.LEFT:
+        case Direction.RIGHT:
+        this.x = val;
+          break;
+        default:
+          console.log("Point.setPositionForSide unhandled case: ", direction);
+      }
+    }
+
     positionForSide(direction) {
       var val;
       switch (direction) {
