@@ -428,6 +428,11 @@ class Rectangle {
             return originalFrame.boundsForFrame(positionFrame);
         }
     };
+
+    if (!otherFrame.hasSize() || !this.hasSize()) {
+      return position;
+    }
+
     var overlapRect = this.overlappingFrame(otherFrame);
     if (!overlapRect) {
         var relativeRect = Rectangle.copy(this);
