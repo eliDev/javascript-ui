@@ -1872,7 +1872,6 @@ class ElementPosition {
     var parentRect = parentElement.getBoundingClientRect();
     var elementRect = element.getBoundingClientRect();
     var frame = new Rectangle();
-
     frame.x = elementRect.left - parentRect.left;
     frame.y = elementRect.top - parentRect.top;
     frame.width = elementRect.width;
