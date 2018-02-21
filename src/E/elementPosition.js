@@ -36,7 +36,7 @@ class ElementPosition {
       if (!parentElement) {
         parentElement = elements[i].parentElement;
       }
-      var r = Rectangle.getFrameInParent(elements[i], parentElement);
+      var r = ElementPosition.getFrameInParent(elements[i], parentElement);
       rects.push(r);
     }
     return rects;
