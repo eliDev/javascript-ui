@@ -1847,7 +1847,7 @@ class ElementPosition {
   * @return {link Rectangle} 
   */
  static getFrame(element) {
-   return ElementPosition/getFrameInParent(element);
+   return ElementPosition.getFrameInParent(element);
   }
 
   static getFramesInParent(elements, parentElement) {
