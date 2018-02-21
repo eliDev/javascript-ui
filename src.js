@@ -1839,24 +1839,37 @@ class ElementPosition {
     return rects;
 }
 
-  /**
-   * Returns the element's coordinates in its 
-   * parent element.
-  
-      Note: if the given element has no parent, then
-      frame will equal the boundingClientRect.
-   *
-   * @param {HTML Element} 'element' element in DOM
-   * @return {link Rectangle} 
+ /**
+  * Returns the element's coordinates in its parent element.
+  * Note: if the given element has no parent, then
+  * frame will equal the boundingClientRect.
+  * @param {HTML Element} 'element' element in DOM
+  * @return {link Rectangle} 
   */
  static getFrame(element) {
-    if (!Boolean(element)) {
+   return ElementPosition/getFrameInParent(element);
+  }
+
+  static getFramesInParent(elements, parentElement) {
+    var rects = [];
+    for (var i = 0; i < elements.length; i ++) {
+      if (!parentElement) {
+        parentElement = elements[i].parentElement;
+      }
+      var r = Rectangle.getFrameInParent(elements[i], parentElement);
+      rects.push(r);
+    }
+    return rects;
+  }
+
+  static getFrameInParent(element, parentElement) {
+    if (!element) {
       return undefined;
     }
-
-    var parent = element.parentElement;
-    var parentRect = parent.getBoundingClientRect();
-
+    if (!parentElement) {
+      parentElement = element.parentElement;
+    }
+    var parentRect = parentElement.getBoundingClientRect();
     var elementRect = element.getBoundingClientRect();
     var frame = new Rectangle();
 
@@ -1865,8 +1878,8 @@ class ElementPosition {
     frame.width = elementRect.width;
     frame.height = elementRect.height;
     // Discount any scrolling in parent.
-    frame.y += parent.scrollTop;
-    frame.x += parent.scrollLeft;
+    frame.y += parentElement.scrollTop;
+    frame.x += parentElement.scrollLeft;
     return frame;
   }
 
