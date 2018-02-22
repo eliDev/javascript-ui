@@ -61,9 +61,9 @@ class Rectangle {
               (otherRect.width === this.width && otherRect.height === this.height));
     }
 
-  /** =========
+  /** ==========
         Points
-    ============*/
+    ============ */
 
   setXY(x, y) {
     this.x = x;
@@ -171,6 +171,21 @@ class Rectangle {
   moveBy(point) {
     this.x = this.x + point.x;
     this.y = this.y + point.y;
+  }
+
+  moveInDirection(distance, direction) {
+    switch (direction) {
+      case Direction.UP:
+      case Direction.DOWN:
+      this.y = this.y + distance;
+        break;
+      case Direction.LEFT:
+      case Direction.RIGHT:
+      this.x = this.x + distance;
+        break;
+      default:
+        console.log("Rectangle.moveInDirection unhandled case: ", direction);
+    }
   }
 
   /** =============
