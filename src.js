@@ -897,7 +897,7 @@ class Rectangle {
     this.y = this.y + point.y;
   }
 
-  moveInDirection(distance, direction) {
+  moveInDirection(direction, distance) {
     switch (direction) {
       case Direction.UP:
       case Direction.DOWN:
