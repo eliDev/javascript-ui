@@ -395,6 +395,22 @@ class Rectangle {
       return this.containsPoint(point);
   }
 
+    /** ================
+        Relationships
+    =================== */
+
+  frameWithin(parentRect, parentScrollOffset) {
+    var frame = this.copy();
+    frame.x -= parentRect.x;
+    frame.y -= parentRect.y;
+    // Discount any scrolling in parent.
+    if (parentScrollOffset) {
+      frame.y += parentScrollOffset.y;
+      frame.x += parentScrollOffset.x;
+    }
+    return frame;
+  }
+
   overlaps(otherRect, outRect) {
       var overlappingRect = this.overlappingFrame(otherRect);
       if (overlappingRect.equals(RectZero())) {
