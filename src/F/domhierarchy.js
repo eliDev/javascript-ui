@@ -11,6 +11,11 @@ class DOMHierarchy {
         return HTMLElements;
     }
 
+    static children(element) {
+        var HTMLElements = element.children;
+        return Array.from(HTMLElements);
+    }
+
     /**
      Differs from .children by returning an array instead
      of an HTMLCollection.
