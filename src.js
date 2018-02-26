@@ -575,6 +575,10 @@ class Point {
     this.y = y;
   }
 
+  static fromPoint(point) {
+    return new Point(point.x, point.y);
+  }
+
   static zero() {
     return new Point(0,0);
   }
@@ -591,11 +595,12 @@ class Point {
     return new Point(point.x, point.y);
   }
 
-  equals(otherPoint) {
-    if (!otherPoint) {
-      return false;
-    }
-    return this.x === otherPoint.x && this.y === otherPoint.y;
+  /** ================
+     Add
+  =================== */
+
+  plusX(xPlus) {
+    this.x += xPlus;
   }
 
   static copyPlusX(point, x) {
@@ -610,8 +615,71 @@ class Point {
     return p;
   }
 
-  plusX(xPlus) {
-    this.x += xPlus;
+  copyPlus(point) {
+    var p = Point.add(this, point);
+    return p;
+  }
+
+  static add(point1, point2) {
+    var point = Point.fromPoint(point1);
+    point.add(point2);
+    return point;
+  }
+
+  add(point) {
+    this.x += point.x;
+    this.y += point.y;
+  }
+
+
+  /** ================
+     Subtract
+  =================== */
+
+  copySubtractX(x){
+    var p = this.copy();
+    p.subtractX(x);
+    return p;
+  }
+
+  subtractX(x) {
+    this.x -= x;
+  }
+
+  copySubtractY(y){
+    var p = this.copy();
+    p.subtractY(y);
+    return p;
+  }
+
+  subtractY(y) {
+    this.y -= y;
+  }
+
+  copySubtract(point) {
+    return Point.subtract(this, point);
+  }
+
+  static subtract(point1, point2) {
+    var point = Point.fromPoint(point1);
+    point.subtract(point2);
+    return point;
+  }
+
+  subtract(point){
+    this.x -= point.x;
+    this.y -= point.y;
+  }
+
+   /** ================
+      Compare
+  =================== */
+
+  equals(otherPoint) {
+    if (!otherPoint) {
+      return false;
+    }
+    return this.x === otherPoint.x && this.y === otherPoint.y;
   }
  
   static min(p1, p2) {
@@ -628,29 +696,7 @@ class Point {
     return p;
   }
 
-  subtract(point) {
-    var p = Point.subtract(this, point);
-    return p;
-  }
 
- static subtract(point1, point2) {
-    var point = new Point();
-    point.x = point1.x - point2.x;
-    point.y = point1.y - point2.y;
-    return point;
-  }
-
-  add(point) {
-    var p = Point.add(this, point);
-    return p;
-  }
-
-  static add(point1, point2) {
-    var point = new Point();
-    point.x = point1.x + point2.x;
-    point.y = point1.y + point2.y;
-    return point;
-  }
     
  static distanceBetweenPoints(startPoint, endPoint) {
     var xDiff = endPoint.x - startPoint.x;
