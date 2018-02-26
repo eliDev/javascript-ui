@@ -1119,6 +1119,22 @@ class Rectangle {
       return this.containsPoint(point);
   }
 
+    /** ================
+        Relationships
+    =================== */
+
+  frameWithin(parentRect, parentScrollOffset) {
+    var frame = this.copy();
+    frame.x -= parentRect.x;
+    frame.y -= parentRect.y;
+    // Discount any scrolling in parent.
+    if (parentScrollOffset) {
+      frame.y += parentScrollOffset.y;
+      frame.x += parentScrollOffset.x;
+    }
+    return frame;
+  }
+
   overlaps(otherRect, outRect) {
       var overlappingRect = this.overlappingFrame(otherRect);
       if (overlappingRect.equals(RectZero())) {
@@ -1841,9 +1857,24 @@ class ElementPosition {
 
   constructor() { }
 
-  /** ==============
+  /** ===========
+     scrolling
+  =============== */
+
+  static scrollOffset(element) {
+    return new Point(element.scrollLeft, element.scrollTop);
+  }
+
+  /** =========
      Frame
-  ===============*/
+  ============= */
+
+  static position(element) {
+    return {
+      viewportFrame: Rectangle.fromDOMRect(element.getBoundingClientRect()),
+      scrollOffset: ElementPosition.scrollOffset(element)
+    };
+  }
 
   static viewportFrames(elements) {
     var rects = [];
@@ -1865,18 +1896,6 @@ class ElementPosition {
    return ElementPosition.getFrameInParent(element);
   }
 
-  static getFramesInParent(elements, parentElement) {
-    var rects = [];
-    for (var i = 0; i < elements.length; i ++) {
-      if (!parentElement) {
-        parentElement = elements[i].parentElement;
-      }
-      var r = ElementPosition.getFrameInParent(elements[i], parentElement);
-      rects.push(r);
-    }
-    return rects;
-  }
-
   static getFrameInParent(element, parentElement) {
     if (!element) {
       return undefined;
@@ -1884,17 +1903,42 @@ class ElementPosition {
     if (!parentElement) {
       parentElement = element.parentElement;
     }
-    var parentRect = parentElement.getBoundingClientRect();
-    var elementRect = element.getBoundingClientRect();
-    var frame = new Rectangle();
-    frame.x = elementRect.left - parentRect.left;
-    frame.y = elementRect.top - parentRect.top;
-    frame.width = elementRect.width;
-    frame.height = elementRect.height;
-    // Discount any scrolling in parent.
-    frame.y += parentElement.scrollTop;
-    frame.x += parentElement.scrollLeft;
+
+    var parentPosition = ElementPosition.position(parentElement);
+    var elementRect = Rectangle.fromDOMRect(element.getBoundingClientRect());
+    var frame = elementRect.frameWithin(parentPosition.viewportFrame, parentPosition.scrollOffset);
+
+
+    // var frame = new Rectangle();
+    // frame.x = elementRect.left - parentRect.left;
+    // frame.y = elementRect.top - parentRect.top;
+    // frame.width = elementRect.width;
+    // frame.height = elementRect.height;
+    // // Discount any scrolling in parent.
+    // frame.y += parentElement.scrollTop;
+    // frame.x += parentElement.scrollLeft;
     return frame;
+  }
+
+  static getFramesInParent(elements, parentElement) {
+    var parentRect;
+    var parentOffset;
+    if (parentElement) {
+      parentRect = Rectangle.fromDOMRect(parentElement.getBoundingClientRect());
+      parentOffset = ElementPosition.scrollOffset(parentElement);
+    }
+    var rects = [];
+    for (var i = 0; i < elements.length; i ++) {
+      if (!parentElement) {
+        parentElement = elements[i].parentElement;
+        parentRect = Rectangle.fromDOMRect(parentElement.getBoundingClientRect());
+        parentOffset = ElementPosition.scrollOffset(parentElement);
+      }
+      var elementRect = Rectangle.fromDOMRect(elements[i].getBoundingClientRect());
+      var frame = elementRect.frameWithin(parentRect, scrollOffset);
+      rects.push(frame);
+    }
+    return rects;
   }
 
   static getFrameOfContent(element) {

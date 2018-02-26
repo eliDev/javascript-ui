@@ -14,9 +14,9 @@ class ElementPosition {
     return new Point(element.scrollLeft, element.scrollTop);
   }
 
-  /** ==============
+  /** =========
      Frame
-  ===============*/
+  ============= */
 
   static position(element) {
     return {
