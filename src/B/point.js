@@ -38,23 +38,23 @@ class Point {
      Add
   =================== */
 
-  plusX(xPlus) {
-    this.x += xPlus;
+  addX(x) {
+    this.x += x;
   }
 
-  static copyPlusX(point, x) {
+  static addXCopy(point, x) {
     var p = Point.copy(point);
-    p.plusX(x);
+    p.addX(x);
     return p;
   }
 
-  static copyPlusY(point, y) {
+  static addYCopy(point, y) {
     var p = Point.copy(point);
     p.y += y;
     return p;
   }
 
-  copyPlus(point) {
+  addCopy(point) {
     var p = Point.add(this, point);
     return p;
   }
@@ -75,7 +75,7 @@ class Point {
      Subtract
   =================== */
 
-  copySubtractX(x){
+  subtractXCopy(x){
     var p = this.copy();
     p.subtractX(x);
     return p;
@@ -85,7 +85,7 @@ class Point {
     this.x -= x;
   }
 
-  copySubtractY(y){
+  subtractYCopy(y){
     var p = this.copy();
     p.subtractY(y);
     return p;
@@ -95,7 +95,7 @@ class Point {
     this.y -= y;
   }
 
-  copySubtract(point) {
+  subtractCopy(point) {
     return Point.subtract(this, point);
   }
 
