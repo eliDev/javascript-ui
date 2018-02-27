@@ -174,6 +174,9 @@ class Rectangle {
   }
 
   moveInDirection(direction, distance) {
+    if (distance === undefined) {
+      return;
+    }
     switch (direction) {
       case Direction.UP:
       case Direction.DOWN:
