@@ -22,7 +22,7 @@ class ClickManager {
 
     onBodyClick(event) {
         // console.log('clicked: ', event);
-        var element = e.target || e.srcElement;
+        var element = event.target || event.srcElement;
         this._handleIdClick(element, event);
         if (!this._handleClassClick(element, event)){
             event.preventDefault();
