@@ -21,7 +21,7 @@ class ClickManager {
     }
 
     onBodyClick(event) {
-        console.log('clicked: ', event);
+        // console.log('clicked: ', event);
         var element = event.srcElement;
         this._handleIdClick(element, event);
         if (!this._handleClassClick(element, event)){
