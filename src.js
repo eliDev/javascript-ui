@@ -1933,8 +1933,8 @@ class CanvasUtils {
   //   context.stroke();
   // }
 
-  static drawRect(rect) {
-    var context = CanvasUtils.getContext();
+  static drawRect(canvas, rect) {
+    var context = CanvasUtils.getContext(canvas);
     context.beginPath();
     context.rect(rect.x, rect.y, rect.width, rect.height);
     context.stroke();
@@ -1947,8 +1947,8 @@ class CanvasUtils {
     context.fillRect(rect.x, rect.y, rect.width, rect.height);
   }
 
-  static drawLine(startPoint, endPoint) {
-    var context = CanvasUtils.getContext();
+  static drawLine(canvas, startPoint, endPoint) {
+    var context = CanvasUtils.getContext(canvas);
     context.beginPath();
     context.moveTo(startPoint.x, startPoint.y);
     context.lineTo(endPoint.x, endPoint.y);
