@@ -27,7 +27,7 @@ VBL = {
     ElementPosition: ElementPosition,
     ElementFactory: ElementFactory,
     CanvasUtils: CanvasUtils,
-    DomHeirarchy: DomHeirarchy
+    DomHierarchy: DomHierarchy
 };
 
 
