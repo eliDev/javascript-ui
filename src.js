@@ -1,125 +1,4 @@
-﻿// <reference path="StringUtils.js" />
-StringUtils = {};
-
-
 /**
-  @param {String} 'string' text to be measured
-  @param {String} 'font' The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana")
-  @return {Rectangle} frame of string (x,y are zero)
-
-  http://www.html5canvastutorials.com/tutorials/html5-canvas-text-metrics/
-*/
-StringUtils.measureStringWidth = function (string, font) {
-
-  if (!Boolean(this.canvas)) {
-    var canvas = document.createElement('canvas');
-    var docFragment = document.createDocumentFragment();
-    docFragment.appendChild(canvas);
-    this.canvas = canvas;
-  }
-
-  var context = this.canvas.getContext("2d");
-  context.font = font;
-  var width = context.measureText(string).width;
-  return width;
-};
-
-/**
-  @param {String} 'pixelString' Expected in the form "...###px"
-  Expect 'px' to be preceeded by a numeric value.
-*/
-//StringUtils.parsePixelNumber = function (pixelString) {
-
-//  var pixelIndex = pixelString.indexOf('px');
-//  if (pixelIndex < 0) {
-//    return null;
-//  }
-
-//  var charIndex;
-//  var character;
-//  var parsedString = "";
-//  var number;
-
-//  for (charIndex = pixelIndex - 1; charIndex >= 0; charIndex--) {
-
-//    character = pixelString.charAt(charIndex);
-//    if (Number.isInteger(character) || character === '.') {
-//      parsedString = character + parsedString;
-//    }
-//    else {
-//      break;
-//    }
-//  }
-//  number = parseInt(parsedString);
-//  return number;
-//};
-
-/**
-   * Determines if the given 'string' has at
-   * least one non-whitespace character.
-   */
-StringUtils.hasText = function (stringInput) {
-
-  var _hasText = false;
-  if (null !== stringInput && typeof stringInput === 'string' && stringInput.length > 0) {
-
-    // Whitespace characters which are
-    // not considering 'text'.
-    var SPACE_CODE = 32;
-    var NON_BREAKING_SPACE_CODE = 160;
-    var TAB_CODE = 9;
-
-    // Looping through each character is more effecient than
-    // performing a regex validation.
-    for (var charIndex = 0; charIndex < stringInput.length; charIndex++) {
-
-      var charCode = stringInput.charCodeAt(charIndex);
-      switch (charCode) {
-
-        // Whitespace character codes.
-        // These characters are ignored.
-        case SPACE_CODE:
-        case NON_BREAKING_SPACE_CODE:
-        case TAB_CODE:
-          break;
-
-        default:
-          _hasText = true;
-      }
-
-      if (_hasText) {
-        break;
-      }
-    }
-  }
-  return _hasText;
-};
-
-/**
-http://stackoverflow.com/questions/17888039/javascript-efficient-parsing-of-css-selector
-*/
-StringUtils.parseSelectors = function (selectorString) {
-
-  var obj = {tags:[], classes:[], ids:[], attrs:[]};
-  selectorString.split(/(?=\.)|(?=#)|(?=\[)/).forEach(function (token) {
-
-    switch (token[0]) {
-      case '#':
-        obj.ids.push(token.slice(1));
-        break;
-      case '.':
-        obj.classes.push(token.slice(1));
-        break;
-      case '[':
-        obj.attrs.push(token.slice(1,-1).split('='));
-        break;
-      default :
-        obj.tags.push(token);
-        break;
-    }
-  });
-  return obj;
-}/**
  * 
  */
 class ClickManager {
@@ -405,6 +284,127 @@ class MathUtils {
     return roundedValue;
   }
 
+}﻿// <reference path="StringUtils.js" />
+StringUtils = {};
+
+
+/**
+  @param {String} 'string' text to be measured
+  @param {String} 'font' The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana")
+  @return {Rectangle} frame of string (x,y are zero)
+
+  http://www.html5canvastutorials.com/tutorials/html5-canvas-text-metrics/
+*/
+StringUtils.measureStringWidth = function (string, font) {
+
+  if (!Boolean(this.canvas)) {
+    var canvas = document.createElement('canvas');
+    var docFragment = document.createDocumentFragment();
+    docFragment.appendChild(canvas);
+    this.canvas = canvas;
+  }
+
+  var context = this.canvas.getContext("2d");
+  context.font = font;
+  var width = context.measureText(string).width;
+  return width;
+};
+
+/**
+  @param {String} 'pixelString' Expected in the form "...###px"
+  Expect 'px' to be preceeded by a numeric value.
+*/
+//StringUtils.parsePixelNumber = function (pixelString) {
+
+//  var pixelIndex = pixelString.indexOf('px');
+//  if (pixelIndex < 0) {
+//    return null;
+//  }
+
+//  var charIndex;
+//  var character;
+//  var parsedString = "";
+//  var number;
+
+//  for (charIndex = pixelIndex - 1; charIndex >= 0; charIndex--) {
+
+//    character = pixelString.charAt(charIndex);
+//    if (Number.isInteger(character) || character === '.') {
+//      parsedString = character + parsedString;
+//    }
+//    else {
+//      break;
+//    }
+//  }
+//  number = parseInt(parsedString);
+//  return number;
+//};
+
+/**
+   * Determines if the given 'string' has at
+   * least one non-whitespace character.
+   */
+StringUtils.hasText = function (stringInput) {
+
+  var _hasText = false;
+  if (null !== stringInput && typeof stringInput === 'string' && stringInput.length > 0) {
+
+    // Whitespace characters which are
+    // not considering 'text'.
+    var SPACE_CODE = 32;
+    var NON_BREAKING_SPACE_CODE = 160;
+    var TAB_CODE = 9;
+
+    // Looping through each character is more effecient than
+    // performing a regex validation.
+    for (var charIndex = 0; charIndex < stringInput.length; charIndex++) {
+
+      var charCode = stringInput.charCodeAt(charIndex);
+      switch (charCode) {
+
+        // Whitespace character codes.
+        // These characters are ignored.
+        case SPACE_CODE:
+        case NON_BREAKING_SPACE_CODE:
+        case TAB_CODE:
+          break;
+
+        default:
+          _hasText = true;
+      }
+
+      if (_hasText) {
+        break;
+      }
+    }
+  }
+  return _hasText;
+};
+
+/**
+http://stackoverflow.com/questions/17888039/javascript-efficient-parsing-of-css-selector
+*/
+StringUtils.parseSelectors = function (selectorString) {
+
+  var obj = {tags:[], classes:[], ids:[], attrs:[]};
+  selectorString.split(/(?=\.)|(?=#)|(?=\[)/).forEach(function (token) {
+
+    switch (token[0]) {
+      case '#':
+        obj.ids.push(token.slice(1));
+        break;
+      case '.':
+        obj.classes.push(token.slice(1));
+        break;
+      case '[':
+        obj.attrs.push(token.slice(1,-1).split('='));
+        break;
+      default :
+        obj.tags.push(token);
+        break;
+    }
+  });
+  return obj;
 }/*jshint esversion: 6 */
 /**
  * 
@@ -1864,6 +1864,106 @@ class TransformUtils {
       return val;
     }
 
+}/*exported CanvasUtils */
+class CanvasUtils {
+  
+  static getContext(canvas) {
+    return canvas.getContext("2d");
+  }
+  
+    /* ============
+        Circle
+    ============== */ 
+    
+  static drawCircleInRect(canvas, rectangle) {
+  
+    // var START_ANGLE = 0;
+    // var END_ANGLE = 2 * Math.PI;
+    // var context = CanvasUtils.getContext(canvas);
+    // var center = rectangle.getCentre();
+    // var radius = Math.min(rectangle.halfWidth(), rectangle.halfHeight());
+    context.beginPath();
+    applyCircle(canvas, rectangle);
+    // context.arc(center.x, center.y, radius, START_ANGLE, END_ANGLE);
+    context.stroke();
+  }
+  
+  static drawCircle(canvas, centrePoint, radius) {
+    var START_ANGLE = 0;
+    var END_ANGLE = 2 * Math.PI;
+    var context = CanvasUtils.getContext(canvas);
+    context.beginPath();
+    context.arc(centrePoint.x, centrePoint.y, radius, START_ANGLE, END_ANGLE);
+    context.stroke();
+  }
+  
+  static applyCircle(canvas, rectangle){
+    var START_ANGLE = 0;
+    var END_ANGLE = 2 * Math.PI;
+    var radius = Math.min(rectangle.halfWidth(), rectangle.halfHeight());
+    var center = rectangle.getCentre();
+    var context = CanvasUtils.getContext(canvas);
+    context.arc(center.x, center.y, radius, START_ANGLE, END_ANGLE);
+  }
+  
+  static fillCircle(canvas, rect, colourString) {
+    var context = CanvasUtils.getContext(canvas);
+    context.fillStyle = colourString;
+    CanvasUtils.applyCircle(canvas, rect);
+    context.fill();
+  }
+  
+  
+  static clearCircle(canvas, rect) {
+    var context = CanvasUtils.getContext(canvas);
+    context.clearRect(rect.x, rect.y, rect.width, rect.height);
+  }
+  
+  
+  /* ================
+        Rectangle
+  =================== */ 
+
+  // function drawRectWithCentre(context, centrePoint, width, height) {
+
+  //   var x = centrePoint.x - (width / 2);
+  //   var y = centrePoint.y - (height / 2);
+  //   context.beginPath();
+  //   context.rect(x, y, width, height);
+  //   context.stroke();
+  // }
+
+  static drawRect(rect) {
+    var context = CanvasUtils.getContext();
+    context.beginPath();
+    context.rect(rect.x, rect.y, rect.width, rect.height);
+    context.stroke();
+  }
+
+  static fillRect(canvas, rect, colourString) {
+    
+    var context = CanvasUtils.getContext(canvas);
+    context.fillStyle = colourString;
+    context.fillRect(rect.x, rect.y, rect.width, rect.height);
+  }
+
+  static drawLine(startPoint, endPoint) {
+    var context = CanvasUtils.getContext();
+    context.beginPath();
+    context.moveTo(startPoint.x, startPoint.y);
+    context.lineTo(endPoint.x, endPoint.y);
+    context.stroke();
+  }
+
+  static clearCanvas(canvas) {
+    clearCanvasRect(canvas, RectBoundsFromElement(canvas));
+  }
+
+  static clearCanvasRect(canvas, rect) {
+    var context = CanvasUtils.getContext(canvas);
+    context.clearRect(rect.x, rect.y, rect.width, rect.height);
+  }
+  
 }﻿/*jshint esversion: 6 */
 /**
  * 
@@ -3338,7 +3438,8 @@ VBL = {
     CSSUtils: CSSUtils,
     TransformUtils: TransformUtils,
     ElementPosition: ElementPosition,
-    ElementFactory: ElementFactory
+    ElementFactory: ElementFactory,
+    CanvasUtils: CanvasUtils
 };
 
 

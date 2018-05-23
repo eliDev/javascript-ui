@@ -25,7 +25,8 @@ VBL = {
     CSSUtils: CSSUtils,
     TransformUtils: TransformUtils,
     ElementPosition: ElementPosition,
-    ElementFactory: ElementFactory
+    ElementFactory: ElementFactory,
+    CanvasUtils: CanvasUtils
 };
 
 
