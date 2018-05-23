@@ -26,6 +26,7 @@ VBL = {
     TransformUtils: TransformUtils,
     ElementPosition: ElementPosition,
     ElementFactory: ElementFactory,
+    ElementProperties: ElementProperties,
     CanvasUtils: CanvasUtils,
     DomHierarchy: DOMHierarchy
 };
