@@ -1889,7 +1889,7 @@ class CanvasUtils {
   }
   
   static drawCircle(canvas, centrePoint, radius) {
-    var START_ANGLE = 0;
+    var START_ANGLE = 0; 
     var END_ANGLE = 2 * Math.PI;
     var context = CanvasUtils.getContext(canvas);
     context.beginPath();
@@ -3439,7 +3439,8 @@ VBL = {
     TransformUtils: TransformUtils,
     ElementPosition: ElementPosition,
     ElementFactory: ElementFactory,
-    CanvasUtils: CanvasUtils
+    CanvasUtils: CanvasUtils,
+    DomHeirarchy: DomHeirarchy
 };
 
 
