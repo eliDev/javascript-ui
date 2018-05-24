@@ -9,7 +9,7 @@ class ElementGeometry {
     if (!element) {
       return undefined;
     }
-    parentElement = element.parentElement;
+    var parentElement = element.parentElement;
     var parentPosition = ElementPosition.position(parentElement);
     var elementRect = Rectangle.fromDOMRect(element.getBoundingClientRect());
     var frame = elementRect.frameWithin(parentPosition.viewportFrame, parentPosition.scrollOffset);
