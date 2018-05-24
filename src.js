@@ -1956,7 +1956,7 @@ class CanvasUtils {
   }
 
   static clearCanvas(canvas) {
-    clearCanvasRect(canvas, RectBoundsFromElement(canvas));
+    CanvasUtils.clearCanvasRect(canvas, RectBoundsFromElement(canvas));
   }
 
   static clearCanvasRect(canvas, rect) {
