@@ -1864,106 +1864,6 @@ class TransformUtils {
       return val;
     }
 
-}/*exported CanvasUtils */
-class CanvasUtils {
-  
-  static getContext(canvas) {
-    return canvas.getContext("2d");
-  }
-  
-    /* ============
-        Circle
-    ============== */ 
-    
-  static drawCircleInRect(canvas, rectangle) {
-  
-    // var START_ANGLE = 0;
-    // var END_ANGLE = 2 * Math.PI;
-    // var context = CanvasUtils.getContext(canvas);
-    // var center = rectangle.getCentre();
-    // var radius = Math.min(rectangle.halfWidth(), rectangle.halfHeight());
-    context.beginPath();
-    applyCircle(canvas, rectangle);
-    // context.arc(center.x, center.y, radius, START_ANGLE, END_ANGLE);
-    context.stroke();
-  }
-  
-  static drawCircle(canvas, centrePoint, radius) {
-    var START_ANGLE = 0; 
-    var END_ANGLE = 2 * Math.PI;
-    var context = CanvasUtils.getContext(canvas);
-    context.beginPath();
-    context.arc(centrePoint.x, centrePoint.y, radius, START_ANGLE, END_ANGLE);
-    context.stroke();
-  }
-  
-  static applyCircle(canvas, rectangle){
-    var START_ANGLE = 0;
-    var END_ANGLE = 2 * Math.PI;
-    var radius = Math.min(rectangle.halfWidth(), rectangle.halfHeight());
-    var center = rectangle.getCentre();
-    var context = CanvasUtils.getContext(canvas);
-    context.arc(center.x, center.y, radius, START_ANGLE, END_ANGLE);
-  }
-  
-  static fillCircle(canvas, rect, colourString) {
-    var context = CanvasUtils.getContext(canvas);
-    context.fillStyle = colourString;
-    CanvasUtils.applyCircle(canvas, rect);
-    context.fill();
-  }
-  
-  
-  static clearCircle(canvas, rect) {
-    var context = CanvasUtils.getContext(canvas);
-    context.clearRect(rect.x, rect.y, rect.width, rect.height);
-  }
-  
-  
-  /* ================
-        Rectangle
-  =================== */ 
-
-  // function drawRectWithCentre(context, centrePoint, width, height) {
-
-  //   var x = centrePoint.x - (width / 2);
-  //   var y = centrePoint.y - (height / 2);
-  //   context.beginPath();
-  //   context.rect(x, y, width, height);
-  //   context.stroke();
-  // }
-
-  static drawRect(canvas, rect) {
-    var context = CanvasUtils.getContext(canvas);
-    context.beginPath();
-    context.rect(rect.x, rect.y, rect.width, rect.height);
-    context.stroke();
-  }
-
-  static fillRect(canvas, rect, colourString) {
-    
-    var context = CanvasUtils.getContext(canvas);
-    context.fillStyle = colourString;
-    context.fillRect(rect.x, rect.y, rect.width, rect.height);
-  }
-
-  static drawLine(canvas, startPoint, endPoint) {
-    var context = CanvasUtils.getContext(canvas);
-    context.beginPath();
-    context.moveTo(startPoint.x, startPoint.y);
-    context.lineTo(endPoint.x, endPoint.y);
-    context.stroke();
-  }
-
-  static clearCanvas(canvas) {
-    CanvasUtils.clearCanvasRect(canvas, RectBoundsFromElement(canvas));
-  }
-
-  static clearCanvasRect(canvas, rect) {
-    var context = CanvasUtils.getContext(canvas);
-    context.clearRect(rect.x, rect.y, rect.width, rect.height);
-  }
-  
 }﻿/*jshint esversion: 6 */
 /**
  * 
@@ -2971,6 +2871,131 @@ class DOMHierarchy {
         return null;
     }
 
+}/**
+ * Implement common shape, position, and layout properties.
+ * This extracts the language/engine specific syntax and passes
+ * calculation on the a common library. 
+ */
+class ElementGeometry {
+
+  static frame(element){
+    if (!element) {
+      return undefined;
+    }
+    parentElement = element.parentElement;
+    var parentPosition = ElementPosition.position(parentElement);
+    var elementRect = Rectangle.fromDOMRect(element.getBoundingClientRect());
+    var frame = elementRect.frameWithin(parentPosition.viewportFrame, parentPosition.scrollOffset);
+    return frame;
+  }
+
+  static bounds(element) {
+    var frame = ElementGeometry.frame(element);
+    if (!frame) {
+      return undefined;
+    }
+    frame.setOrigin(Point.zero());
+    return frame;
+  }
+}/*exported CanvasUtils */
+class CanvasUtils {
+  
+  static getContext(canvas) {
+    return canvas.getContext("2d");
+  }
+  
+    /* ============
+        Circle
+    ============== */ 
+    
+  static drawCircleInRect(canvas, rectangle) {
+  
+    // var START_ANGLE = 0;
+    // var END_ANGLE = 2 * Math.PI;
+    // var context = CanvasUtils.getContext(canvas);
+    // var center = rectangle.getCentre();
+    // var radius = Math.min(rectangle.halfWidth(), rectangle.halfHeight());
+    context.beginPath();
+    applyCircle(canvas, rectangle);
+    // context.arc(center.x, center.y, radius, START_ANGLE, END_ANGLE);
+    context.stroke();
+  }
+  
+  static drawCircle(canvas, centrePoint, radius) {
+    var START_ANGLE = 0; 
+    var END_ANGLE = 2 * Math.PI;
+    var context = CanvasUtils.getContext(canvas);
+    context.beginPath();
+    context.arc(centrePoint.x, centrePoint.y, radius, START_ANGLE, END_ANGLE);
+    context.stroke();
+  }
+  
+  static applyCircle(canvas, rectangle){
+    var START_ANGLE = 0;
+    var END_ANGLE = 2 * Math.PI;
+    var radius = Math.min(rectangle.halfWidth(), rectangle.halfHeight());
+    var center = rectangle.getCentre();
+    var context = CanvasUtils.getContext(canvas);
+    context.arc(center.x, center.y, radius, START_ANGLE, END_ANGLE);
+  }
+  
+  static fillCircle(canvas, rect, colourString) {
+    var context = CanvasUtils.getContext(canvas);
+    context.fillStyle = colourString;
+    CanvasUtils.applyCircle(canvas, rect);
+    context.fill();
+  }
+  
+  
+  static clearCircle(canvas, rect) {
+    var context = CanvasUtils.getContext(canvas);
+    context.clearRect(rect.x, rect.y, rect.width, rect.height);
+  }
+  
+  
+  /* ================
+        Rectangle
+  =================== */ 
+
+  // function drawRectWithCentre(context, centrePoint, width, height) {
+
+  //   var x = centrePoint.x - (width / 2);
+  //   var y = centrePoint.y - (height / 2);
+  //   context.beginPath();
+  //   context.rect(x, y, width, height);
+  //   context.stroke();
+  // }
+
+  static drawRect(canvas, rect) {
+    var context = CanvasUtils.getContext(canvas);
+    context.beginPath();
+    context.rect(rect.x, rect.y, rect.width, rect.height);
+    context.stroke();
+  }
+
+  static fillRect(canvas, rect, colourString) {
+    var context = CanvasUtils.getContext(canvas);
+    context.fillStyle = colourString;
+    context.fillRect(rect.x, rect.y, rect.width, rect.height);
+  }
+
+  static drawLine(canvas, startPoint, endPoint) {
+    var context = CanvasUtils.getContext(canvas);
+    context.beginPath();
+    context.moveTo(startPoint.x, startPoint.y);
+    context.lineTo(endPoint.x, endPoint.y);
+    context.stroke();
+  }
+
+  static clearCanvas(canvas) {
+    CanvasUtils.clearCanvasRect(canvas, ElementGeometry.bounds(canvas));
+  }
+
+  static clearCanvasRect(canvas, rect) {
+    var context = CanvasUtils.getContext(canvas);
+    context.clearRect(rect.x, rect.y, rect.width, rect.height);
+  }
+  
 }
 /*jshint esversion: 6 */
 /**
@@ -3437,6 +3462,7 @@ VBL = {
     Rectangle: Rectangle,
     CSSUtils: CSSUtils,
     TransformUtils: TransformUtils,
+    ElementGeometry: ElementGeometry,
     ElementPosition: ElementPosition,
     ElementFactory: ElementFactory,
     ElementProperties: ElementProperties,

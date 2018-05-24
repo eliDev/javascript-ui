@@ -24,6 +24,7 @@ VBL = {
     Rectangle: Rectangle,
     CSSUtils: CSSUtils,
     TransformUtils: TransformUtils,
+    ElementGeometry: ElementGeometry,
     ElementPosition: ElementPosition,
     ElementFactory: ElementFactory,
     ElementProperties: ElementProperties,

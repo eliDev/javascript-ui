@@ -75,7 +75,6 @@ class CanvasUtils {
   }
 
   static fillRect(canvas, rect, colourString) {
-    
     var context = CanvasUtils.getContext(canvas);
     context.fillStyle = colourString;
     context.fillRect(rect.x, rect.y, rect.width, rect.height);
@@ -90,7 +89,7 @@ class CanvasUtils {
   }
 
   static clearCanvas(canvas) {
-    CanvasUtils.clearCanvasRect(canvas, RectBoundsFromElement(canvas));
+    CanvasUtils.clearCanvasRect(canvas, ElementGeometry.bounds(canvas));
   }
 
   static clearCanvasRect(canvas, rect) {
