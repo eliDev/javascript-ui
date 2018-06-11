@@ -34,7 +34,8 @@ class WindowEventManager {
 
   registerForResizeEvent(callback) {
     if (!this.isWatchingResize) {
-      WindowEventManager._startWatchingResize();
+      // WindowEventManager._startWatchingResize();
+      WindowEventManager.throttleEventListening("resize", "optimizedResize");
       this.isWatchingResize = true;
     }
     this.onResizeCallbacks.push(callback);
@@ -47,7 +48,28 @@ class WindowEventManager {
     }
   }
 
-  static _startWatchingResize() {
+  // static _startWatchingResize() {
+  //   (function () {
+  //     var throttle = function (type, name, obj) {
+  //       obj = obj || window;
+  //       var running = false;
+  //       var func = function () {
+  //         if (running) { return; }
+  //         running = true;
+  //         requestAnimationFrame(function () {
+  //           obj.dispatchEvent(new CustomEvent(name));
+  //           running = false;
+  //         });
+  //       };
+  //       obj.addEventListener(type, func);
+  //     };
+    
+  //     /* init - you can init any event */
+  //     throttle("resize", "optimizedResize");
+  //   })();
+  // }
+
+  static throttleEventListening(browserEventKey, customWindowEventKey) {
     (function () {
       var throttle = function (type, name, obj) {
         obj = obj || window;
@@ -62,10 +84,14 @@ class WindowEventManager {
         };
         obj.addEventListener(type, func);
       };
-    
+
       /* init - you can init any event */
-      throttle("resize", "optimizedResize");
+      throttle(browserEventKey, customWindowEventKey);
     })();
+
   }
 
+  onZoom() { 
+    
+  }
 }
